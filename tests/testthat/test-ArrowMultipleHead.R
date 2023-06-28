@@ -1,0 +1,168 @@
+###################
+#
+# Thesis
+#
+# Title: BioShapes
+#
+# Candidate: Darian Voda
+# Faculty of Mathematics and Informatics, UVT
+#
+# Coordinator:
+#   Prof. Daniela Zaharie
+#   Dr. med. Leonard Mada (Syonic SRL)
+#
+# in collaboration with Syonic SRL
+#
+# GitHub: https://github.com/DarianFlorianVoda/Diagram-Generator
+
+
+###############
+#### Tests ####
+
+#### Diagonal, H & V Tests ####
+
+##### Multiple ArrowHead #####
+
+cat("Starting: N ArrowHead\n")
+
+# default join:
+n = 5; d = 1;
+x = c(0, 6); y = c(1, 6);
+plot.base()
+arrowN(x, y, n=n, d=d, lwd=2);
+arrowN(c(x[1], 8), c(y[1], y[1]), n=n, d=d, lwd=2);
+arrowN(c(x[1], x[1]), c(y[1], 8), n=n, d=d, lwd=2);
+
+###### Test 1 ######
+x = c(0, 6); y = c(1, 6);
+d = 1; n=5;
+plot.base()
+a1 = arrowN(x, y, n=n, d=d, lwd=2);
+a2 = arrowN(c(x[1], 7), c(y[1], y[1]), n=n, d=d, lwd=2);
+a3 = arrowN(c(x[1], x[1]), c(y[1], 8), n=n, d=d, lwd=2);
+# Head
+h1 = a1$Head[[1]]
+
+h2 = a2$Head[[1]]
+
+h3 = a3$Head[[1]]
+# - visual aids:
+linesAid(h1, h2, h3)
+# Total length = (d^2 + dV[1]^2) + (d^2 + dV[2]^2)
+cat("Test 1\n")
+testArrow(h=h1, d=d)
+testArrow(h=h2, d=d)
+testArrow(h=h3, d=d)
+
+
+###### Test 2 ######
+x = c(0, 6); y = c(1, 6) + 1;
+d = 1; d.head = c(-d+1.5, d-1.5); n=5;
+plot.base()
+a1 = arrowN(x, y, n=n, d=d, lwd=2, d.head=d.head);
+a2 = arrowN(c(x[1], 8), c(y[1], y[1]), n=n, d=d, d.head=d.head, lwd=2);
+a3 = arrowN(c(x[1], x[1]), c(y[1], 8), n=n, d=d, d.head=d.head, lwd=2);
+# Head
+h1 = a1$Head[[1]]
+
+h2 = a2$Head[[1]]
+
+h3 = a3$Head[[1]]
+# - visual aids:
+linesAid(h1, h2, h3)
+cat("Test 2\n")
+testArrow(h=h1, d=d, dV=d.head)
+testArrow(h=h2, d=d, dV=d.head)
+testArrow(h=h3, d=d, dV=d.head)
+
+
+###### Test 3 ######
+x = c(0, 6); y = c(1, 80);
+d = 2; d.head = c(-d+1.5, d-1.5); n=5;
+scale = (100/12)*aspect_ratio_max
+plot.base(ylim = c(-50,100))
+a1 = arrowN(x, y, n=n, d=d, d.head=d.head, lwd=2, scale=scale);
+a2 = arrowN(c(x[1], 5), c(y[1], y[1]), n=n, d=d, d.head=d.head, lwd=2, scale=scale);
+a3 = arrowN(c(x[1], x[1]), c(y[1], 50), n=n, d=d, d.head=d.head, lwd=2, scale=scale);
+# Head
+h1 = a1$Head[[1]]
+
+h2 = a2$Head[[1]]
+
+h3 = a3$Head[[1]]
+# - visual aids:
+linesAid(h1, h2, h3)
+
+cat("Test 3: only visual\n")
+
+###### explicit join ######
+n = 5; d = 0.5;
+x = c(0, 6); y = c(1, 6);
+join = n;
+plot.base()
+arrowN(x, y, n=n, d=d, lwd=2, join=join);
+arrowN(c(x[1], 8), c(y[1], y[1]), n=n, d=d, lwd=2, join=join);
+arrowN(c(x[1], x[1]), c(y[1], 8), n=n, d=d, lwd=2, join=join);
+
+
+###### Test 1 ######
+x = c(0, 6); y = c(1, 6);
+d = 1; n=5; join=n;
+plot.base()
+a1 = arrowN(x, y, n=n, d=d, lwd=2, join=join);
+a2 = arrowN(c(x[1], 7), c(y[1], y[1]), n=n, d=d, lwd=2, join=join);
+a3 = arrowN(c(x[1], x[1]), c(y[1], 8), n=n, d=d, lwd=2, join=join);
+# Head
+h1 = a1$Head[[1]]
+
+h2 = a2$Head[[1]]
+
+h3 = a3$Head[[1]]
+# - visual aids:
+linesAid(h1, h2, h3)
+# Total length = (d^2 + dV[1]^2) + (d^2 + dV[2]^2)
+cat("Test 1\n")
+testArrow(h=h1, d=d)
+testArrow(h=h2, d=d)
+testArrow(h=h3, d=d)
+
+
+###### Test 2 ######
+x = c(0, 6); y = c(1, 6) + 1;
+d = 1; d.head = c(-d+1.5, d-1.5); n=5; join=n;
+plot.base()
+a1 = arrowN(x, y, n=n, d=d, lwd=2, d.head=d.head, join=join);
+a2 = arrowN(c(x[1], 8), c(y[1], y[1]), n=n, d=d, d.head=d.head, lwd=2, join=join);
+a3 = arrowN(c(x[1], x[1]), c(y[1], 8), n=n, d=d, d.head=d.head, lwd=2, join=join);
+# Head
+h1 = a1$Head[[1]]
+
+h2 = a2$Head[[1]]
+
+h3 = a3$Head[[1]]
+# - visual aids:
+linesAid(h1, h2, h3)
+cat("Test 2\n")
+testArrow(h=h1, d=d, dV=d.head)
+testArrow(h=h2, d=d, dV=d.head)
+testArrow(h=h3, d=d, dV=d.head)
+
+
+###### Test 3 ######
+x = c(0, 6); y = c(1, 80);
+d = 2; d.head = c(-d+1.5, d-1.5); n=5; join=n;
+scale = (100/12)*aspect_ratio_max
+plot.base(ylim = c(-50,100))
+a1 = arrowN(x, y, n=n, d=d, d.head=d.head, lwd=2, scale=scale, join=join);
+a2 = arrowN(c(x[1], 5), c(y[1], y[1]), n=n, d=d, d.head=d.head, lwd=2, scale=scale, join=join);
+a3 = arrowN(c(x[1], x[1]), c(y[1], 50), n=n, d=d, d.head=d.head, lwd=2, scale=scale, join=join);
+# Head
+h1 = a1$Head[[1]]
+
+h2 = a2$Head[[1]]
+
+h3 = a3$Head[[1]]
+# - visual aids:
+linesAid(h1, h2, h3)
+
+cat("Test 3: only visual\n")
