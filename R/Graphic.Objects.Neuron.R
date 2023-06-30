@@ -29,8 +29,9 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
 			axon.length = 3 * r, dendrite.length = ~ r/2, r.nucl = ~ (R - r)/2,
 			r.synapse = r*2/3,
 			type.syn = c("Solid", "Tree", "Detail", "Radial"),
-			col = "red", col.nucl = 1, fill.nucl = NULL,
-			col.synapse = col, fill.synapse = col) {
+			lwd = 1, lwd.axon = lwd,
+			col = 1, col.nucl = 1, fill.nucl = NULL,
+			col.axon = col, col.synapse = col, fill.synapse = col) {
   body = neuron.body(center = center, n = n, r = r, phi = phi, col = col);
   ### Init
   axon.length = axon.length; # force = scale * r;
@@ -52,7 +53,8 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
     slope = if(abs(phiA - pi20) < 1E-2 || abs(phiA - pi32) < 1E-2) Inf
     else tan(phiA);
     xy = shiftPoint(c(x0[n], y0[n]), d = sg[n] * axon.length, slope = slope);
-    axon = list(x = c(x0[n], xy[1]), y = c(y0[n], xy[2]));
+    axon = list(x = c(x0[n], xy[1]), y = c(y0[n], xy[2]),
+		lwd = lwd.axon, col = col.axon);
     axon = list(axon);
     lenDendites = n - 1;
     if( ! is.null(type.syn)) {
