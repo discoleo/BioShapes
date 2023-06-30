@@ -28,7 +28,8 @@
 neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
 			axon.length = 3 * r, r.synapse = 2/3 * r,
 			dendrite.length = ~ r/2, r.nucl = ~ (R - r)/2,
-			type.syn = c("Solid", "Tree", "Detail", "Radial"),
+			type.syn = c("Solid", "Tree", "Arrow", "SArrow",
+				"Detail", "Radial", "T"),
 			lwd = 1, lwd.axon = lwd, lwd.dendrite = lwd, lwd.nucl = 1,
 			col = 1, col.nucl = 1, fill.nucl = NULL,
 			col.dendrite = col,
@@ -150,9 +151,11 @@ neuron.body = function(center = c(0, 0), n = 5, r = 3, phi = 0,
 # slope = slope of axon, as alternative to angle phi;
 # alpha = angle of tree-cone (in degrees);
 #' @export
-synapse = function(p, phi, type = c("Solid", "Tree", "Detail", "Radial"),
-                   slope=NULL, col=1, fill="#808080", l=1/2, n=4, alpha = 120,
-                   helix.scale = 1/12, ...) {
+synapse = function(p, phi, type = c("Solid", "Tree", "Arrow", "SArrow",
+			"Detail", "Radial", "T"),
+			col=1, fill="#808080",
+			slope = NULL, l = 1/2, n = 4, alpha = 120,
+			helix.scale = 1/12, ...) {
   type = match.arg(type);
   if( ! is.null(slope)) {
     th  = atan(slope);
@@ -181,7 +184,9 @@ synapse = function(p, phi, type = c("Solid", "Tree", "Detail", "Radial"),
     return(as.bioshape(lst));
   }
   # Tree Types
-  if(phi >= 0) {
+  if(type == "T") {
+	# skip;
+  } else if(phi >= 0) {
     th = th + c(- phi, phi);
   } else {
     th = th + pi + c(- phi, phi);
@@ -200,7 +205,26 @@ synapse = function(p, phi, type = c("Solid", "Tree", "Detail", "Radial"),
     py = l * sin(id) + p[2];
     xy = data.frame(x = p[1], y = p[2], id = seq(n));
     xy = rbind(xy, data.frame(x = px, y = py, id = seq(n)));
-  } else if(type == "Solid") {
+  } else if(type == "T") {
+    id = c(-pi, pi)/2 + th;
+	l  = l/2; # uses L / 2 !!!
+    px = l * cos(id) + p[1];
+    py = l * sin(id) + p[2];
+	xy = list(x = px, y = py);
+  } else if(type == "Arrow" || type == "SArrow") {
+    id = th + pi;
+	l  = l/2; # uses L / 2 !!!
+    px = l * cos(id) + p[1];
+    py = l * sin(id) + p[2];
+    if(type == "Arrow") {
+		xy = list(
+			x = c(px[1], p[1], px[2]),
+			y = c(py[1], p[2], py[2]), col=col);
+	} else {
+		xy = list(x = c(p[1], px), y = c(p[2], py), col=col, fill=fill);
+		class(xy) = c("polygon", "list");
+	}
+  }  else if(type == "Solid") {
     px = l * cos(th) + p[1];
     py = l * sin(th) + p[2];
     xy = list(x = c(p[1], px), y = c(p[2], py), col=col, fill=fill);
