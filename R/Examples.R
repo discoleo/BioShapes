@@ -22,7 +22,8 @@
 
 ### Various BioShapes
 #' @export
-examples.bioshapes = function(col = list("#48B000", 1, 1, c("blue", "red"), c("purple", "orange")),
+examples.bioshapes = function(col = list("#48B000", 1, 1,
+		c("blue", "red"), c("purple", "orange")),
 		lwd=2, y.txt = c(6, 0), axt=c(1,2)) {
 	if(length(lwd) == 1) lwd = rep(lwd, 5);
 	# Plot
@@ -76,9 +77,10 @@ examples.bioshapes = function(col = list("#48B000", 1, 1, c("blue", "red"), c("p
 #### Diagram of a Liposome ####
 # d = Dimensions of ArrowHead;
 #' @export
-diagramLiposome = function(lbl = c("Outer lipid layer", "Inner lipid layer", "Lipid bilayer"),
-    title = "Liposome", lwd=2, d=-0.4, n = c(30, 17), col="#48B000",
-    cex.title = 1.5, xy.title = c(0, -6.5), new = TRUE) {
+diagramLiposome = function(lbl = c("Outer lipid layer",
+		"Inner lipid layer", "Lipid bilayer"),
+		title = "Liposome", lwd=2, d=-0.4, n = c(30, 17), col="#48B000",
+		cex.title = 1.5, xy.title = c(0, -6.5), new = TRUE) {
 
   if(new){
     plot.base(xlim=c(-10,10), ylim=c(-10,10))
@@ -133,10 +135,10 @@ measureLiposome = function(lbl = c("D = 60 nm", "d=50"), center=c(0,0), add=FALS
 ### Example Enzyme ####
 #' @export
 enzymeReaction = function(x = c(2,5), y = c(1,1),
-                          lbl = c("A", "B", "Enzyme", "Inhibitor"),
-                          col = c("black", "black", "black", "red", "red"),
-                          dx=1, dy=c(0.1, 0.1, 0.5), dI= - c(2, 0.75, 2.4), dH=0.5,
-                          lwd=c(1, 2), scale=1) {
+		lbl = c("A", "B", "Enzyme", "Inhibitor"),
+		col = c("black", "black", "black", "red", "red"),
+		dx=1, dy=c(0.1, 0.1, 0.5), dI= - c(2, 0.75, 2.4), dH=0.5,
+		lwd=c(1, 2), scale=1) {
   if(length(y) == 1) y = c(y, y);
   slope = slope(x, y);
   l1 = shiftLine(x, y, d = dy[[1]], slope=slope, scale=scale);
@@ -298,34 +300,15 @@ example.curves = function(R = 5, nr = 20, axt = c(1, 2)) {
   invisible();
 }
 
-### helix for ADN
+### DNA: Double Helix
 #' @export
-example.dna = function(n.lin = 6){
-  h2 = dna.new(c(-5,15), c(0,9), phi = c(0, pi), n.lin = n.lin)
-  plot.base()
-  lines(h2, lwd=1)
-  # # n = 2.2;
-  # tmp1 = helix(c(0, 0), c(5, 5), n = n, phi = 0, A = 3/4)
-  # tmp2 = helix(c(0, 0), c(5, 5), n = n, phi = pi, A = 3/4)
-  # plot.base()
-  # col = c("#FF9696", "#F2FF82")
-  # lines(tmp1, col = col[1], lwd = 5)
-  # lines(tmp2, col = col[2], lwd = 5)
-  #
-  # N = length(tmp1[[1]]$x);
-  # nL = round(N/3.5);
-  # scale = N/nL;
-  # nc = ceiling(2*n);
-  # # TODO: Proper colors
-  # colL = rep(col[1], nL);
-  # tmp = lapply(seq(nL), function(id) {
-  #   idL = scale*id;
-  #   x = c(tmp1[[1]]$x[idL], tmp2[[1]]$x[idL]);
-  #   y = c(tmp1[[1]]$y[idL], tmp2[[1]]$y[idL]);
-  #   d = dist.xy(x, y);
-  #   if(d < 0.2) return(); # TODO: Parameter
-  #   lines(x, y, col = colL[id]);
-  # })
+example.dna = function(n = 3, n.lin = 6, phi = c(0, pi),
+		lwd = 2, lwd.lines = lwd, col = c("red", "green"), axt = NULL){
+	h2 = dna.new(c(1,8), c(1,4), phi = phi,
+		n=n, n.lin=n.lin, lwd=lwd, lwd.lines=lwd.lines, col=col);
+	plot.base(axt=axt);
+	lines(h2);
+	invisible(h2);
 }
 
 ### Ducts
