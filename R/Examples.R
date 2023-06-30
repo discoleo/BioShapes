@@ -352,23 +352,26 @@ example.complexDuct = function(n = 8, lim = c(-10, 10)){
   lines(tmp);
 }
 
-### The creation of the neuron
-#' @export
-example.neuronDesign = function(N = 5){
+### Neuron
 
+### Creation of the neuron
+#' @export
+example.neuronDesign = function(n = 5, r = 2, col.mark = "red") {
+  if(length(r) == 1) r = rep(r, 2);
   par.old = par(mfrow = c(1,2));
 
-  n = 5; phi = 2*pi/n;
-  testFilledCircle(circlesOnCircle(n,2, phi=pi/n), lim = c(-6, 6), pin = FALSE)
+  phi = 2*pi/n;
+  tmp = circlesOnCircle(n, r[1], phi = pi/n);
+  testFilledCircle(tmp, lim = c(-6, 6), pin = FALSE);
+  R = attr(tmp, "R");
   tmp = sapply(seq(n), function(k) points(
-    2 * cos(pi/2 + k * phi) + 3.4 * cos(phi * (k-1) + phi/2),
-    2 * sin(pi/2 + k * phi) + 3.4 * sin(phi * (k-1) + phi/2), col = "red"))
+    r[1] * cos(pi/2 + k * phi) + R * cos(phi * (k-1) + phi/2),
+    r[1] * sin(pi/2 + k * phi) + R * sin(phi * (k-1) + phi/2),
+	col = col.mark) );
 
-  phi = 0;
-  n = 5;
-  center = c(2, 3)
+  phi = 0; center = c(2, 3);
   plot.base()
-  tmp = neuron(n = N, center = center, phi = phi)
+  tmp = neuron(n = n, r = r[2], center = center, phi = phi)
   lines(tmp)
 
   par(par.old);
@@ -377,30 +380,34 @@ example.neuronDesign = function(N = 5){
 
 ### Neuron
 #' @export
-example.neuron = function(phi = 0, n = 5){
+example.neuron = function(phi = 0, n = 5, col = NULL) {
   center = c(2, 3)
   plot.base()
-  tmp = neuron(n = n, center = center, phi = phi, type = "Tree", col = NULL)
+  tmp = neuron(n = n, center = center, phi = phi, type = "Tree",
+	col = col)
   lines(tmp)
 }
 
 #' @export
-description.neuron = function(lbl = c("Axon", "Dendrites", "Nucleus"), title = "Neuron",
-                              lwd=2, col="#48B000", d=-0.4, cex.title = 1.5, xy.title = c(3, 8)){
+description.neuron = function(phi = 0,
+			lbl = c("Axon", "Dendrites", "Nucleus"),
+			title = "Neuron",
+			lwd = 2, col = "#48B000", col.arrow = "red",
+			d.arrow = -0.4, cex.title = 1.5, xy.title = c(3, 8)){
   # TODO: parameters
-  print("ok");
-  neuron = example.neuron()
-  #plot.base()
-  #lines(neuron)
+  neuron = example.neuron(phi = phi);
 
   # Title
   if( ! is.null(title)) text(xy.title[1], xy.title[2], title, cex=cex.title);
 
   # Labels
-  a1 = arrowSimple(x=c(5,6), y=c(5.5,3.5), d=d, lwd=lwd);
+  # TODO: Case phi != 0
+  a1 = arrowSimple(x=c(5,6), y=c(5.5, 3.5), d = d.arrow,
+	lwd=lwd, col = col.arrow);
   text(5, 6, lbl[[1]])
 
-  a2 = arrowSimple(x=c(1, 2), y=c(0.75,1.5), d=d, lwd=lwd);
+  a2 = arrowSimple(x=c(1, 2), y=c(0.75, 1.5), d = d.arrow,
+	lwd=lwd, col = col.arrow);
   text(1, 0, lbl[[2]])
 
   return(invisible());
@@ -410,13 +417,13 @@ description.neuron = function(lbl = c("Axon", "Dendrites", "Nucleus"), title = "
 #' @export
 example.neurons = function(n = 5, col = "red",
 		lwd = 1, lwd.axon = lwd) {
-
   ###
   center = c(2, 3)
   lim = c(-15, 15);
   plot.base(xlim = lim, ylim = lim, axt = NULL)
 
   ### First group
+  
   phi = -pi/2;
   center2 = center + c(-6, -10)
   tmp = neuron(n = n, center = center2, phi = phi, type = "Tree",
@@ -437,12 +444,11 @@ example.neurons = function(n = 5, col = "red",
 	col=col, lwd=lwd, lwd.axon = lwd.axon);
   lines(tmp)
 
-  # Second group
-  ###
+  ### Second group
+  
   # TODO: All synapse types
   phi = 0;
   center = c(-9, 13)
-  #plot.base(xlim = lim, ylim = lim, axt = NULL)
   tmp = neuron(n = n, center = center, phi = phi, type = "Tree",
 	col=col, lwd=lwd, lwd.axon = lwd.axon);
   lines(tmp)
