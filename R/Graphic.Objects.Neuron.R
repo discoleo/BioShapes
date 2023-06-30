@@ -26,11 +26,12 @@
 ### Neuron body
 #' @export
 neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
-			axon.length = 3 * r, dendrite.length = ~ r/2, r.nucl = ~ (R - r)/2,
-			r.synapse = 2/3 * r,
+			axon.length = 3 * r, r.synapse = 2/3 * r,
+			dendrite.length = ~ r/2, r.nucl = ~ (R - r)/2,
 			type.syn = c("Solid", "Tree", "Detail", "Radial"),
-			lwd = 1, lwd.axon = lwd,
+			lwd = 1, lwd.axon = lwd, lwd.dendrite = lwd, lwd.nucl = 1,
 			col = 1, col.nucl = 1, fill.nucl = NULL,
+			col.dendrite = col,
 			col.axon = col, col.synapse = col, fill.synapse = col) {
 	body = neuron.body(center = center, n = n, r = r, phi = phi,
 		lwd = lwd, col = col);
@@ -79,21 +80,23 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
     tree(c(x0[k], y0[k]), d = dendrite.len[k], slope = tan(phiD[k]),
          n = 2, levels = 2); # TODO
   })
-  ### Nucleus
-  r.nucl = eval.formula(r.nucl);
-  if(r.nucl > 0) {
-    nucleus = list(r = r.nucl, center = center, col = col.nucl, fill = fill.nucl);
-    class(nucleus) = c("circle", "list");
-    nucleus = list(nucleus);
-  } else nucleus = NULL;
-
+  dend$lwd = lwd.dendrite;
+  # dend$col = col.dendrite; # TODO
+  dend = as.bioshape(dend);
+  dend = list(dend);
+	### Nucleus
+	r.nucl = eval.formula(r.nucl);
+	if(r.nucl > 0) {
+		nucleus = list(r = r.nucl, center = center, lwd = lwd.nucl,
+			col = col.nucl, fill = fill.nucl);
+		class(nucleus) = c("circle", "list");
+		nucleus = list(nucleus);
+	} else nucleus = NULL;
+	
   ### Neuron
   neuron = c(Body = body, Axon = axon,
              Dendrites = dend, Nucleus = nucleus);
-  if( ! inherits(neuron, "bioshape")) {
-    class(neuron) = c("bioshape", "list");
-  }
-  return(neuron);
+  return(as.bioshape(neuron));
 }
 
 #' @export
