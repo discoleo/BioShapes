@@ -27,13 +27,14 @@
 #' @export
 neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
 			axon.length = 3 * r, dendrite.length = ~ r/2, r.nucl = ~ (R - r)/2,
-			r.synapse = r*2/3,
+			r.synapse = 2/3 * r,
 			type.syn = c("Solid", "Tree", "Detail", "Radial"),
 			lwd = 1, lwd.axon = lwd,
 			col = 1, col.nucl = 1, fill.nucl = NULL,
 			col.axon = col, col.synapse = col, fill.synapse = col) {
-  body = neuron.body(center = center, n = n, r = r, phi = phi, col = col);
-  ### Init
+	body = neuron.body(center = center, n = n, r = r, phi = phi,
+		lwd = lwd, col = col);
+	### Init
   axon.length = axon.length; # force = scale * r;
   R = r;
   r = attr(body, "r");
@@ -118,7 +119,8 @@ tree = function(p, d, slope, n=2, levels=2) {
 }
 
 #' @export
-neuron.body = function(center = c(0, 0), n = 5, r = 3, phi = 0, col = 1){
+neuron.body = function(center = c(0, 0), n = 5, r = 3, phi = 0,
+		lwd = 1, col = 1) {
   phi0 = phi + pi/n;
   cc = circlesOnFixedCircle(n = n, r = r, center = center, phi = phi0);
   R = r;
@@ -127,14 +129,15 @@ neuron.body = function(center = c(0, 0), n = 5, r = 3, phi = 0, col = 1){
   id = seq(n);
   a1 = pi/2 + phi + id * phin;
   a2 = pi/2 + phi + (id + (n - 2)/2) * phin;
-  lst = lapply(id, function(id){
+  lst = lapply(id, function(id) {
     lst = list(
       r = r, center = c(x = cc$x[id], y = cc$y[id]),
       phi = c(a1[id], a2[id]) );
+	lst$lwd = lwd;
     lst$col = col;
     class(lst) = c("circle.arc", "list");
     return(lst);
-  })
+  });
   attr(lst, "r") = r;
   class(lst) = c("bioshape", "list");
   return(lst);
