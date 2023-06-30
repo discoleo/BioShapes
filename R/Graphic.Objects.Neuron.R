@@ -26,9 +26,11 @@
 ### Neuron body
 #' @export
 neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
-                  axon.length = 3 * r, dendrite.length = ~ r/2, r.nucl = ~ (R - r)/2,
-                  r.synapse = r*2/3, type.syn = c("Solid", "Tree", "Detail", "Radial"),
-                  col = "red", col.nucl = 1, fill.nucl = NULL, col.synapse = col) {
+			axon.length = 3 * r, dendrite.length = ~ r/2, r.nucl = ~ (R - r)/2,
+			r.synapse = r*2/3,
+			type.syn = c("Solid", "Tree", "Detail", "Radial"),
+			col = "red", col.nucl = 1, fill.nucl = NULL,
+			col.synapse = col, fill.synapse = col) {
   body = neuron.body(center = center, n = n, r = r, phi = phi, col = col);
   ### Init
   axon.length = axon.length; # force = scale * r;
@@ -54,7 +56,8 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
     axon = list(axon);
     lenDendites = n - 1;
     if( ! is.null(type.syn)) {
-      syn  = synapse(xy, phi = phiA, type = type.syn, l = r.synapse, fill = col.synapse);
+      syn  = synapse(xy, phi = phiA, type = type.syn, l = r.synapse,
+		col = col.synapse, fill = fill.synapse);
       axon = c(axon, syn);
     }
   } else {
@@ -195,6 +198,7 @@ synapse = function(p, phi, type = c("Solid", "Tree", "Detail", "Radial"),
     xy = list(x = c(p[1], px), y = c(p[2], py), col=col, fill=fill);
     class(xy) = c("polygon", "list");
   } else stop("Not yet implemented!");
+  xy$col = col;
   xy = as.bioshape(list(xy));
   return(xy);
 }
