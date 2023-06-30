@@ -16,27 +16,10 @@
 #
 # GitHub: https://github.com/Adi131313/BioShapes
 
+
 ### Functions to Generate Objects
 
-
-# Generates a star polygon
-#' @export
-star = function(n, R = c(2,1), center = c(0,0), lwd=1, phi = pi/2,
-                col=1, fill = NULL) {
-  c1 = pointsCircle(n, r=R[1], center=center, phi=phi[1]);
-  c2 = pointsCircle(n, r=R[2], center=center, phi=phi[1] + pi/n);
-  x = as.vector(rbind(c1$x, c2$x));
-  y = as.vector(rbind(c1$y, c2$y));
-  lst = list(x = x, y = y, col = col, lwd = lwd);
-  if(! is.null(fill)){
-    lst$fill = fill;
-  }
-  class(lst) = c("polygon", "list");
-  lst = list(lst);
-  class(lst) = c("bioshape", "list");
-  return(invisible(lst));
-}
-
+### Regular n-gon
 #' @export
 ngon = function(n, r = 1, center = c(0, 0), phi = 0,
 		lwd = NULL, col = NULL, fill = NULL) {
@@ -60,6 +43,35 @@ ngon.circle = function(n, N, R = 2, r = 1/2, center = c(0, 0), phi = 0,
   class(pg) = c("bioshape", "list");
   invisible(pg);
 }
+
+# Generates a star polygon
+#' @export
+star = function(n, R = c(2,1), center = c(0,0), lwd=1, phi = pi/2,
+                col=1, fill = NULL) {
+  c1 = pointsCircle(n, r=R[1], center=center, phi=phi[1]);
+  c2 = pointsCircle(n, r=R[2], center=center, phi=phi[1] + pi/n);
+  x = as.vector(rbind(c1$x, c2$x));
+  y = as.vector(rbind(c1$y, c2$y));
+  lst = list(x = x, y = y, col = col, lwd = lwd);
+  if(! is.null(fill)){
+    lst$fill = fill;
+  }
+  class(lst) = c("polygon", "list");
+  lst = list(lst);
+  class(lst) = c("bioshape", "list");
+  return(invisible(lst));
+}
+
+### Ring ###
+# Quadrilaterals: circularly arranged
+#' @export
+ring = function(n, R = c(5, 7), center = c(0,0),
+                col = 1, fill = NULL, phi = c(0,0)){
+  return(duct(n = n, R = R, nc.r = NULL, center = center,
+              col = col, fill = fill, phi = phi))
+}
+
+###################
 
 #### Liposomes ####
 #' @export
@@ -95,14 +107,6 @@ liposomes = function(n, r, center=c(0, 0), phi=c(0, 0), d=0, ...){
   return(obj);
 }
 
-### Ring ###
-#' @export
-
-ring = function(n, R = c(5, 7), center = c(0,0),
-                col = 1, fill = NULL, phi = c(0,0)){
-  return(duct(n = n, R = R, nc.r = NULL, center = center,
-              col = col, fill = fill, phi = phi))
-}
 
 ### Glandular Duct ###
 #' @export
@@ -139,9 +143,6 @@ duct = function(n, R = c(5, 7), nc.r=1/2, center=c(0,0),
     return(l)
   })
 
-  # plot.base(xlim=c(-10,10), ylim=c(-10,10))
-  # polygon(cells.x, cells.y)
-
   ### Nuclei:
   if(is.null(nc.r)){
     class(cells) = c("bioshape", "list")
@@ -161,8 +162,6 @@ duct = function(n, R = c(5, 7), nc.r=1/2, center=c(0,0),
   nuclei = list(center = cbind(mid.x, mid.y), r = nc.r, fill = nc.fill);
   class(nuclei) = c("circle", "list")
   cells = c(cells, list(nuclei));
-  # TODO
-  # testFilledCircle(nuclei,r=nc.r, add=TRUE, line=FALSE)
   class(cells) = c("bioshape", "list")
   return(cells);
 }
@@ -206,7 +205,7 @@ duct.complex = function(center = c(0, 0), r = c(7, 5, 2), n = 8,
   invisible(lst);
 }
 
-# Generates a virus
+### Virus particle
 #' @export
 virus = function(R = 1, center = c(0,0), n.spike = 10, off.spike = c(0, 1),
                  r.spike=0.4, ngon.spike=4, phi.spike = 0, lwd = 6, lwd.spike = lwd/2,
@@ -264,6 +263,9 @@ spikes = function(R = 1, center = c(0,0), n.spike = 10, off.spike = c(0, 1),
   return(invisible(virus));
 }
 
+### Virus:
+# - multiple types of spikes;
+#' @export
 virus2 = function(R = 2, center = c(0,0), n.spike = 10, off.spike = c(0, 1, 1.5),
                   r.spike=0.25, ngon.spike=c(4, 0), phi.spike = 0,
                   lwd = 8, lwd.spike = lwd/2, col = "#D06432",
@@ -290,7 +292,7 @@ virus2 = function(R = 2, center = c(0,0), n.spike = 10, off.spike = c(0, 1, 1.5)
   return(virus)
 }
 
-### Convex lens
+### Convex Lens
 #' @export
 lens = function(x, y, R = NULL, scale = c(1,1),
                 lwd=1, col=1, fill = NULL) {
