@@ -81,7 +81,7 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
          n = 2, levels = 2); # TODO
   })
   dend$lwd = lwd.dendrite;
-  # dend$col = col.dendrite; # TODO
+  dend$col = col.dendrite; # TODO
   dend = as.bioshape(dend);
   dend = list(dend);
 	### Nucleus
