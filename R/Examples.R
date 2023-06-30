@@ -385,7 +385,8 @@ example.neuron = function(phi = 0, n = 5, col = NULL) {
   plot.base()
   tmp = neuron(n = n, center = center, phi = phi, type = "Tree",
 	col = col)
-  lines(tmp)
+  lines(tmp);
+  invisible(tmp);
 }
 
 #' @export
@@ -416,7 +417,7 @@ description.neuron = function(phi = 0,
 ### Multiple neurons
 #' @export
 example.neurons = function(n = 5, col = "red",
-		lwd = 1, lwd.axon = lwd) {
+		lwd = 1, lwd.axon = lwd, lwd.nucl = 1) {
   ###
   center = c(2, 3)
   lim = c(-15, 15);
@@ -427,21 +428,21 @@ example.neurons = function(n = 5, col = "red",
   phi = -pi/2;
   center2 = center + c(-6, -10)
   tmp = neuron(n = n, center = center2, phi = phi, type = "Tree",
-	col=col, lwd=lwd, lwd.axon = lwd.axon);
+	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl);
   lines(tmp)
 
   ###
   phi = -pi/1.5;
   center2 = center + c(-1, -2)
   tmp = neuron(n = n, center = center2, phi = phi, type = "Tree",
-	col=col, lwd=lwd, lwd.axon = lwd.axon);
+	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl);
   lines(tmp)
 
   ###
   phi = 2*pi - pi/3;
   center2 = center + c(-11, -2)
   tmp = neuron(n = n, center = center2, phi = phi, type = "Tree",
-	col=col, lwd=lwd, lwd.axon = lwd.axon);
+	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl);
   lines(tmp)
 
   ### Second group
@@ -450,25 +451,25 @@ example.neurons = function(n = 5, col = "red",
   phi = 0;
   center = c(-9, 13)
   tmp = neuron(n = n, center = center, phi = phi, type = "Tree",
-	col=col, lwd=lwd, lwd.axon = lwd.axon);
+	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl);
   lines(tmp)
   ###
   phi = pi/2;
   center = c(-10, 4)
   tmp = neuron(n = n, center = center, phi = phi, type = "Solid",
-	col=col, lwd=lwd, lwd.axon = lwd.axon);
+	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl);
   lines(tmp)
   ###
   phi = -pi;
   center = c(0, 4)
   tmp = neuron(n = n, center = center, phi = phi, type = "Detail",
-	col=col, lwd=lwd, lwd.axon = lwd.axon);
+	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl);
   lines(tmp)
   ###
   phi = -pi/2;
   center = c(1, 13.5)
   tmp = neuron(n = n, center = center, phi = phi, type = "Radial",
-	col=col, lwd=lwd, lwd.axon = lwd.axon);
+	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl);
   lines(tmp)
 }
 
