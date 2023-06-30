@@ -20,14 +20,10 @@
 #' @example man/examples/Examples.Man.R
 
 
-
-
 ################
 #### Arrows ####
 
-
-
-example.arrows()
+examples.arrows()
 
 
 ####################
@@ -36,19 +32,24 @@ example.arrows()
 examples.bioshapes()
 
 
-#### Description of a Liposome ####
+### Liposomes
+
+### Description of a Liposome
 
 diagramLiposome()
 
-#### Liposome Measurements ####
+### Liposome Measurements
 
 measureLiposome()
 
 
-### Arrows with Enzymes ####
+#######################
+
+### Enzymes: Arrows
 plot.base()
 enzymeReaction(lbl = c("A2", "B2", "Enz2", "Inhibitor 2"))
 enzymeReaction(y = 6, lbl = c("A1", "B1", "Enz1", "Inhibitor 1"))
+
 
 ### DNA Structure ###
 
@@ -58,7 +59,10 @@ example.dna()
 
 example.bloodCells()
 
-### Creation of the neuron ###
+
+### Neuron
+
+### Creation of the Neuron ###
 
 example.neuronDesign()
 
@@ -73,6 +77,7 @@ description.neuron()
 ### Multiple neurons ###
 # TODO: move neurons around and make connections between
 example.neurons()
+
 
 ### Muscle Tissue ###
 
