@@ -23,7 +23,7 @@
 ### Functions to Generate Neuron
 
 
-### Neuron body
+### Neuron: Main function
 #' @export
 neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
 			axon.length = 3 * r, r.synapse = 2/3 * r,
@@ -68,22 +68,22 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
     axon = NULL;
     lenDendites = n;
   }
-  ### Dendrites
-  eval.formula = function(x) {
-    xx = if(inherits(x, "formula")) {
-      eval(x[[2]]);
-    } else x;
-  }
-  dendrite.len = eval.formula(dendrite.length);
-  dendrite.len = sg * dendrite.len;
-  dend = lapply(seq(lenDendites), function(k) {
-    tree(c(x0[k], y0[k]), d = dendrite.len[k], slope = tan(phiD[k]),
-         n = 2, levels = 2); # TODO
-  })
-  dend$lwd = lwd.dendrite;
-  dend$col = col.dendrite; # TODO
-  dend = as.bioshape(dend);
-  dend = list(dend);
+	### Dendrites
+	eval.formula = function(x) {
+		xx = if(inherits(x, "formula")) {
+			eval(x[[2]]);
+		} else x;
+	}
+	dendrite.len = eval.formula(dendrite.length);
+	dendrite.len = sg * dendrite.len;
+	dend = lapply(seq(lenDendites), function(k) {
+		tree(c(x0[k], y0[k]), d = dendrite.len[k], slope = tan(phiD[k]),
+			n = 2, levels = 2); # TODO
+	})
+	dend$lwd = lwd.dendrite;
+	dend$col = col.dendrite;
+	dend = as.bioshape(dend);
+	dend = list(dend);
 	### Nucleus
 	r.nucl = eval.formula(r.nucl);
 	if(r.nucl > 0) {
@@ -93,10 +93,10 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
 		nucleus = list(nucleus);
 	} else nucleus = NULL;
 	
-  ### Neuron
-  neuron = c(Body = body, Axon = axon,
-             Dendrites = dend, Nucleus = nucleus);
-  return(as.bioshape(neuron));
+	### Neuron
+	neuron = c(Body = body, Axon = axon,
+		Dendrites = dend, Nucleus = nucleus);
+	return(as.bioshape(neuron));
 }
 
 #' @export
