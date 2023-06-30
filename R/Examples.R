@@ -381,8 +381,7 @@ example.neuronDesign = function(n = 5, r = 2, col.mark = "red") {
 ### Neuron
 #' @export
 example.neuron = function(phi = 0, n = 5, type = "Tree",
-		col = NULL, fill.nucl = NULL) {
-  center = c(2, 3)
+		col = NULL, fill.nucl = NULL, center = c(2, 3)) {
   plot.base()
   tmp = neuron(n = n, center = center, phi = phi, type = type,
 	col = col, fill.nucl = fill.nucl);
