@@ -68,13 +68,10 @@ lines.object.base = function(x, lwd, col=1, fill=NULL, ...) {
     lwd = if(is.null(x$lwd)) 1 else x$lwd;
   }
   x$lwd = NULL;
-  # List with a data.frame:
-  # if(length(x) == 1 && inherits(x[[1]], "data.frame")) {
-  #  x = split(x[[1]][, c("x", "y")], x[[1]]$id);
-  # }
   # Actual components:
   basef = function(lst, lwd, ...) {
     if(inherits(lst, "bioshape")) {
+      if(! is.null(lst$lwd)) { lwd = lst$lwd; lst$lwd = NULL; }
       lapply(lst, basef, lwd = lwd, ...);
     } else if(inherits(lst, "circle")) {
       if(is.null(fill)) fill = lst$fill;
