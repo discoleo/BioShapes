@@ -69,10 +69,11 @@ lines.object.base = function(x, lwd, col=1, fill=NULL, ...) {
   }
   x$lwd = NULL;
   # Actual components:
-  basef = function(lst, lwd, ...) {
+  basef = function(lst, lwd, col, ...) {
     if(inherits(lst, "bioshape")) {
       if(! is.null(lst$lwd)) { lwd = lst$lwd; lst$lwd = NULL; }
-      lapply(lst, basef, lwd = lwd, ...);
+      if(! is.null(lst$col)) { col = lst$col; lst$col = NULL; }
+      lapply(lst, basef, lwd = lwd, col = col, ...);
     } else if(inherits(lst, "circle")) {
       if(is.null(fill)) fill = lst$fill;
       if(! is.null(lst$col)) col = lst$col;
@@ -127,7 +128,7 @@ lines.object.base = function(x, lwd, col=1, fill=NULL, ...) {
       }
     }
   }
-  lapply(x, basef, lwd = lwd, ...);
+  lapply(x, basef, lwd=lwd, col=col, ...);
   invisible();
 }
 
