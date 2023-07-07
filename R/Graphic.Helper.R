@@ -263,6 +263,28 @@ rotate = function(x, y, slope, p1=c(0,0)) {
   lst = list(x = p1[1] + dx, y = p1[2] + dy);
 }
 
+
+### Helix / Spirals
+
+### Radians: between [0, 2*pi);
+#' @export
+as.radians0 = function(x, tol=1E-10) {
+	p2 = 2*pi;
+	xf = floor(x / p2);
+	x  = x - p2*xf;
+	x[abs(x) < tol] = 0;
+	return(x);
+}
+
+### Sinusoid Origins
+# - which sinusoids intersect given sinusoid (same origin);
+#' @export
+as.sin.intersect = function(phi) {
+	sapply(phi, function(phi) {
+		as.radians0(pi - phi + c(0, pi));
+	})
+}
+
 # Intersection of 2 shifted-Sine Functions
 #' @export
 which.intersect.sin = function(phi, n, from=0, to = n-1) {
@@ -284,6 +306,23 @@ which.intersect.sin = function(phi, n, from=0, to = n-1) {
   return(list(x0 = x0, x1=x1));
 }
 
+### Order of 2 Helices
+#' @export
+is.helix.rev = function(phi, debug=FALSE) {
+	# Warning: phi needs to be normalized to [0, 2*pi);
+	phi.c = as.sin.intersect(phi[1]);
+	isInc = phi.c[1] <= phi.c[2];
+	if(debug) print(cbind(phi, phi.c));
+	if(isInc) {
+		# Note: strictly "<", but ">=";
+		if(phi[2] < phi.c[1] || phi[2] >= phi.c[2]) {
+			return(TRUE);
+		}
+	} else if(phi[2] > phi.c[2] && phi[2] <= phi.c[1]) {
+		return(TRUE);
+	}
+	return(FALSE);
+}
 
 
 #######################
