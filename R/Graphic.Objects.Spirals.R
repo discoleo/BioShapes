@@ -158,11 +158,13 @@ helix.link = function(n, k=3, phi=pi/2) {
   return(list(id=id, div = tail(id, 1)));
 }
 
-#' @export
+
 ### DNA
+#' @export
 dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
 			lwd=1, lwd.lines = lwd,
 			col = c("red", "green"), col.lines = col) {
+  phi = as.radians0(phi);
   p1 = c(x[1], y[1]); p2 = c(x[2], y[2]);
   h1 = helix(p1, p2, n=n, A=A, phi=phi[1], lwd=lwd, parts=0);
   h2 = helix(p1, p2, n=n, A=A, phi=phi[2], lwd=lwd, parts=0);
@@ -173,6 +175,9 @@ dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
   lst = c(Helix1 = h1, Helix2 = h2);
   if(n.lines == 0) return(as.bioshape(lst));
   #
+  if(is.helix.rev(phi)) {
+    col.lines = rev(col.lines);;
+  }
   pp  = which.intersect.sin(phi, n, to = n - 0.5);
   len = length(pp$x0);
   pi2 = 2*pi*n;
