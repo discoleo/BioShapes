@@ -163,7 +163,8 @@ helix.link = function(n, k=3, phi=pi/2) {
 #' @export
 dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
 			lwd=1, lwd.lines = lwd,
-			col = c("red", "green"), col.lines = col) {
+			col = c("red", "green"), col.lines = col,
+			S1 = list(L1 = 1.5, L2 = 2)) {
   phi = as.radians0(phi);
   p1 = c(x[1], y[1]); p2 = c(x[2], y[2]);
   h1 = helix(p1, p2, n=n, A=A, phi=phi[1], lwd=lwd, parts=0);
@@ -184,12 +185,28 @@ dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
   p0  = c(0, pp$x0 / pi2);
   Ln  = dist.xy(x, y);
   slope = slope(x, y);
+  lenL1 = pi / (n.lines + 1);
+  phix0 = pp$x0[[1]];
+  hasL1 = phix0 >= lenL1;
   lstLL = list();
   # TODO: proper-processing of half-ends;
+  # print(cbind(phi, c(pp$x0[[1]], pp$x1[[1]])));
   for(i in seq(len)) {
     pS = p0[i];
     pE = p0[i + 1];
-    pp = seq(pS, pE, length.out = n.lines + 2);
+	# Starting-Segment:
+	if(i == 1) {
+		if( ! hasL1) next;
+		lenS1 = round(phix0 / lenL1) + 2;
+		if(phix0 < pi - lenL1/2) {
+			# very short segment;
+			if(phix0 <= S1$L2*lenL1) lenS1 = ifelse(phix0 <= S1$L1*lenL1, 2, 3);
+			pp = seq(pS + lenL1/(4*pi2), pE, length.out = lenS1);
+			pp = c(pS, pp);
+		} else pp = seq(pS, pE, length.out = lenS1);
+	} else {
+		pp = seq(pS, pE, length.out = n.lines + 2);
+	}
     # pp = pp[- c(1, 6)];
     py = A * sin(pi2*pp + phi[1]);
     h1 = rotate(pp * Ln, py, slope=slope, p1);
