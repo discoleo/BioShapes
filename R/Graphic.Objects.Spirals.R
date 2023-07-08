@@ -160,11 +160,15 @@ helix.link = function(n, k=3, phi=pi/2) {
 
 
 ### DNA
+# S1 = Options for Segment 1;
+#  - L1: draw only 1 line if shorter than this;
+#  - L2: draw 2 lines if length between L2 & L1;
+#  - short: use enhanced algorithm for length < pi - short * d_theta;
 #' @export
 dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
 			lwd=1, lwd.lines = lwd,
 			col = c("red", "green"), col.lines = col,
-			S1 = list(L1 = 1.5, L2 = 2)) {
+			S1 = list(L1 = 1.5, L2 = 2, short = 0.5)) {
   phi = as.radians0(phi);
   p1 = c(x[1], y[1]); p2 = c(x[2], y[2]);
   h1 = helix(p1, p2, n=n, A=A, phi=phi[1], lwd=lwd, parts=0);
@@ -198,9 +202,10 @@ dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
 	if(i == 1) {
 		if( ! hasL1) next;
 		lenS1 = round(phix0 / lenL1) + 2;
-		if(phix0 < pi - lenL1/2) {
+		if(phix0 < pi - S1$short * lenL1) {
 			# very short segment;
 			if(phix0 <= S1$L2*lenL1) lenS1 = ifelse(phix0 <= S1$L1*lenL1, 2, 3);
+			# include 1st line close to start of segment;
 			pp = seq(pS + lenL1/(4*pi2), pE, length.out = lenS1);
 			pp = c(pS, pp);
 		} else pp = seq(pS, pE, length.out = lenS1);
