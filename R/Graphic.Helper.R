@@ -286,6 +286,7 @@ as.sin.intersect = function(phi) {
 }
 
 # Intersection of 2 shifted-Sine Functions
+# from, to = integers (cycles of 2*pi);
 #' @export
 which.intersect.sin = function(phi, n, from = 0, to = NULL) {
   phi.eq = (pi*c(1,3) - sum(phi))/2;
@@ -300,7 +301,8 @@ which.intersect.sin = function(phi, n, from = 0, to = NULL) {
   phi.rad = phi.eq / (2*pi);
   if(is.null(to)) {
     # complete 2*pi cycles: starts at 0;
-	to = floor(n - phi.rad[2] + 0.01);
+	# tol = 0.01;
+    to = floor(n - phi.rad[2] + 0.01);
   }
   x0 = sapply(seq(from, to, by=1), function(n) {
     phi.eq + 2*n*pi;

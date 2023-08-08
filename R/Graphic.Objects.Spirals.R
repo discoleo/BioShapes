@@ -168,7 +168,7 @@ helix.link = function(n, k=3, phi=pi/2) {
 dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
 			lwd=1, lwd.lines = lwd,
 			col = c("red", "green"), col.lines = col,
-			S1 = list(L1 = 1.5, L2 = 2, short = 0.5)) {
+			S1 = list(L1 = 1.5, L2 = 2, short = 0.5, LE2 = 2)) {
   phi = as.radians0(phi);
   p1 = c(x[1], y[1]); p2 = c(x[2], y[2]);
   h1 = helix(p1, p2, n=n, A=A, phi=phi[1], lwd=lwd, parts=0);
@@ -190,11 +190,24 @@ dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
   Ln  = dist.xy(x, y);
   slope = slope(x, y);
   lenL1 = pi / (n.lines + 1);
-  phix0 = pp$x0[[1]];
+  phix0 = pp$x0[[1]]; # first Intersection/Segment
   hasL1 = phix0 >= lenL1;
   lstLL = list();
-  # TODO: proper-processing of half-ends;
   # print(cbind(phi, c(pp$x0[[1]], pp$x1[[1]])));
+  as.lines.dna = function(pp) {
+    ### pp = pp[- c(1, 6)];
+    py = A * sin(pi2*pp + phi[1]);
+    h1 = rotate(pp * Ln, py, slope=slope, p1);
+    py = A * sin(pi2*pp + phi[2]);
+    h2 = rotate(pp * Ln, py, slope=slope, p1);
+    lenL = length(h1$x);
+    tmp = lapply(seq(2, lenL - 1), function(iL) {
+      data.frame(
+        x = c(h1$x[iL], h2$x[iL]),
+        y = c(h1$y[iL], h2$y[iL]), id = iL);
+    });
+    tmp = do.call(rbind, tmp);
+  }
   for(i in seq(len)) {
     pS = p0[i];
     pE = p0[i + 1];
@@ -212,23 +225,27 @@ dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
 	} else {
 		pp = seq(pS, pE, length.out = n.lines + 2);
 	}
-    # pp = pp[- c(1, 6)];
-    py = A * sin(pi2*pp + phi[1]);
-    h1 = rotate(pp * Ln, py, slope=slope, p1);
-    py = A * sin(pi2*pp + phi[2]);
-    h2 = rotate(pp * Ln, py, slope=slope, p1);
+	tmp  = as.lines.dna(pp);
     colL = if(i %% 2 == 1) col.lines[2] else col.lines[1];
-    lenL = length(h1$x);
-    tmp = lapply(seq(2, lenL - 1), function(iL) {
-      data.frame(
-        x = c(h1$x[iL], h2$x[iL]),
-        y = c(h1$y[iL], h2$y[iL]), id = iL);
-    });
-    tmp = do.call(rbind, tmp);
 	tmp$lwd = lwd.lines;
     tmp$col = colL;
     lstLL = c(lstLL, list(tmp));
   }
+  ### DNA-End
+  # TODO: advanced-processing of DNA-end;
+  pS  = p0[length(p0)]; pE = 1;
+  dnE = pi2 * (pE - pS) / lenL1;
+  # print(c(pS, dnE));
+  if(dnE >= S1$LE2) {
+    lenS1 = round(dnE) + 2;
+    pp   = seq(pS, pE, length.out = lenS1);
+	tmp  = as.lines.dna(pp);
+    colL = if(len %% 2 == 1) col.lines[1] else col.lines[2];
+	tmp$lwd = lwd.lines;
+    tmp$col = colL;
+    lstLL = c(lstLL, list(tmp));
+  }
+  #
   lst = c(Lines = lstLL, lst);
   return(as.bioshape(lst));
 }
