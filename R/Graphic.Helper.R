@@ -287,22 +287,32 @@ as.sin.intersect = function(phi) {
 
 # Intersection of 2 shifted-Sine Functions
 #' @export
-which.intersect.sin = function(phi, n, from=0, to = n-1) {
+which.intersect.sin = function(phi, n, from = 0, to = NULL) {
   phi.eq = (pi*c(1,3) - sum(phi))/2;
   id.neg = which(phi.eq < 0);
   if(length(id.neg) > 0) {
     shift = abs(floor(phi.eq[id.neg] / (2*pi)));
     phi.eq[id.neg] = phi.eq[id.neg] + (2*pi)*shift;
   }
-  x0 = sapply(seq(from, to), function(n) {
+  # Sort:
+  if(phi.eq[2] < phi.eq[1]) phi.eq = rev(phi.eq);
+  # Last:
+  phi.rad = phi.eq / (2*pi);
+  if(is.null(to)) {
+    # complete 2*pi cycles: starts at 0;
+	to = floor(n - phi.rad[2] + 0.01);
+  }
+  x0 = sapply(seq(from, to, by=1), function(n) {
     phi.eq + 2*n*pi;
   })
-  if(to - floor(to) >= 0.5)
+  last = n - 1 - to - phi.rad[1] + 0.01;
+  # print(c(to, last, phi.rad));
+  if(last >= 0)
     x0 = c(x0, x0[length(x0)] + pi);
 
   x0 = sort(x0);
   x1 = x0 + phi[1];
-  # x1 = non-shifted; x2 = shifted;
+  # x0 = non-shifted; x1 = shifted;
   return(list(x0 = x0, x1=x1));
 }
 
