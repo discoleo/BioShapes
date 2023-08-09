@@ -259,7 +259,19 @@ examples.GonsOnCircle = function(R = 3, ngons = c(3,4,5,6)) {
   invisible();
 }
 
-#'@export
+
+### Basic Shapes
+
+### Star shape polygon
+#' @export
+example.star = function(n = 5, fill = "red"){
+  plot.base()
+  star = star(n, R = c(3, 1), center = c(5, 5), fill = fill)
+  lines(star)
+}
+
+
+#' @export
 example.curves = function(R = 5, nr = 20, axt = c(1, 2)) {
   par.old = par(mfrow = c(2,2));
 
@@ -309,6 +321,26 @@ example.dna = function(n = 3, n.lin = 6, phi = c(0, pi),
 	plot.base(axt=axt);
 	lines(h2);
 	invisible(h2);
+}
+
+#' @export
+example.dna.tests = function(n = 3, phi = c(pi, -pi/2), A = 1,
+		x0 = c(0, 8), y0 = c(0, 0), dy = 3,
+		dphi = c(0, pi/6, pi/3, pi/2), col = c("red", "green"),
+		xlim = NULL, ylim = NULL, axt = c(1,2)) {
+	LEN = length(dphi);
+	if(length(dy) == 1) {
+		dy = seq(0, LEN - 1) * dy;
+	}
+	if(is.null(xlim)) {
+		sgn  = if(x0[1] < x0[2]) c(-1, 1) else c(1, -1);
+		xlim = x0 + 2*sgn;
+	}
+	if(is.null(ylim)) ylim = c(-2, 10);
+	plot.base(xlim=xlim, ylim=ylim, axt=axt);
+	for(i in seq(LEN)) {
+		lines(dna.new(x0, y0 + dy[i], A=A, col=col, n=n, phi = phi + dphi[i]));
+	}
 }
 
 ### Ducts
@@ -473,27 +505,6 @@ example.neurons = function(n = 5, col = "red",
   lines(tmp)
 }
 
-### 3 Blood cells
-#' @export
-example.bloodCells = function(radius = 2, lwd = 10){
-  radius = 2;
-  lim = c(-radius, radius) * 4;
-  plot.base(xlim = lim, ylim = lim)
-  tmp = draw_blood_cell(radius = radius, center = c(-3, -1), lwd = lwd)
-  lines(tmp)
-  tmp = draw_blood_cell(radius = radius, center = c(3, 1), lwd = lwd)
-  lines(tmp)
-  tmp = draw_blood_cell(radius = radius, center = c(3, -5), lwd = lwd)
-  lines(tmp)
-}
-
-### Star shape polygon
-#' @export
-example.star = function(n = 5, fill = "red"){
-  plot.base()
-  star = star(n, R = c(3, 1), center = c(5, 5), fill = fill)
-  lines(star)
-}
 
 ### Braces
 #' @export
@@ -572,6 +583,10 @@ example.lens = function(pos = c(0, 1/2, 1), fill = "#6480D0"){
   invisible();
 }
 
+#####################
+
+### Cells
+
 ### Example of muscle tissue
 #' @export
 example.muscle = function(n = 6, fill = "red"){
@@ -581,6 +596,25 @@ example.muscle = function(n = 6, fill = "red"){
   lines(tmp, fill=fill)
 }
 
+
+### 3 Blood cells
+#' @export
+example.bloodCells = function(radius = 2, lwd = 10){
+  radius = 2;
+  lim = c(-radius, radius) * 4;
+  plot.base(xlim = lim, ylim = lim)
+  tmp = draw_blood_cell(radius = radius, center = c(-3, -1), lwd = lwd)
+  lines(tmp)
+  tmp = draw_blood_cell(radius = radius, center = c(3, 1), lwd = lwd)
+  lines(tmp)
+  tmp = draw_blood_cell(radius = radius, center = c(3, -5), lwd = lwd)
+  lines(tmp)
+}
+
+
+### Virus
+
+#' @export
 example.virus = function(N = 12, R = 3, lwd = 10){
 
   par.old = par(mfrow = c(1,3));
