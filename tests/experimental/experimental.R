@@ -20,8 +20,6 @@
 # TODO: Centers for muscles
 # TODO: Genome for examples.virus
 
-# citare pachete
-citation("shiny")
 
 ######################
 
@@ -96,7 +94,9 @@ lines(lst)
 
 ################
 
-### Helix for DNA
+### DNA Helix
+
+# old algorithm
 tmp1 = helix(c(0, 0), c(5, 5), n = 2, phi = 0, A = 3/4)
 tmp2 = helix(c(0, 0), c(5, 5), n = 2, phi = pi, A = 3/4)
 plot.base()
@@ -112,6 +112,7 @@ tmp = lapply(seq(40), function(id) {
 pp = which.intersect.sin(c(0, pi), 2)
 p0 = pp$x0 / (2*2*pi) * 5
 abline(v = p0, col="purple")
+
 
 ### DNA
 
@@ -134,13 +135,35 @@ abline(v = pp$x0, col="blue")
 points(pp$x0, sin(pp$x1), col="green", lwd=2)
 
 
-### for monocyte
+### Tests for DNA
+
+###
+phi = c(pi, -pi/2); n = 3;
+example.dna.tests(n=n, phi=phi)
+
+###
+phi = c(pi, -pi/2); n = 3.4;
+example.dna.tests(n=n, phi=phi)
+
+###
+phi = c(pi, -pi/2); n = 3;
+example.dna.tests(n=n, phi=phi, y0 = c(0, -2))
+
+###
+phi = c(pi, -pi/2); n = 1.7;
+example.dna.tests(n=n, phi=phi, x0 = c(0, 6), y0 = c(0, -2))
+# Note: (x0, y0) are NOT exact;
+abline(v=6, col="blue")
+
+
+### TODO: Design of monocyte
 R = 20; n = 10;
 lim = c(-R, R) + c(-2,2);
 plot.base(xlim = lim, ylim = lim)
 abline(h=0, col="green", lty=2)
 xy = helix.rad(R = R, n=n, phi=pi, r = 2);
 lines(xy, col="red")
+
 
 #########################
 
