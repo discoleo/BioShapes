@@ -92,8 +92,13 @@ reflect = function(x, y, p, slope=NULL) {
 }
 
 ### Shift Point or Line
-# Shifts a point octogonal to a given line;
+# Shifts a point orthogonal to a given line;
 # d = distance to shift (translate);
+#' @export
+shift.ortho = function(x, y, d = 1, slope = NULL,
+			scale = 1, id.offset = 0) {
+	shiftLine(x=x, y=y, d=d, slope=slope, scale=scale, id.offset=id.offset);
+}
 #' @export
 shiftLine = function(x, y, d=1, slope=NULL,
                      scale=1, id.offset = 0) {
