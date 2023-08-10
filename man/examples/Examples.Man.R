@@ -99,6 +99,11 @@ example.curves()
 # TODO: create the 4th lens
 example.arcs()
 
+### Apple-Melon Inversion:
+# (weird things can happen at 1 MT)
+example.ArcsByDist(lwd=2)
+
+
 ### Lens Examples ###
 
 example.lens()
