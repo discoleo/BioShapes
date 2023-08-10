@@ -514,7 +514,13 @@ example.braces = function(){
   lines(braces.curly(c(4,0), left=FALSE), lwd=3)
 }
 
-### Example of arcs, how the lens is made
+
+###################
+
+### Example: Arcs
+
+### Design of Lens
+# (Simple Arcs)
 #' @export
 example.arcs = function(){
   par.old = par(mfrow = c(2,2));
@@ -532,6 +538,42 @@ example.arcs = function(){
 
   par(par.old);
   invisible();
+}
+
+
+### Arcs by Distance
+#' @export
+example.ArcsByDist = function(d = c(0.5, 1, 1.5, 2), dL = 0.5,
+		col = c("green", "red"), col.line = "blue", lwd=1) {
+	plot.arcs = function(x, y, dd) {
+		if( ! is.null(col.line)) lines(x, y, col = col.line);
+		for(d in dd) {
+			sg = if(d < 0) -1 else 1;
+			tmp = circle.ArcByDist(x, y, d = d, col="green", lwd=lwd);
+			lines(tmp);
+			tmp = circle.ArcByDist(x, y, d = d + 3*sg, col="red", lwd=lwd);
+			lines(tmp);
+		}
+	}
+	par.old = par(mfrow=c(1,3));
+	# V
+	plot.base()
+	x = c(4, 4); y = c(0, 6);
+	plot.arcs(x, y, d);
+	plot.arcs(x + dL, y, - d);
+	# H
+	plot.base()
+	x = c(2, 5); y = c(4, 4);
+	plot.arcs(x, y, d);
+	plot.arcs(x, y - dL, - d);
+	# Oblique:
+	plot.base()
+	x = c(2, 5); y = c(0, 6);
+	plot.arcs(x, y, d);
+	xy = shift.ortho(x, y, d = - dL);
+	plot.arcs(xy$x, xy$y, - d);
+	par(par.old);
+	invisible();
 }
 
 ### Examples of convex lenses

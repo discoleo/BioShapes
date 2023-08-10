@@ -122,6 +122,10 @@ circlesInFixedCircle = function(n, r, center = c(0,0), phi=0) {
   return(xy);
 }
 
+###############
+
+### Arcs
+
 # Generates the points on an arc of circle.
 #' @export
 circle.arc = function(r=1, phi, center = c(0,0), N = 64) {
@@ -134,4 +138,43 @@ circle.arc = function(r=1, phi, center = c(0,0), N = 64) {
   return(xy);
 }
 
+
+### Circle arc through p1 & p2
+# d = distance from the p1-p2 segment;
+# x, y = corresponding x & y coordinates of p1 and p2;
+#' @export
+circle.ArcByDist = function(x, y, d, col=NULL, fill=NULL, lwd=1, tol=1E-8) {
+	L  = dist.xy(x, y);
+	sg = sign(d); d = abs(d);
+	dd = L - 2*d;
+	center.x = (x[1] + x[2]) / 2;
+	center.y = (y[1] + y[2]) / 2;
+	center = c(center.x, center.y);
+	slope  = slope(x, y);
+	if(abs(dd) < tol) {
+		r  = L / 2;
+		th = pi / 2;
+	} else {
+		r  = L^2/(8*d) + d/2;
+		di = r - d;
+		di = sg * di;
+		th = atan2(L/2, di);
+		center = shift.ortho(center.x, center.y, d = - di, slope = slope);
+		center = unlist(center[1, 1:2]);
+	}
+	phi = pi/2 + atan(slope) - th;
+	# print(c(th=th, phi=phi)/pi);
+	if(sg >= 0) {
+		phi = c(phi, phi + 2*th);
+	} else {
+		phi = c(phi + 2*th, phi);
+	}
+	phi = as.radians0(phi);
+	arc = list(center=center, r=r, phi=phi, lwd=lwd);
+	if( ! is.null(col))  arc$col = col;
+	if( ! is.null(fill)) arc$fill = fill;
+	class(arc) = c("circle.arc", "list");
+	arc = list(arc);
+	return(as.bioshape(arc));
+}
 
