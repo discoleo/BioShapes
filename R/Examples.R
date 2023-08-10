@@ -517,24 +517,35 @@ example.braces = function(){
 
 ###################
 
-### Example: Arcs
+### Examples: Arcs
 
-### Design of Lens
-# (Simple Arcs)
+### Design of Lens: Simple Arcs
 #' @export
-example.arcs = function(){
+example.arcs = function(th = pi/3) {
   par.old = par(mfrow = c(2,2));
 
-  #half
+  ### Half of Next one:
   plot.base()
-  plot.circle.arc(3, c(3,3), c(pi-pi/3, pi), lty=2)
+  plot.circle.arc(3, c(3,3), c(pi - th, pi), lty=2)
 
-  ### Arcs
+  ### 2 x Previous one:
   plot.base()
-  plot.circle.arc(3, c(3,3), c(pi - pi/3, pi + pi/3), lty=2)
-
+  plot.circle.arc(3, c(3,3), c(pi - th, pi + th), lty=2)
+  
+  ### Mirrored:
   plot.base()
-  plot.circle.arc(3, c(3,3), c(2*pi- pi/3, pi/3), lwd=1, col="#6432B0")
+  phi = c(2*pi - th, th);
+  plot.circle.arc(3, c(3,3), phi, lwd=1, col="#6432B0")
+  plot.circle.arc(3, c(3 - 0.2,3), phi + pi, lwd=1, col="#6432B0")
+  # exact = r * sin(pi/3) + 3;
+  abline(h = 6, lty=2, col="green")
+  
+  ### Ex 4:
+  r = 5;
+  plot.base()
+  for(ri in seq(1, r, by=1)) {
+	plot.circle.arc(ri, c(3,3), c(0, 2*th), lwd=1, col="#6432B0")
+  }
 
   par(par.old);
   invisible();
