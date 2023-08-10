@@ -51,14 +51,51 @@ enzymeReaction(lbl = c("A2", "B2", "Enz2", "Inhibitor 2"))
 enzymeReaction(y = 6, lbl = c("A1", "B1", "Enz1", "Inhibitor 1"))
 
 
+#####################
+
+### Basic Shapes
+
+### Star Shape ###
+
+example.star(n=5, fill = "yellow")
+
+
+### Arcs
+
+### Simple Arcs
+example.arcs()
+
+### Apple-Melon Inversion:
+# (weird things can happen at 1 MT)
+example.ArcsByDist(lwd=2)
+
+
+### Lens Examples ###
+
+example.lens()
+
+
+
+### Various Curves ###
+
+example.curves()
+
+
+### Simple Braces ###
+
+example.braces()
+
+
+#####################
+
+### Objects
+
 ### DNA Structure ###
 
 example.dna()
 
-### Blood Cells ###
 
-example.bloodCells()
-
+#####################
 
 ### Neuron
 
@@ -66,7 +103,7 @@ example.bloodCells()
 
 example.neuronDesign()
 
-### Neuron ###
+### Neuron: Basic ###
 
 example.neuron()
 
@@ -83,30 +120,11 @@ example.neurons()
 
 example.muscle()
 
-### Star Shape ###
 
-example.star(n=5, fill = "yellow")
+### Blood Cells ###
 
-### Simple Braces ###
+example.bloodCells()
 
-example.braces()
-
-### Various Curves ###
-
-example.curves()
-
-### Arcs Examples ###
-# TODO: create the 4th lens
-example.arcs()
-
-### Apple-Melon Inversion:
-# (weird things can happen at 1 MT)
-example.ArcsByDist(lwd=2)
-
-
-### Lens Examples ###
-
-example.lens()
 
 ### Duct Examples ###
 
