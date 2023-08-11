@@ -34,6 +34,22 @@ as.bioshape = function(x) {
   invisible(x);
 }
 
+
+#' @export
+rep.all.list = function(x, len) {
+	if(len == 1) return(x);
+	ll = length(x);
+	for(id in seq(ll)) {
+		tmp = x[[id]];
+		if(length(tmp) == 1) x[[id]] = rep(tmp, len);
+	}
+	return(x);
+}
+
+
+################
+### Geometry ###
+
 #' @export
 compute_slope = function(x, y) {
   warning("Deprecated");
@@ -230,6 +246,23 @@ split.line = function(x, y, n) {
   lst = list(x=xs, y=ys);
   return(lst);
 }
+
+### Split into alternate & separate lines
+#' @export
+split.AltLines.matrix = function(xy) {
+	len = nrow(xy);
+	xyS = xy[seq(1, len, by=2), , drop=FALSE];
+	xyE = xy[seq(2, len, by=2), , drop=FALSE];
+	xyS = as.data.frame(xyS);
+	xyE = as.data.frame(xyE);
+	len = nrow(xyS);
+	xyS$id = seq(len);
+	xyE$id = seq(len);
+	xy = rbind(xyS, xyE);
+	names(xy) = c("x", "y", "id");
+	return(xy);
+}
+
 
 ### Distance
 #' @export
