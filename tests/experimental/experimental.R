@@ -226,3 +226,16 @@ points(c(p1[1], p2[1]), c(p1[2], p2[2]), col="red")
 p2 = c(4,6); p1 = c(1, 5)
 xy = helix(p1, p2); lines(xy);
 points(c(p1[1], p2[1]), c(p1[2], p2[2]), col="red")
+
+
+###################
+
+### Ig-like Domains
+
+# minimal test:
+plot.base()
+tt = c(1/2, 3/4); l = 1/2;
+lines(mol.IgDomain(c(1,1), c(1,8), t = tt, l=l))
+lines(mol.IgDomain(c(2,3), c(1,8), t = tt, l=l, lwd=2, col.ig="red"))
+lines(mol.IgDomain(c(3,5), c(1,8), t = tt, l=l, lwd=3, col.ig=c("blue", "red")))
+
