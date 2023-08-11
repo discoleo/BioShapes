@@ -396,13 +396,19 @@ example.complexDuct = function(n = 8, lim = c(-10, 10)){
 example.arcs = function(th = pi/3) {
   par.old = par(mfrow = c(2,2));
 
-  ### Half of Next one:
+  ### Half of Middle Arc:
+  r = 3; dr = 0.3;
   plot.base()
-  plot.circle.arc(3, c(3,3), c(pi - th, pi), lty=2)
+  plot.circle.arc(r + dr, c(3,3), c(pi - th, pi), lty=2)
+  plot.circle.arc(r     , c(3,3), c(pi - th, pi + th), lty=2)
+  plot.circle.arc(r - dr, c(3,3), c(pi, pi + th), lty=2)
 
-  ### 2 x Previous one:
+  ### Curvatures: only with lens()
+  cc = c(4,3)
   plot.base()
-  plot.circle.arc(3, c(3,3), c(pi - th, pi + th), lty=2)
+  plot.circle.arc(3, cc, c(pi - th, pi + th), lty=2)
+  plot.circle.arc(4, cc, c(pi - th, pi + th), lty=2)
+  plot.circle.arc(5, cc, c(pi - th, pi + th), lty=2)
   
   ### Mirrored:
   plot.base()
