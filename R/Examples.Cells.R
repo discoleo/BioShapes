@@ -1,7 +1,28 @@
+###################
+#
+# Title: BioShapes
+#
+# Maintainer: L. Mada
+#
+# Based on: Bachelor Thesis (2022-2023)
+# Adrian Cotoc
+# Faculty of Mathematics and Informatics, UVT
+#
+# Coordinator:
+#   Prof. Daniela Zaharie
+#   Dr. med. Leonard Mada (Syonic SRL)
+#
+# in collaboration with Syonic SRL
+# continous the work of Darian Voda (BSc 2021-2022)
+#
+# GitHub: https://github.com/discoleo/BioShapes
+# [old]
+# GitHub: https://github.com/Adi131313/BioShapes
 
-### Cells
 
-### Example of muscle tissue
+### Cells: Examples
+
+### Muscle Tissue
 #' @export
 example.muscle = function(n = 6, fill = "red"){
   tmp = muscle(n = n, fill = fill)
@@ -29,7 +50,7 @@ example.bloodCells = function(radius = 2, lwd = 10){
 ##############
 ### Neuron ###
 
-### Creation of the neuron
+### Design of Neuron
 #' @export
 example.neuronDesign = function(n = 5, r = 2, col.mark = "red") {
   if(length(r) == 1) r = rep(r, 2);
