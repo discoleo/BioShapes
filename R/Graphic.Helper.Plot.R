@@ -62,12 +62,15 @@ lines.list = function(x, y, lwd=NULL, ...) {
 
 ### Base function
 #' @export
-lines.object.base = function(x, lwd, col=1, fill=NULL, ...) {
+lines.object.base = function(x, lwd, col, fill=NULL, ...) {
   # do NOT overwrite user-value;
   if(is.null(lwd)) {
     lwd = if(is.null(x$lwd)) 1 else x$lwd;
   }
-  x$lwd = NULL;
+  if(is.null(col)) {
+    col = if(is.null(x$col)) 1 else x$col;
+  }
+  x$lwd = NULL; x$col = NULL;
   # Actual components:
   basef = function(lst, lwd, col, ...) {
     if(inherits(lst, "bioshape")) {
@@ -164,7 +167,7 @@ lines.bioshape = function(x, lwd=NULL, col=1, ...) {
 lines.liposome = function(x, col="#48B000", col.line=1, lwd=1, lipid.border=FALSE) {
 	lines.circles(x[[1]], line = lipid.border, fill=col);
 	lines.circles(x[[2]], line = lipid.border, fill=col);
-	# Lines: x[3]!
+	# Lines: requires list: x[3]!
 	lines.object.base(x[3], lwd=lwd, col=col.line);
 	invisible();
 }
