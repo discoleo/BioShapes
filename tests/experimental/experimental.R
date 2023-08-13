@@ -230,6 +230,36 @@ points(c(p1[1], p2[1]), c(p1[2], p2[2]), col="red")
 
 ###################
 
+### Tests: Pins
+
+plot.base()
+lines(pin.center(c(1,5), c(1,5), col.circle="red"))
+points(5,5)
+
+plot.base()
+lines(pin.center(c(1,5), c(1,5), theta = pi/6, col.circle="red", fill="#B280F2", lwd=2))
+points(5,5)
+
+plot.base()
+lines(pin.center(c(1,5), c(5,1), col.circle="red"))
+points(5,1)
+
+plot.base()
+lines(pin.center(c(5,1), c(5,1), theta = pi/6, col.circle="red"))
+points(1,1)
+
+plot.base()
+lines(pin.center(c(5,1), c(1,5), theta = pi/6, col.circle="red"))
+points(1,5)
+
+# TODO: theta >= pi ???
+plot.base()
+lines(pin.center(c(1,5), c(1,5), theta = 4/3*pi, col.circle="red"))
+points(5,5)
+
+
+###################
+
 ### Ig-like Domains
 
 # minimal test:
