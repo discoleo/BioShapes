@@ -438,13 +438,13 @@ example.ArcsByDist = function(d = c(0.5, 1, 1.5, 2), dL = 0.5,
 		if( ! is.null(col.line)) lines(x, y, col = col.line);
 		for(d in dd) {
 			sg = if(d < 0) -1 else 1;
-			tmp = circle.ArcByDist(x, y, d = d, col="green", lwd=lwd);
+			tmp = circle.ArcByDist(x, y, d = d, col=col[1], lwd=lwd);
 			lines(tmp);
-			tmp = circle.ArcByDist(x, y, d = d + 3*sg, col="red", lwd=lwd);
+			tmp = circle.ArcByDist(x, y, d = d + 3*sg, col=col[2], lwd=lwd);
 			lines(tmp);
 		}
 	}
-	par.old = par(mfrow=c(1,3));
+	par.old = par(mfrow=c(2,2));
 	# V
 	plot.base()
 	x = c(4, 4); y = c(0, 6);
@@ -461,6 +461,13 @@ example.ArcsByDist = function(d = c(0.5, 1, 1.5, 2), dL = 0.5,
 	plot.arcs(x, y, d);
 	xy = shift.ortho(x, y, d = - dL);
 	plot.arcs(xy$x, xy$y, - d);
+	# Oblique:
+	plot.base()
+	x = c(5, 2); y = c(0, 6);
+	plot.arcs(x, y, d);
+	xy = shift.ortho(x, y, d = - dL);
+	plot.arcs(xy$x, xy$y, - d);
+	
 	par(par.old);
 	invisible();
 }
