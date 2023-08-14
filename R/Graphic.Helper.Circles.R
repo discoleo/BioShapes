@@ -146,6 +146,7 @@ circle.arc = function(r=1, phi, center = c(0,0), N = 64) {
 circle.ArcByDist = function(x, y, d, col=NULL, fill=NULL, lwd=1, tol=1E-8) {
 	L  = dist.xy(x, y);
 	sg = sign(d); d = abs(d);
+	qq = which.quadrant(x, y);
 	dd = L - 2*d;
 	center.x = (x[1] + x[2]) / 2;
 	center.y = (y[1] + y[2]) / 2;
@@ -158,7 +159,11 @@ circle.ArcByDist = function(x, y, d, col=NULL, fill=NULL, lwd=1, tol=1E-8) {
 		r  = L^2/(8*d) + d/2;
 		di = r - d;
 		di = sg * di;
-		th = atan2(L/2, di);
+		if(qq == 2) {
+			th = atan2( - L/2, - di);
+		} else {
+			th = atan2(L/2, di);
+		}
 		center = shift.ortho(center.x, center.y, d = - di, slope = slope);
 		center = unlist(center[1, 1:2]);
 	}
