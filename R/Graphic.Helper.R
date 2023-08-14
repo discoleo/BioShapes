@@ -72,7 +72,18 @@ slope = function(x, y) {
   return(slope);
 }
 
-
+### Quadrant
+# 2|1
+# 3|4
+#' @export
+which.quadrant = function(x, y) {
+	qdr = if(x[1] <= x[2]) {
+		if(y[1] <= y[2]) 1 else 4;
+	} else {
+		if(y[1] <= y[2]) 2 else 3;
+	}
+	return(qdr);
+}
 
 
 ### Reflect Point across line
