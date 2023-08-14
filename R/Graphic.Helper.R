@@ -113,7 +113,7 @@ reflect = function(x, y, p, slope=NULL) {
 #' @export
 shiftLine = function(x, y, d = 1, slope = NULL,
 			scale = 1, id.offset = 0) {
-	shiftLine(x=x, y=y, d=d, slope=slope, scale=scale, id.offset=id.offset);
+	shift.ortho(x=x, y=y, d=d, slope=slope, scale=scale, id.offset=id.offset);
 }
 #' @export
 shift.ortho.df = function(xy, d = 1, slope = NULL,
