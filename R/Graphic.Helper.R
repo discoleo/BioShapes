@@ -111,12 +111,19 @@ reflect = function(x, y, p, slope=NULL) {
 # Shifts a point orthogonal to a given line;
 # d = distance to shift (translate);
 #' @export
-shift.ortho = function(x, y, d = 1, slope = NULL,
+shiftLine = function(x, y, d = 1, slope = NULL,
 			scale = 1, id.offset = 0) {
 	shiftLine(x=x, y=y, d=d, slope=slope, scale=scale, id.offset=id.offset);
 }
 #' @export
-shiftLine = function(x, y, d=1, slope=NULL,
+shift.ortho.df = function(xy, d = 1, slope = NULL,
+		scale = 1, id.offset = 0) {
+	xy = shift.ortho(xy$x, xy$y, d=d, slope=slope,
+		scale=scale, id.offset=id.offset);
+	return(xy);
+}
+#' @export
+shift.ortho = function(x, y, d=1, slope=NULL,
                      scale=1, id.offset = 0) {
   if(is.null(slope)) {
     if(length(x) < 2 || length(y) < 2)
@@ -134,7 +141,7 @@ shiftLine = function(x, y, d=1, slope=NULL,
     if(length(d) == 1) {
       r = data.frame(x = x - d, y = y);
     } else {
-      r = lapply(seq(along=d), function(id) {
+      r = lapply(seq(along = d), function(id) {
         data.frame(x = x - d[id], y = y, id = id + id.offset);
       })
       r = do.call(rbind, r);
@@ -147,7 +154,7 @@ shiftLine = function(x, y, d=1, slope=NULL,
     if(length(d) == 1) {
       r = data.frame(x = x, y = y + d);
     } else {
-      r = lapply(seq(along=d), function(id) {
+      r = lapply(seq(along = d), function(id) {
         data.frame(x = x, y = y + d[id], id = id + id.offset);
       })
       r = do.call(rbind, r);
@@ -165,7 +172,7 @@ shiftLine = function(x, y, d=1, slope=NULL,
     y.sh  = y - delta*sl.orto;
     data.frame(x=x.sh, y=y.sh, id = id + id.offset);
   }
-  rez = lapply(seq(length(d)), function(id) shift.f(x, y, id))
+  rez = lapply(seq(along = d), function(id) shift.f(x, y, id))
   rez = data.frame(do.call(rbind, rez));
   return(rez);
 }
@@ -173,6 +180,27 @@ shiftLine = function(x, y, d=1, slope=NULL,
 # shift point p along line defined by (x, y);
 # d = distance;
 # TODO: Scale reference Ox
+#' @export
+shift.points.df = function(p, x, y, d=1, slope=NULL, scale=1, simplify = TRUE) {	
+	len = nrow(p);
+	if(len == 0) return(list());
+	if(is.null(slope)) {
+		if(length(x) < 2 || length(y) < 2)
+			stop("The base-line requires 2 points!");
+		slope = slope(x,y);
+	}
+	lst = lapply(seq(len), function(id) {
+		pp = shiftPoint(p[id, c("x", "y")], slope=slope, d=d, scale=scale);
+		data.frame(pp);
+	})
+	if( ! simplify) return(lst);
+	lst = do.call(rbind, lst);
+	names(lst) = c("x", "y");
+	if(match("id", names(p))) {
+		lst$id = rep(p$id, each = length(d));
+	}
+	return(lst);
+}
 #' @export
 shiftPoint = function(p, x, y, d=1, slope=NULL, scale=1) {
   if(is.null(slope)) {
