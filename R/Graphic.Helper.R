@@ -86,7 +86,7 @@ which.quadrant = function(x, y) {
 }
 #' @export
 which.quadrant.phi = function(phi) {
-	qdr = if(phi < 0) phi = as.radians0(phi);
+	if(phi < 0 || phi > 2*pi) phi = as.radians0(phi);
 	if(phi <= pi/2) return(1);
 	if(phi < pi) return(2);
 	if(phi <= 3*pi/2) return(3);
