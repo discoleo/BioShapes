@@ -63,13 +63,12 @@ mol.IgDomain = function(x, y, t = 3/4, l = 1, d = 1.5 * l,
 
 ### Ig: Basic Backbone
 #' @export
-mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, theta = pi/3, phi = pi/2) {
+mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2,
+		theta = pi/3, phi = pi/2, debug = FALSE) {
 	th2 = theta / 2;
 	slope = tan(phi);
 	qq = which.quadrant.phi(phi);
-	dsgn  = if(qq == 1 || qq == 4) height else - height;
-	isRUp = (phi >= th2) && (phi - th2 <= pi);
-	isLUp = (phi + th2 >= 0) && (phi + th2 <= pi);
+	dsgn = if(qq == 1 || qq == 4) height else - height;
 	# Bottom & Top: Start & End
 	pS = shift.ortho(xy, slope=slope, d = c(-d.HH, d.HH)/2);
 	pE = shift.points.df(pS, slope=slope, d = dsgn, simplify = FALSE);
@@ -83,11 +82,19 @@ mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, theta = pi/3, phi
 	# Top:
 	pT1 = shift.ortho(pE[[1]], slope=slope, d = - dd);
 	pT2 = shift.ortho(pE[[2]], slope=slope, d = dd);
-	if(qq == 3 || qq == 4) d.HH = - d.HH;
-	dHR = if(isRUp) - d.HH else   d.HH;
-	dHL = if(isLUp)   d.HH else - d.HH;
+	#
+	qR = which.quadrant.phi(phi + th2);
+	qL = which.quadrant.phi(phi - th2);
+	if(debug) cat("Quadrant: ", c(qR, qL), "\n");
+	sgnR = if(qR == 1)  1 else -1;
+	sgnL = if(qL == 2) -1 else  1;
+	dHR = sgnR * d.HH;
+	dHL = sgnL * d.HH;
 	LL1 = shift.ortho.df(rbind(mid1, pT1[, c("x", "y")]), d = dHR);
 	LL2 = shift.ortho.df(rbind(mid2, pT2[, c("x", "y")]), d = dHL);
+	#
+	isRUp = (phi >= th2) && (phi - th2 <= pi);
+	isLUp = (phi + th2 >= 0) && (phi + th2 <= pi);
 	lst = list(pS=pS, pE=pE, mid1=mid1, mid2=mid2,
 		pT1=pT1, pT2=pT2, LL1=LL1, LL2=LL2, qq = list(isRUp=isRUp, isLUp=isLUp));
 	return(lst);
