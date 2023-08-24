@@ -161,6 +161,8 @@ circle.ArcByDist = function(x, y, d, col=NULL, fill=NULL, lwd=1, tol=1E-8) {
 		di = sg * di;
 		if(qq == 2) {
 			th = atan2( - L/2, - di);
+		} else if(qq == 4) {
+			th = atan2( - L/2, - di);
 		} else {
 			th = atan2(L/2, di);
 		}

@@ -80,7 +80,7 @@ which.quadrant = function(x, y) {
 	qdr = if(x[1] <= x[2]) {
 		if(y[1] <= y[2]) 1 else 4;
 	} else {
-		if(y[1] <= y[2]) 2 else 3;
+		if(y[1] < y[2]) 2 else 3;
 	}
 	return(qdr);
 }
@@ -121,6 +121,7 @@ reflect = function(x, y, p, slope=NULL) {
 ### Shift Point or Line
 # Shifts a point orthogonal to a given line;
 # d = distance to shift (translate);
+# Note: direction of shift is independent of quadrant;
 #' @export
 shiftLine = function(x, y, d = 1, slope = NULL,
 			scale = 1, id.offset = 0) {
