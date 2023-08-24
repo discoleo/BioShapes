@@ -32,7 +32,7 @@ mol.IgDomain = function(x, y, t = 3/4, l = 1, d = 1.5 * l,
 	slope = slope(x, y);
 	xy = sapply(seq(len), function(id) {
 		l = opt$l[id];
-		if(qdr == 2) l = - l;
+		if(qdr == 2 || qdr == 3) l = - l;
 		shiftPoint(mid[id, c(1,2)], slope=slope, d = c(-l, l));
 	}); # t(x, x, y, y);
 	# Ig-Loops:
