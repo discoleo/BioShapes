@@ -269,3 +269,10 @@ lines(mol.IgDomain(c(1,1), c(1,8), t = tt, l=l))
 lines(mol.IgDomain(c(2,3), c(1,8), t = tt, l=l, lwd=2, col.ig="red"))
 lines(mol.IgDomain(c(3,5), c(1,8), t = tt, l=l, lwd=3, col.ig=c("blue", "red")))
 
+
+###
+plot.base(xlim = c(-10, 10))
+lines(mol.Ig(c(0,1)))
+lines(mol.Ig(c(-2,1), phi = pi - pi/10))
+lines(mol.Ig(c(2,1), phi = pi/10))
+
