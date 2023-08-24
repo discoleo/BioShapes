@@ -431,9 +431,11 @@ example.arcs = function(th = pi/3) {
 
 
 ### Arcs by Distance
+# dL = distance between the 2 halves;
+# col.line = colour of middle line;
 #' @export
 example.ArcsByDist = function(d = c(0.5, 1, 1.5, 2), dL = 0.5,
-		col = c("green", "red"), col.line = "blue", lwd=1) {
+		col = c("green", "red"), col.line = "blue", lwd=1, debug=FALSE) {
 	plot.arcs = function(x, y, dd) {
 		if( ! is.null(col.line)) lines(x, y, col = col.line);
 		for(d in dd) {
@@ -444,26 +446,33 @@ example.ArcsByDist = function(d = c(0.5, 1, 1.5, 2), dL = 0.5,
 			lines(tmp);
 		}
 	}
+	if(is.logical(debug)) {
+		if(debug == FALSE) debug = 0;
+	}
 	par.old = par(mfrow=c(2,2));
 	# V
 	plot.base()
 	x = c(4, 4); y = c(0, 6);
+	if(debug < 0) y = 6 - y;
 	plot.arcs(x, y, d);
 	plot.arcs(x + dL, y, - d);
 	# H
 	plot.base()
 	x = c(2, 5); y = c(4, 4);
+	if(debug < 0) x = 5 - x;
 	plot.arcs(x, y, d);
 	plot.arcs(x, y - dL, - d);
 	# Oblique:
 	plot.base()
 	x = c(2, 5); y = c(0, 6);
+	if(debug < 0) { x = 5 - x; y = 6 - y; }
 	plot.arcs(x, y, d);
 	xy = shift.ortho(x, y, d = - dL);
 	plot.arcs(xy$x, xy$y, - d);
 	# Oblique:
 	plot.base()
 	x = c(5, 2); y = c(0, 6);
+	if(debug < 0) { x = 5 - x; y = 6 - y; }
 	plot.arcs(x, y, d);
 	xy = shift.ortho(x, y, d = - dL);
 	plot.arcs(xy$x, xy$y, - d);
