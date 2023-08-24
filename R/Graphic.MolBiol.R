@@ -66,9 +66,8 @@ mol.IgDomain = function(x, y, t = 3/4, l = 1, d = 1.5 * l,
 mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, theta = pi/3, phi = pi/2) {
 	th2 = theta / 2;
 	slope = tan(phi);
-	isUp  = ((phi >= 0) && (phi <= pi/2)) ||
-			(phi >= 3*pi/2);
-	dsgn  = if(isUp) height else - height;
+	qq = which.quadrant.phi(phi);
+	dsgn  = if(qq == 1 || qq == 4) height else - height;
 	isRUp = (phi >= th2) && (phi - th2 <= pi);
 	isLUp = (phi + th2 >= 0) && (phi + th2 <= pi);
 	# Bottom & Top: Start & End
@@ -84,6 +83,7 @@ mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, theta = pi/3, phi
 	# Top:
 	pT1 = shift.ortho(pE[[1]], slope=slope, d = - dd);
 	pT2 = shift.ortho(pE[[2]], slope=slope, d = dd);
+	if(qq == 3 || qq == 4) d.HH = - d.HH;
 	dHR = if(isRUp) - d.HH else   d.HH;
 	dHL = if(isLUp)   d.HH else - d.HH;
 	LL1 = shift.ortho.df(rbind(mid1, pT1[, c("x", "y")]), d = dHR);
