@@ -270,9 +270,19 @@ lines(mol.IgDomain(c(2,3), c(1,8), t = tt, l=l, lwd=2, col.ig="red"))
 lines(mol.IgDomain(c(3,5), c(1,8), t = tt, l=l, lwd=3, col.ig=c("blue", "red")))
 
 
-###
+### Ig Monomer
+
+# Upper quadrants:
 plot.base(xlim = c(-10, 10))
-lines(mol.Ig(c(0,1)))
+lines(mol.Ig(c( 0,1)))
 lines(mol.Ig(c(-2,1), phi = pi - pi/10))
-lines(mol.Ig(c(2,1), phi = pi/10))
+lines(mol.Ig(c( 2,1), phi = pi/10))
+
+# Lower Quadrants:
+plot.base(xlim = c(-10, 10))
+lines(mol.Ig(c(-3,6), phi = pi + pi/12))
+lines(mol.Ig(c(-1,3), phi = pi + pi/4))
+lines(mol.Ig(c( 0,1), phi = 3*pi/2))
+lines(mol.Ig(c( 1,3), phi = 2*pi - pi/4))
+lines(mol.Ig(c( 3,6), phi = 2*pi - pi/12))
 
