@@ -116,7 +116,15 @@ mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.rel = 1/4,
 	# Ig-Domains:
 	if(length(n) == 1) n = c(n, 0);
 	lst = list();
-	if(n[1] > 0) {
+	if(n[1] == 0) {
+		HV1x = c(Ig$pT1$x, mid1[1]); HV1y = c(Ig$pT1$y, mid1[2]);
+		HV2x = c(Ig$pT2$x, mid2[1]); HV2y = c(Ig$pT2$y, mid2[2]);
+		VV = as.bioshape(list(
+			LV1 = Ig$LL1, LV2 = Ig$LL2,
+			HV1 = list(x = HV1x, y = HV1y),
+			HV2 = list(x = HV2x, y = HV2y)) );
+		lst = c(lst, VV = list(VV));
+	} else if(n[1] > 0) {
 		nS  = n[1] + 1; l = lL / nS * d.rel;
 		tL  = seq(n[1]) / nS;
 		qq  = Ig$qq;
