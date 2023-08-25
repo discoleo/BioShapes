@@ -83,20 +83,20 @@ mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2,
 	pT1 = shift.ortho(pE[[1]], slope=slope, d = - dd);
 	pT2 = shift.ortho(pE[[2]], slope=slope, d = dd);
 	#
-	qR = which.quadrant.phi(phi + th2);
-	qL = which.quadrant.phi(phi - th2);
+	qR = which.quadrant.phi(phi - th2);
+	qL = which.quadrant.phi(phi + th2);
 	if(debug) cat("Quadrant: ", c(qR, qL), "\n");
-	sgnR = if(qR == 1)  1 else -1;
-	sgnL = if(qL == 2) -1 else  1;
+	sgnR = if(qR == 2) -1 else  1;
+	sgnL = if(qL == 1)  1 else -1;
 	dHR = sgnR * d.HH;
 	dHL = sgnL * d.HH;
-	LL1 = shift.ortho.df(rbind(mid1, pT1[, c("x", "y")]), d = dHR);
-	LL2 = shift.ortho.df(rbind(mid2, pT2[, c("x", "y")]), d = dHL);
+	LL1 = shift.ortho.df(rbind(mid1, pT1[, c("x", "y")]), d = dHL);
+	LL2 = shift.ortho.df(rbind(mid2, pT2[, c("x", "y")]), d = dHR);
 	#
 	isRUp = (phi >= th2) && (phi - th2 <= pi);
 	isLUp = (phi + th2 >= 0) && (phi + th2 <= pi);
 	lst = list(pS=pS, pE=pE, mid1=mid1, mid2=mid2,
-		pT1=pT1, pT2=pT2, LL1=LL1, LL2=LL2, qq = list(isRUp=isRUp, isLUp=isLUp));
+		pT1=pT1, pT2=pT2, LL1=LL1, LL2=LL2, qq = list(qq1=qL, qq2=qR));
 	return(lst);
 }
 
@@ -120,16 +120,16 @@ mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.rel = 1/4,
 		nS  = n[1] + 1; l = lL / nS * d.rel;
 		tL  = seq(n[1]) / nS;
 		qq  = Ig$qq;
-		sgR = if(qq$isRUp) 1 else -1;
-		sgL = if(qq$isLUp) 1 else -1;
-		LC1 = mol.IgDomain(Ig$LL1$x, Ig$LL1$y, t = tL, l = l, d = - sgR * 1.5 * l);
-		LC2 = mol.IgDomain(Ig$LL2$x, Ig$LL2$y, t = tL, l = l, d = sgL * 1.5 * l);
+		sg1 = if(qq$qq1 == 1) -1 else 1;
+		sg2 = if(qq$qq2 == 2) -1 else 1;
+		LC1 = mol.IgDomain(Ig$LL1$x, Ig$LL1$y, t = tL, l = l, d = - sg1 * 1.5 * l);
+		LC2 = mol.IgDomain(Ig$LL2$x, Ig$LL2$y, t = tL, l = l, d = sg2 * 1.5 * l);
 		LC  = as.bioshape(list(LC1=LC1, LC2=LC2));
 		# HV:
 		HV1x = c(mid1[1], Ig$pT1$x[1]); HV1y = c(mid1[2], Ig$pT1$y[1]);
 		HV2x = c(mid2[1], Ig$pT2$x[1]); HV2y = c(mid2[2], Ig$pT2$y[1]);
-		HV1 = mol.IgDomain(HV1x, HV1y, t = tL, l = l, d = sgR * 1.5 * l);
-		HV2 = mol.IgDomain(HV2x, HV2y, t = tL, l = l, d = - sgL * 1.5 * l);
+		HV1 = mol.IgDomain(HV1x, HV1y, t = tL, l = l, d = sg1 * 1.5 * l);
+		HV2 = mol.IgDomain(HV2x, HV2y, t = tL, l = l, d = - sg2 * 1.5 * l);
 		HV  = as.bioshape(list(HV1=HV1, HV2=HV2));
 		lst = c(lst, HV = HV, LC = LC);
 	}
