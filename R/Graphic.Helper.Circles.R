@@ -65,6 +65,7 @@ testFilledCircle = function(xy, r=NULL, R=NULL, lim=NULL, line=TRUE,
 
 ### Helper Functions
 
+### Points on a Circle
 # r = radius;
 # phi = rotation (counter-clockwise);
 #' @export
@@ -78,7 +79,37 @@ pointsCircle = function(n, r, center = c(0,0), phi=0) {
 }
 
 
-#### Tangent circles forming a large circle ####
+################
+
+### Constructors
+
+### Tangent & 2 Points:
+# - tangent in p1 at line of given slope,
+#   and passing also through p2;
+#' @export
+circle.p2s = function(p1, p2, slope) {
+	# y1 = - x1/slope + y0;
+	# (x1-x2)*xc + (y1-y2)*yc = (x1^2 - x2^2 + y1^2 - y2^2)/2;
+	x1 = p1[1]; y1 = p1[2];
+	x2 = p2[1]; y2 = p2[2];
+	dy = y1 - y2;
+	sinv = 1 / slope; # as (+) value;
+	xdiv = (x1 - x2) - sinv*dy;
+	xc = (x1^2 - x2^2 + dy*(y1 + y2))/2 - dy*(y1 + x1*sinv);
+	xc = xc / xdiv;
+	yc = y1 - sinv*(xc - x1);
+	r  = dist.xy(c(x1,xc), c(y1,yc));
+	lst = list(r=r, center = c(xc, yc));
+	class(lst) = c("circle", "list");
+	return(lst);
+}
+
+
+#####################
+
+### Chains of Circles
+
+### Tangent circles forming a large circle
 #' @export
 circlesOnCircle = function(n, r, center = c(0,0), phi=0) {
   R  = r / sin(pi/n);
@@ -88,7 +119,7 @@ circlesOnCircle = function(n, r, center = c(0,0), phi=0) {
   return(xy);
 }
 
-##### Outside a large circle of given radius #####
+### Outside a large circle of given radius
 #' @export
 circlesOutsideFixedCircle = function(n, r, center = c(0,0), phi=0) {
   r1 = r / (1/sin(pi/n) - 1);
