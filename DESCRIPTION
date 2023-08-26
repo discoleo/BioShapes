@@ -3,8 +3,8 @@ Title: Methods to Generate Biological Shapes
 Version: 0.0.5
 Authors@R:
     person("Leonard", "Mada", "leo.mada@syonic.eu", role = c("aut", "cre"))
-    person("Darian-Florian", "Voda", "darian.voda00@e-uvt.ro", role = c("aut"))
-    person("Adrian", "Cotoc", "darian.voda00@e-uvt.ro", role = c("aut"))
+    person("Darian-Florian", "Voda", role = c("aut"))
+    person("Adrian", "Cotoc", role = c("aut"))
     person("Daniela", "Zaharie", "daniela.zaharie@e-uvt.ro", role=c("ctb"))
 Imports: shape
 Description: Methods to generate and draw various simple shapes and biological shapes, e.g. liposomes, viral particles, helix strands.
