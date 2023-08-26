@@ -1,9 +1,10 @@
 Package: BioShapes
 Title: Methods to Generate Biological Shapes
-Version: 0.0.1
-Authors@R: 
-    person("Darian-Florian", "Voda", "darian.voda00@e-uvt.ro", role = c("aut", "cre"))
-    person("Leonard", "Mada", "leo.mada@syonic.eu", role = c("aut"))
+Version: 0.0.5
+Authors@R:
+    person("Leonard", "Mada", "leo.mada@syonic.eu", role = c("aut", "cre"))
+    person("Darian-Florian", "Voda", "darian.voda00@e-uvt.ro", role = c("aut"))
+    person("Adrian", "Cotoc", "darian.voda00@e-uvt.ro", role = c("aut"))
     person("Daniela", "Zaharie", "daniela.zaharie@e-uvt.ro", role=c("ctb"))
 Imports: shape
 Description: Methods to generate and draw various simple shapes and biological shapes, e.g. liposomes, viral particles, helix strands.
@@ -14,5 +15,5 @@ RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://github.com/Adi131313/BioShapes
-BugReports: https://github.com/Adi131313/BioShapes/issues
+URL: https://github.com/discoleo/BioShapes
+BugReports: https://github.com/discoleo/BioShapes/issues
