@@ -63,7 +63,7 @@ mol.IgDomain = function(x, y, t = 3/4, l = 1, d = 1.5 * l,
 
 ### Ig: Basic Backbone
 #' @export
-mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2,
+mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, t.LC = c(0, 1), d.HH = 1/2,
 		theta = pi/3, phi = pi/2, debug = FALSE) {
 	th2 = theta / 2;
 	slope = tan(phi);
@@ -75,44 +75,52 @@ mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2,
 	### Variable Region (Hinge):
 	# Start:
 	as.m = function(id) as.matrix(rbind(pS[id, c("x", "y")], pE[[id]]))
-	mid1 = c(t.Hinge, 1 - t.Hinge) %*% as.m(1);
-	mid2 = c(t.Hinge, 1 - t.Hinge) %*% as.m(2);
+	midL = c(t.Hinge, 1 - t.Hinge) %*% as.m(1);
+	midR = c(t.Hinge, 1 - t.Hinge) %*% as.m(2);
 	d2 = height * (1 - t.Hinge);
 	dd = d2 * tan(theta/2); # d(Tip VRegion, Midline)
 	# Top:
-	pT1 = shift.ortho(pE[[1]], slope=slope, d = - dd);
-	pT2 = shift.ortho(pE[[2]], slope=slope, d = dd);
-	#
+	pTL = shift.ortho(pE[[1]], slope=slope, d = - dd);
+	pTR = shift.ortho(pE[[2]], slope=slope, d = dd);
+	# LC = Light Chains
 	qR = which.quadrant.phi(phi - th2);
 	qL = which.quadrant.phi(phi + th2);
 	if(debug) cat("Quadrant: ", c(qR, qL), "\n");
 	sgnR = if(qR == 2) -1 else  1;
 	sgnL = if(qL == 1)  1 else -1;
-	dHR = sgnR * d.HH;
+	dHR = sgnR * d.HH; # reusing d.HH
 	dHL = sgnL * d.HH;
-	LL1 = shift.ortho.df(rbind(mid1, pT1[, c("x", "y")]), d = dHL);
-	LL2 = shift.ortho.df(rbind(mid2, pT2[, c("x", "y")]), d = dHR);
+	LCL = shift.ortho.df(rbind(midL, pTL[, c("x", "y")]), d = dHL);
+	LCR = shift.ortho.df(rbind(midR, pTR[, c("x", "y")]), d = dHR);
 	#
-	isRUp = (phi >= th2) && (phi - th2 <= pi);
-	isLUp = (phi + th2 >= 0) && (phi + th2 <= pi);
-	lst = list(pS=pS, pE=pE, mid1=mid1, mid2=mid2,
-		pT1=pT1, pT2=pT2, LL1=LL1, LL2=LL2, qq = list(qq1=qL, qq2=qR));
+	shiftL = function(xy) {
+		tt = rbind(c(1 - t.LC[1], t.LC[1]), c(1 - t.LC[2], t.LC[2]));
+		xy$x = tt %*% xy$x;
+		xy$y = tt %*% xy$y;
+		return(xy);
+	}
+	LCL = shiftL(LCL); LCR = shiftL(LCR);
+	#
+	lst = list(pS=pS, pE=pE, mid1=midL, mid2=midR,
+		pT1=pTL, pT2=pTR, LL1=LCL, LL2=LCR, qq = list(qq1=qL, qq2=qR));
 	return(lst);
 }
 
 # xy  = base of Ig-molecule;
 # phi = slope of molecule;
 # theta = angle between the 2 chains;
+# d.HH  = distance between the 2 Heavy Chains;
+# d.rel = relative length of the Ig-Domains;
 #' @export
 mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.rel = 1/4,
-		n = c(2,2), theta = pi/3, phi = pi/2) {
+		n = c(2,2), t.LC = c(0, 1), phi = pi/2, theta = pi/3) {
 	phi = as.radians0(phi);
 	th2 = theta / 2;
-	Ig = mol.IgBB(xy=xy, height=height, t.Hinge=t.Hinge, d.HH=d.HH,
+	Ig = mol.IgBB(xy=xy, height=height, t.Hinge=t.Hinge, t.LC=t.LC, d.HH=d.HH,
 		theta=theta, phi=phi);
 	mid1 = Ig$mid1; mid2 = Ig$mid2;
-	d2 = height * (1 - t.Hinge);
-	lL = d2 / cos(th2); # length of Light Chain
+	d2   = height * (1 - t.Hinge);
+	lenL = d2 / cos(th2); # length of Light Chain
 	# Ig-Domains:
 	if(length(n) == 1) n = c(n, 0);
 	lst = list();
@@ -125,7 +133,7 @@ mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.rel = 1/4,
 			HV2 = list(x = HV2x, y = HV2y)) );
 		lst = c(lst, VV = list(VV));
 	} else if(n[1] > 0) {
-		nS  = n[1] + 1; l = lL / nS * d.rel;
+		nS  = n[1] + 1; l = lenL / nS * d.rel;
 		tL  = seq(n[1]) / nS;
 		qq  = Ig$qq;
 		sg1 = if(qq$qq1 == 1) -1 else 1;
