@@ -64,7 +64,7 @@ mol.IgDomain = function(x, y, t = 3/4, l = 1, d = 1.5 * l,
 ### Ig: Basic Backbone
 #' @export
 mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, t.LC = c(0, 1), d.HH = 1/2,
-		theta = pi/3, phi = pi/2, debug = FALSE) {
+		d.LH = d.HH, theta = pi/3, phi = pi/2, debug = FALSE) {
 	th2 = theta / 2;
 	slope = tan(phi);
 	qq = which.quadrant.phi(phi);
@@ -88,13 +88,13 @@ mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, t.LC = c(0, 1), d.HH = 1/2,
 	if(debug) cat("Quadrant: ", c(qR, qL), "\n");
 	sgnR = if(qR == 2) -1 else  1;
 	sgnL = if(qL == 1)  1 else -1;
-	dHR = sgnR * d.HH; # reusing d.HH
-	dHL = sgnL * d.HH;
+	dHR = sgnR * d.LH;
+	dHL = sgnL * d.LH;
 	LCL = shift.ortho.df(rbind(midL, pTL[, c("x", "y")]), d = dHL);
 	LCR = shift.ortho.df(rbind(midR, pTR[, c("x", "y")]), d = dHR);
 	#
+	tt = rbind(c(1 - t.LC[1], t.LC[1]), c(1 - t.LC[2], t.LC[2]));
 	shiftL = function(xy) {
-		tt = rbind(c(1 - t.LC[1], t.LC[1]), c(1 - t.LC[2], t.LC[2]));
 		xy$x = tt %*% xy$x;
 		xy$y = tt %*% xy$y;
 		return(xy);
@@ -106,17 +106,19 @@ mol.IgBB = function(xy, height = 6, t.Hinge = 2/5, t.LC = c(0, 1), d.HH = 1/2,
 	return(lst);
 }
 
+# n = number of Ig-domains in the V-region & HC-region;
 # xy  = base of Ig-molecule;
 # phi = slope of molecule;
 # theta = angle between the 2 chains;
 # d.HH  = distance between the 2 Heavy Chains;
+# d.LH  = distance between the H & L Chains;
 # d.rel = relative length of the Ig-Domains;
 #' @export
-mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.rel = 1/4,
+mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.LH = d.HH, d.rel = 1/4,
 		n = c(2,2), t.LC = c(0, 1), phi = pi/2, theta = pi/3) {
 	phi = as.radians0(phi);
 	th2 = theta / 2;
-	Ig = mol.IgBB(xy=xy, height=height, t.Hinge=t.Hinge, t.LC=t.LC, d.HH=d.HH,
+	Ig = mol.IgBB(xy=xy, height=height, t.Hinge=t.Hinge, t.LC=t.LC, d.HH=d.HH, d.LH=d.LH,
 		theta=theta, phi=phi);
 	mid1 = Ig$mid1; mid2 = Ig$mid2;
 	d2   = height * (1 - t.Hinge);
@@ -138,6 +140,7 @@ mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.rel = 1/4,
 		qq  = Ig$qq;
 		sg1 = if(qq$qq1 == 1) -1 else 1;
 		sg2 = if(qq$qq2 == 2) -1 else 1;
+		# d.IgDomain.rel = 1.5; hardcoded!
 		LC1 = mol.IgDomain(Ig$LL1$x, Ig$LL1$y, t = tL, l = l, d = - sg1 * 1.5 * l);
 		LC2 = mol.IgDomain(Ig$LL2$x, Ig$LL2$y, t = tL, l = l, d = sg2 * 1.5 * l);
 		LC  = as.bioshape(list(LC1=LC1, LC2=LC2));
