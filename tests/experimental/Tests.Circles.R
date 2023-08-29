@@ -4,57 +4,68 @@
 
 ### Circles
 
+test.r = function(x) {
+	test.isNaN(x$r);
+}
+test.isNaN = function(x) {
+	if(is.nan(x) || is.na(x)) {
+		return(FALSE);
+	}
+	return(TRUE);
+}
 
 ### Through 3 Points
 
+test.circle.p3 = function(x, y, msg="") {
+	cc = circle.p3(x, y)
+	if( ! test.r(cc)) {
+		cat(paste0("Failed in ", msg, ": x = ",
+			x[1], x[2], "; y = ", y[1], y[2], ";\n"));
+		stop();
+	}
+	#
+	plot.base()
+	lines(as.bioshape(list(cc)))
+	polygon(x, y, border="blue")
+	points(x, y, col="red")
+}
 
 # VH
 x = c(1,1,5); y = c(1,4,1)
-cc = circle.p3(x, y)
-plot.base()
-lines(as.bioshape(list(cc)))
-polygon(x, y, border="blue")
-points(x, y, col="red")
+test.circle.p3(x, y)
+
+# VH
+x = c(1,6,1); y = c(1,1,4)
+test.circle.p3(x, y)
+
 
 # V-Narrow
 x = c(1,1,5); y = c(1,4,3)
-cc = circle.p3(x, y)
-plot.base()
-lines(as.bioshape(list(cc)))
-polygon(x, y, border="blue")
-points(x, y, col="red")
+test.circle.p3(x, y)
 
 # V-Obtuse
 x = c(1,1,5); y = c(1,4,0)
-cc = circle.p3(x, y)
-plot.base()
-lines(as.bioshape(list(cc)))
-polygon(x, y, border="blue")
-points(x, y, col="red")
+test.circle.p3(x, y)
+
+# V-Obtuse
+x = c(7,1,7); y = c(4,2,8)
+test.circle.p3(x, y)
 
 # H-Narrow
 x = c(1,5,4); y = c(1,1,8)
-cc = circle.p3(x, y)
-plot.base()
-lines(as.bioshape(list(cc)))
-polygon(x, y, border="blue")
-points(x, y, col="red")
+test.circle.p3(x, y)
 
 # H-Obtuse
 x = c(1,8,6); y = c(1,1,0)
-cc = circle.p3(x, y)
-plot.base()
-lines(as.bioshape(list(cc)))
-polygon(x, y, border="blue")
-points(x, y, col="red")
+test.circle.p3(x, y)
+
+# H-Obtuse
+x = c(7,1,3); y = c(8,2,8)
+test.circle.p3(x, y)
 
 # G-Obtuse
 x = c(1,8,6); y = c(1,2,0)
-cc = circle.p3(x, y)
-plot.base()
-lines(as.bioshape(list(cc)))
-polygon(x, y, border="blue")
-points(x, y, col="red")
+test.circle.p3(x, y)
 
 
 ##############################
