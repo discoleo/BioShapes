@@ -147,9 +147,13 @@ center.p3 = function(x, y) {
 			xc = mid13.x + (mid13.y - mid12.y) * slope;
 			return(c(xc, mid12.y));
 		}
-	} else if(y[1] == y[2]) {
+	}
+	if(y[1] == y[3]) {
+		if(y[1] == y[2]) stop("Points are collinear!");
+		x = x[c(1,3,2)]; y = y[c(1,3,2)];
+	}
+	if(y[1] == y[2]) {
 		# H Line
-		if(y[1] == y[3]) stop("Points are collinear!");
 		mid12.x = (x[1] + x[2])/2;
 		mid12.y = y[1];
 		mid13.x = (x[1] + x[3])/2;
