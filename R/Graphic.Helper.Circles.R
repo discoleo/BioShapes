@@ -1,22 +1,22 @@
-###################
+#######################################
 #
-# Thesis
+# BioShapes
+# Maintainer: L. Mada
 #
-# Title: BioShapes
+# https://github.com/discoleo/BioShapes
 #
-# BSC Candidate: Adrian Cotoc (2022-2023)
+# Continuation of:
+# 1. Bachelor Thesis (2022-2023)
+# Candidate: Adrian Cotoc
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
+#   in collaboration with Syonic SRL
+# GitHub: https://github.com/Adi131313/BioShapes
 #
-# Based on BSC Thesis: Darian Voda (2021-2022)
-# Faculty of Mathematics and Informatics, UVT
-#
-# in collaboration with Syonic SRL
-#
-# GitHub: https://github.com/Adi131313/Licenta
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
 
 
 ### Helper Functions to Generate Circles
@@ -83,6 +83,26 @@ pointsCircle = function(n, r, center = c(0,0), phi=0) {
 
 ### Constructors
 
+#' @export
+circle = function(...) {
+	UseMethod("circle");
+	# NO default method
+}
+
+
+### Circle through 3 Points
+#' @export
+circle.p3 = function(x, y) {
+	if(length(x) != 3 || length(y) != 3) {
+		stop("Circle needs 3 points!");
+	}
+	mid = center.p3(x, y);
+	r   = dist.xy(c(x[1], mid[1]), c(y[1], mid[2]));
+	lst = list(r=r, center = mid);
+	class(lst) = c("circle", "list");
+	return(lst);
+}
+
 ### Tangent & 2 Points:
 # - tangent in p1 at line of given slope,
 #   and passing also through p2;
@@ -105,11 +125,60 @@ circle.p2s = function(p1, p2, slope) {
 }
 
 
+### Center of Triangle
+#' @export
+center.p3 = function(x, y) {
+	# Special Cases: slope == Inf or 0;
+	if(x[1] == x[2]) {
+		# V Line
+		if(x[1] == x[3]) stop("Points are collinear!");
+		mid12.x = x[1];
+		mid12.y = (y[1] + y[2])/2;
+		mid13.x = (x[1] + x[3])/2;
+		mid13.y = (y[1] + y[3])/2;
+		slope = slope(x[c(1,3)], y[c(1,3)]);
+		if(slope == 0) {
+			return(c(mid13.x, mid12.y));
+		} else {
+			xc = mid13.x + (mid13.y - mid12.y) * slope;
+			return(c(xc, mid12.y));
+		}
+	} else if(y[1] == y[2]) {
+		# H Line
+		if(y[1] == y[3]) stop("Points are collinear!");
+		mid12.x = (x[1] + x[2])/2;
+		mid12.y = y[1];
+		mid13.x = (x[1] + x[3])/2;
+		mid13.y = (y[1] + y[3])/2;
+		slope = slope(x[c(1,3)], y[c(1,3)]);
+		yc = mid13.y - (mid12.x - mid13.x)/slope;
+		return(c(mid12.x, yc));
+	}
+	# General Case:
+	slope2  = slope(x[c(1,2)], y[c(1,2)]);
+	slope3  = slope(x[c(1,3)], y[c(1,3)]);
+	# Collinearity check;
+	if(slope2 == slope3) stop("Points are collinear!");
+	mid12.x = (x[1] + x[2])/2;
+	mid12.y = (y[1] + y[2])/2;
+	mid13.x = (x[1] + x[3])/2;
+	mid13.y = (y[1] + y[3])/2;
+	# mid12.y - yc = xc/slope2 - mid12.x/slope2;
+	# mid13.y - yc = xc/slope3 - mid13.x/slope3;
+	xc = (mid12.y - mid13.y) + mid12.x/slope2 - mid13.x/slope3;
+	xc = xc / (1/slope2 - 1/slope3);
+	yc = mid12.y + (mid12.x - xc) / slope2;
+	return(c(xc, yc));
+}
+
+
 #####################
 
 ### Chains of Circles
+# - Tangent circles forming a large circle;
 
-### Tangent circles forming a large circle
+### Large Circle of Unknown Radius
+# - n small circles each of radius r;
 #' @export
 circlesOnCircle = function(n, r, center = c(0,0), phi=0) {
   R  = r / sin(pi/n);
@@ -130,19 +199,17 @@ circlesOutsideFixedCircle = function(n, r, center = c(0,0), phi=0) {
   return(xy);
 }
 
-#### Tangent circles ####
-
-##### Forming large circle of given radius #####
+### Forming large circle of given radius
 #' @export
 circlesOnFixedCircle = function(n, r, center = c(0,0), phi=0) {
   r1 = r * sin(pi/n);
   xy = pointsCircle(n, r=r, center=center, phi=phi);
-  attr(xy, "R") = r+r1; # reuse same attribute name ???
+  attr(xy, "R") = r1 + r; # reuse same attribute name ???
   attr(xy, "r") = r1;
   return(xy);
 }
 
-##### Inside a large circle of given radius #####
+### Inside a large circle of given radius
 #' @export
 circlesInFixedCircle = function(n, r, center = c(0,0), phi=0) {
   r1 = r / (1 + 1/sin(pi/n));
