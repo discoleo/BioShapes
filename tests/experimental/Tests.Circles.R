@@ -30,6 +30,10 @@ test.circle.p3 = function(x, y, msg="") {
 	points(x, y, col="red")
 }
 
+###
+par.old = par(mfrow = c(3,3))
+
+
 # VH
 x = c(1,1,5); y = c(1,4,1)
 test.circle.p3(x, y)
@@ -66,6 +70,9 @@ test.circle.p3(x, y)
 # G-Obtuse
 x = c(1,8,6); y = c(1,2,0)
 test.circle.p3(x, y)
+
+###
+par(par.old)
 
 
 ##############################
