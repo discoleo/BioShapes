@@ -1,42 +1,52 @@
-###################
+#######################################
 #
-# Bachelor Thesis
+# BioShapes
+# Maintainer: L. Mada
 #
-# Title: BioShapes
+# https://github.com/discoleo/BioShapes
 #
+# Continuation of:
+# 1. Bachelor Thesis (2022-2023)
 # Candidate: Adrian Cotoc
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
+#   in collaboration with Syonic SRL
 # GitHub: https://github.com/Adi131313/BioShapes
+#
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
+
 
 #### Cell-like Objects ####
 
-#### Cells resembling a smooth muscle cell ####
+
+### Smooth muscle cell or Fibroblast
 #' @export
-cellSmooth = function(x, y, r=1, slope=NULL, lwd=1, N=128, phi=pi) {
-  if(is.null(slope)) slope = slope(x, y);
-  d = sqrt((x[1] - x[2])^2 + (y[1] - y[2])^2);
-  dx = d / N;
-  pL = seq(0, d, by=dx);
-  pp = shiftPoint(c(x[1], y[1]), d=pL, slope=slope);
-  pL = pL + x[1];
-  px = pp[,1] - x[1]; px = px * pi / max(abs(px));
-  # Margin 1:
-  pS = r * sin(px) + pp[,2];
-  lst = list(x = pL, y = pS);
-  # Margin 2:
-  pS = r * sin(px + phi) + pp[,2];
-  lst = list(lst, list(x = pL, y = pS));
-  #
-  lst$lwd = lwd;
-  return(lst)
+cell.SmoothMuscle = function(x, y, r=1, slope=NULL, lwd=1, col=NULL, fill=NULL,
+		N=128, phi=pi) {
+	if(is.null(slope)) slope = slope(x, y);
+	d = sqrt((x[1] - x[2])^2 + (y[1] - y[2])^2);
+	dx = d / N;
+	pL = seq(0, d, by=dx);
+	pp = shiftPoint(c(x[1], y[1]), d=pL, slope=slope);
+	pL = pL + x[1];
+	px = pp[,1] - x[1]; px = px * pi / max(abs(px));
+	# Margin 1:
+	pS = r * sin(px) + pp[,2];
+	lst = list(x = pL, y = pS);
+	# Margin 2:
+	pS = r * sin(px + phi) + pp[,2];
+	lst$x = c(lst$x, rev(pL));
+	lst$y = c(lst$y, rev(pS));
+	#
+	lst$lwd = lwd;
+	if( ! is.null(col)) lst$col = col;
+	if( ! is.null(fill)) lst$fill = fill;
+	class(lst) = c("polygon", "list");
+	lst = as.bioshape(list(lst));
+	return(lst)
 }
 
 

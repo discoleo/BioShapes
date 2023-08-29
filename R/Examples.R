@@ -48,11 +48,12 @@ examples.bioshapes = function(col = list("#48B000", 1, 1,
 
 	### Ex 3: Smooth Muscles / Connective Tissue
 	# Cell 1:
-	lst = cellSmooth(c(6, 9), c(8, 9), r=0.3);
-	lines.object.base(lst, lwd=lwd[3], col=col[[3]]);
+	lst = cell.SmoothMuscle(c(6, 9), c(8, 9), r=0.3, fill="#F04832");
+	lines(lst, lwd=lwd[3], col=col[[3]]);
 	# Cell 2:
-	lst = cellSmooth(c(6, 9), c(6.5, 8), r=0.4);
-	lines.object.base(lst, lwd=lwd[3], col=col[[3]]);
+	# - someone in the lab sipped some toluidine blue in the haematoxylin;
+	lst = cell.SmoothMuscle(c(6, 9), c(6.5, 8), r=0.4, fill="#D03264");
+	lines(lst, lwd=lwd[3], col=col[[3]]);
 	text(7.5, y.txt[1], "Smooth Muscles");
 
 
