@@ -129,9 +129,13 @@ circle.p2s = function(p1, p2, slope) {
 #' @export
 center.p3 = function(x, y) {
 	# Special Cases: slope == Inf or 0;
+	if(x[1] == x[3]) {
+		if(x[1] == x[2]) stop("Points are collinear!");
+		x = x[c(1,3,2)]; y = y[c(1,3,2)];
+	} else if(x[2] == x[3]) { x = x[c(2,3,1)]; y = y[c(2,3,1)]; }
+	#
 	if(x[1] == x[2]) {
 		# V Line
-		if(x[1] == x[3]) stop("Points are collinear!");
 		mid12.x = x[1];
 		mid12.y = (y[1] + y[2])/2;
 		mid13.x = (x[1] + x[3])/2;
