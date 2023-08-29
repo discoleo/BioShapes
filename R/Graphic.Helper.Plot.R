@@ -110,7 +110,7 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
       # if(is.null(fill)) fill = lst$fill;
       lwd = if(is.null(lst$lwd)) lwd else lst$lwd;
       col = if(is.null(lst$col)) col else lst$col;
-      fill = lst$fill;
+      fill = if(is.null(lst$fill)) NA else lst$fill;
       polygon(lst$x, lst$y, col=fill, border=col, lwd = lwd, ...);
     } else {
       # warning("Only lines");
@@ -157,7 +157,7 @@ lines.chemistry = function(x, lwd=NULL, col=1, ...) {
 
 ### Bio-Shapes
 #' @export
-lines.bioshape = function(x, lwd=NULL, col=1, ...) {
+lines.bioshape = function(x, lwd=NULL, col=NULL, ...) {
   lines.object.base(x, lwd=lwd, col=col, ...)
   invisible();
 }
