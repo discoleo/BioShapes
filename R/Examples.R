@@ -43,7 +43,7 @@ examples.bioshapes = function(col = list("#48B000", c("#FFFF80", "#9648C0"),
 
 	### Ex 2: Brush-Border Cell
 	p1 = c(3, 6.5)
-	cell = cell.BrushBorder(p1, w=2, h=2.5, A=1/2, lwd = lwd[2],
+	cell = cell.BrushBorder(p1, w=2, h=2.5, lwd = lwd[2],
 		col = 1, fill = col[[2]][[1]], fill.nc = col[[2]][[2]]);
 	lines(cell);
 	text(4, y.txt[1], "Brush-Border Cell");

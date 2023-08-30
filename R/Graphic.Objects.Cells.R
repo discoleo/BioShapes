@@ -65,10 +65,20 @@ cell.SmoothMuscle = function(x, y, r = 1, r.nc = r/2, slope = NULL, t.nc = c(0.5
 # p1 = Base of Cell (Point 1);
 # w, h = width, height;
 # n = number of half-cycles of sine-wave;
+as.options.BrushBorder = function(...) {
+	opt = list(...);
+	len = length(opt);
+	if(len == 1 && is.list(opt[[1]])) opt = opt[[1]];
+	if(is.null(opt$n)) opt$n = 6.5;
+	if(is.null(opt$A)) opt$A = 0.5;
+	if(is.null(opt$N)) opt$N = 128;
+	if(is.null(opt$phi)) opt$phi = 0;
+	return(opt);
+}
 #' @export
-cell.BrushBorder = function(p1, w, h, n=6.5, A=1, slope=0,
-		r.nc = ~ 1/5, t.nc = c(1/2, 7/20), lwd = 1, lwd.nc = lwd,
-		col = NULL, fill = NULL, col.nc = 1, fill.nc = NULL, N=128, phi=0) {
+cell.BrushBorder = function(p1, w, h, slope=0, r.nc = ~ 1/5, t.nc = c(1/2, 7/20),
+		lwd = 1, lwd.nc = lwd, col = NULL, fill = NULL, col.nc = 1, fill.nc = NULL,
+		brush.options = list(n=6.5, A=0.5, N=128, phi=0)) {
 	# Cell:
 	p11 = p1;
 	p12 = shiftPoint( p1, d=w, slope=slope);
@@ -76,7 +86,8 @@ cell.BrushBorder = function(p1, w, h, n=6.5, A=1, slope=0,
 	p21 = unlist(p21);
 	p22 = shiftPoint(p21, d=w, slope=slope);
 	# Brush-Border:
-	brush = helix(p21, p22, n=n, A=A, phi=phi, N=N);
+	opt   = as.options.BrushBorder(brush.options);
+	brush = helix(p21, p22, n = opt$n, A = opt$A, phi = opt$phi, N = opt$N);
 	brush = brush[[1]];
 	brush$x = c(brush$x, p22[1], p12[1], p11[1], p21[1]);
 	brush$y = c(brush$y, p22[2], p12[2], p11[2], p21[2]);
