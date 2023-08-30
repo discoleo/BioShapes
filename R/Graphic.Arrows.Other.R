@@ -58,3 +58,56 @@ pin.center = function(x, y, theta = pi/3, lwd=1, lwd.circle = lwd,
 	return(as.bioshape(lst0));
 }
 
+######################
+######################
+
+### Boxes & Labels
+
+
+# TODO:
+# - correct length by - h;
+# - correct/verify arcs when scale != 1;
+#' @export
+box.cap = function(x, y, h = 1, lwd = 1, col = NULL, fill = NULL, scale = 1) {
+	slope = slope(x, y);
+	h2 = h/2;
+	xy = shift.ortho(x, y, slope=slope, d = c(-h2, h2), scale=scale);
+	qd = which.quadrant(x, y);
+	lst  = list(Poly = xy, lwd = lwd);
+	### Caps
+	phi0 = atan(slope / scale);
+	if(qd == 2 || qd == 4) phi0 = pi/2 - phi0;
+	phiA = c(phi0 + pi/2, phi0 + 3*pi/2);
+	phiB = c(phi0 + 3*pi/2, phi0 + pi/2);
+	# 2 | 1
+	# 3 | 4
+	if(qd == 1 || qd == 2) {
+		phi1 = phiA; phi2 = phiB;
+	} else {
+		phi1 = phiB; phi2 = phiA;
+	}
+	cap1 = list(r = h2, center = c(x[1], y[1]), phi = phi1, lwd=lwd);
+	cap2 = list(r = h2, center = c(x[2], y[2]), phi = phi2, lwd=lwd);
+	if( ! is.null(col)) {
+		lst$col = col;
+		cap1$col = col;
+		cap2$col = col;
+	}
+	if( ! is.null(fill)) {
+		cap1$fill = fill;
+		cap2$fill = fill;
+		# Polygon:
+		pp = list(
+			x = lst$Poly$x[c(1,2,4,3)],
+			y = lst$Poly$y[c(1,2,4,3)]);
+		pp$fill = fill; pp$col = NA;
+		class(pp) = c("polygon", "list");
+		lst = c(PolyFill = list(pp), lst);
+	}
+	class(cap1) = c("circle.arc", "list");
+	class(cap2) = c("circle.arc", "list");
+	cap = as.bioshape(list(Cap1 = cap1, Cap2 = cap2))
+	lst = c(lst, Cap = cap);
+	return(as.bioshape(lst));
+}
+
