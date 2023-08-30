@@ -61,22 +61,27 @@ cell.SmoothMuscle = function(x, y, r = 1, r.nc = r/2, slope = NULL, t.nc = c(0.5
 }
 
 
-#### brush-Border Cells ####
-# p1 = Base of Cell, Point 1;
+### Brush-Border Cells
+# p1 = Base of Cell (Point 1);
+# w, h = width, height;
+# n = number of half-cycles of sine-wave;
 #' @export
 cell.BrushBorder = function(p1, w, h, n=6.5, A=1, slope=0, lwd=1, N=128, phi=0) {
   # Cell:
   p11 = p1;
-  p12 = shiftPoint(p1,  d=w, slope=slope);
-  p21 = shiftLine( p1,  d=h, slope=slope);
+  p12 = shiftPoint( p1, d=w, slope=slope);
+  p21 = shift.ortho(p1, d=h, slope=slope);
   p21 = unlist(p21);
   p22 = shiftPoint(p21, d=w, slope=slope);
   # Brush-Border:
   brush = helix(p21, p22, n=n, A=A, phi=phi, N=N);
-  brush[[1]]$x = c(brush[[1]]$x, p22[1], p12[1], p11[1], p21[1], brush[[1]]$x[[1]]);
-  brush[[1]]$y = c(brush[[1]]$y, p22[2], p12[2], p11[2], p21[2], brush[[1]]$y[[1]]);
+  brush = brush[[1]];
+  brush$x = c(brush$x, p22[1], p12[1], p11[1], p21[1]);
+  brush$y = c(brush$y, p22[2], p12[2], p11[2], p21[2]);
   brush$lwd = lwd;
-  return(brush);
+  class(brush) = c("polygon", "list");
+  brush = list(Cell = brush);
+  return(as.bioshape(brush));
 }
 
 ### Muscle tissue ###

@@ -1,20 +1,22 @@
-###################
+#######################################
 #
-# Bachelor Thesis
+# BioShapes
+# Maintainer: L. Mada
 #
-# Title: BioShapes
+# https://github.com/discoleo/BioShapes
 #
+# Continuation of:
+# 1. Bachelor Thesis (2022-2023)
 # Candidate: Adrian Cotoc
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
+#   in collaboration with Syonic SRL
 # GitHub: https://github.com/Adi131313/BioShapes
+#
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
 
 
 ##########################
@@ -41,8 +43,8 @@ examples.bioshapes = function(col = list("#48B000", 1, 1,
 
 	### Ex 2: Brush-Border Cell
 	p1 = c(3, 6.5)
-	cell = cell.BrushBorder(p1, w=2, h=2.5, A=1/2);
-	lines(cell, lwd=lwd[2], col=col[[2]]);
+	cell = cell.BrushBorder(p1, w=2, h=2.5, A=1/2, lwd = lwd[2]);
+	lines(cell, col=col[[2]]);
 	text(4, y.txt[1], "Brush-Border Cell");
 
 
