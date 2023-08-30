@@ -1,31 +1,33 @@
-###################
+#######################################
 #
-# Bachelor Thesis
+# BioShapes
+# Maintainer: L. Mada
 #
-# Title: BioShapes
+# https://github.com/discoleo/BioShapes
 #
+# Continuation of:
+# 1. Bachelor Thesis (2022-2023)
 # Candidate: Adrian Cotoc
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
+#   in collaboration with Syonic SRL
 # GitHub: https://github.com/Adi131313/BioShapes
+#
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
 
-### Initial Ideas
 
 
 ####################
 
 ### Helper Functions
 
+### Basic math functions:
 # - reflect;
 # - shift;
-# - plot;
+
 
 #' @export
 as.bioshape = function(x) {
@@ -91,6 +93,21 @@ which.quadrant.phi = function(phi) {
 	if(phi < pi) return(2);
 	if(phi <= 3*pi/2) return(3);
 	return(4);
+}
+
+
+### Center: 4 points
+# t = partition;
+#' @export
+center.p4 = function(p1, p2, p3, p4, t = c(1/2, 1/2)) {
+	tx = cbind(t[1], 1 - t[1]);
+	ty = rbind(t[2], 1 - t[2]);
+	xx = matrix(c(p1[1], p2[1], p3[1], p4[1]), 2);
+	yy = matrix(c(p1[2], p2[2], p3[2], p4[2]), 2);
+	mid.x = as.vector((tx %*% xx) %*% ty);
+	mid.y = as.vector((tx %*% yy) %*% ty);
+	center = c(mid.x, mid.y);
+	return(center);
 }
 
 
