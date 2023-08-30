@@ -65,6 +65,7 @@ cell.SmoothMuscle = function(x, y, r = 1, r.nc = r/2, slope = NULL, t.nc = c(0.5
 # p1 = Base of Cell (Point 1);
 # w, h = width, height;
 # n = number of half-cycles of sine-wave;
+#' @export
 as.options.BrushBorder = function(...) {
 	opt = list(...);
 	len = length(opt);
