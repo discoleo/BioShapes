@@ -41,7 +41,7 @@ examples.bioshapes = function(col = list("#48B000", 1, 1,
 
 	### Ex 2: Brush-Border Cell
 	p1 = c(3, 6.5)
-	cell = cellBrushBorder(p1, w=2, h=2.5, A=1/2);
+	cell = cell.BrushBorder(p1, w=2, h=2.5, A=1/2);
 	lines(cell, lwd=lwd[2], col=col[[2]]);
 	text(4, y.txt[1], "Brush-Border Cell");
 
@@ -63,6 +63,7 @@ examples.bioshapes = function(col = list("#48B000", 1, 1,
 	### Row 2:
 
 	### Ex 4: Vertical Helix
+	# Note: explicit function for DNA also available!
 	p1 = c(2.5, 0.5); p2 = c(p1[1], 5);
 	lst1 = helix(p1, p2);
 	lst2 = helix(p1, p2, phi=-pi/2);

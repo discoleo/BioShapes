@@ -64,7 +64,7 @@ cell.SmoothMuscle = function(x, y, r = 1, r.nc = r/2, slope = NULL, t.nc = c(0.5
 #### brush-Border Cells ####
 # p1 = Base of Cell, Point 1;
 #' @export
-cellBrushBorder = function(p1, w, h, n=6.5, A=1, slope=0, lwd=1, N=128, phi=0) {
+cell.BrushBorder = function(p1, w, h, n=6.5, A=1, slope=0, lwd=1, N=128, phi=0) {
   # Cell:
   p11 = p1;
   p12 = shiftPoint(p1,  d=w, slope=slope);
