@@ -260,6 +260,38 @@ points(5,5)
 
 ###################
 
+### Tests: Boxes
+
+tmp = box.cap(c(1,7), c(1,6), fill = "red", col="#FFA0A0")
+plot.base()
+lines(tmp)
+
+tmp = box.cap(c(1,7), c(4,4), fill = "red", col="#FFA0A0")
+plot.base()
+lines(tmp)
+
+scale = 2
+tmp = box.cap(c(1,7), c(1,6), fill = "red", col="#FFA0A0", scale=scale)
+plot.base(asp=1/scale)
+lines(tmp)
+
+
+plot.base()
+tmp = box.cap(c(1,7), c(2,7))
+lines(tmp)
+tmp = box.cap(c(1,7), c(0,5))
+lines(tmp)
+
+
+plot.base()
+tmp = box.cap(c(1,7), c(7,2))
+lines(tmp)
+tmp = box.cap(c(7,1), c(0,5))
+lines(tmp)
+
+
+###################
+
 ### Ig-like Domains
 
 # minimal test:
