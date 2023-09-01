@@ -103,12 +103,12 @@ test.circle.p2s(slope = -2, add=T)
 
 plot.base()
 tmp = circle.hash(11, phi = pi/5, r = 2, center = c(4,4), lty = 2, col = "red")
-lines(as.bioshape(list(tmp)))
+lines(tmp)
 
 ### Scale
 n = 13; r = 2; scale = 2; phi = pi/3;
 tmp = circle.hash(n, phi = phi, r = r, center = c(4,4), scale=scale)
 plot.base(asp = 1/scale)
-lines(as.bioshape(list(tmp)))
+lines(tmp)
 abline(v = 4 + c(-r,r), col = "green")
 
