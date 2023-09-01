@@ -296,17 +296,18 @@ circle.ArcByDist = function(x, y, d, col=NULL, fill=NULL, lwd=1, tol=1E-8) {
 # n = number of lines;
 # phi = counter-clockwise rotation starting at pi/2;
 #' @export
-circle.hash = function(n, center = c(0, 0), r = 1, phi = 0,
+circle.hash = function(n, center = c(0, 0), r = 1, phi = 0, scale = 1,
 		lwd = 1, lty = 1, col = NULL, neps = 1/(2*n)) {
 	n0 = 1 - neps;
 	tx = seq(- n0, n0, length.out = n);
 	ty = sqrt(1 - tx^2);
-	x1 = tx * cos(phi) + ty * sin(phi);
-	y1 = tx * sin(phi) - ty * cos(phi);
-	x2 = tx * cos(phi) - ty * sin(phi);
-	y2 = tx * sin(phi) + ty * cos(phi);
-	x1 = r*x1 + center[1]; y1 = r*y1 + center[2];
-	x2 = r*x2 + center[1]; y2 = r*y2 + center[2];
+	tx = r * tx; ty = r * ty;
+	cs = cos(phi); sn = sin(phi);
+	# print(c(cs, sn, slope.sqrt))
+	x1 = tx * cs + ty * sn + center[1];
+	y1 = (tx * sn - ty * cs) * scale + center[2];
+	x2 = tx * cs - ty * sn + center[1];
+	y2 = (tx * sn + ty * cs) * scale + center[2];
 	hasCol = ! is.null(col);
 	if(hasCol && length(col) == 1) col = rep(col, n);
 	xy = lapply(seq(n), function(id) {
