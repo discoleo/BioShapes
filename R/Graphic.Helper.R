@@ -24,7 +24,7 @@
 
 ### Helper Functions
 
-### Basic math functions:
+### Basic Math Functions:
 # - reflect;
 # - shift;
 
@@ -433,7 +433,7 @@ is.helix.rev = function(phi, debug=FALSE) {
 		if(phi[2] < phi.c[1] || phi[2] >= phi.c[2]) {
 			return(TRUE);
 		}
-	} else if(phi[2] > phi.c[2] && phi[2] <= phi.c[1]) {
+	} else if(phi[2] > phi.c[2] && phi[2] < phi.c[1]) {
 		return(TRUE);
 	}
 	return(FALSE);
