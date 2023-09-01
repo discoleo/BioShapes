@@ -137,6 +137,8 @@ points(pp$x0, sin(pp$x1), col="green", lwd=2)
 
 ### Tests for DNA
 
+par.old = par(mfrow = c(2,2))
+
 ###
 phi = c(pi, -pi/2); n = 3;
 example.dna.tests(n=n, phi=phi)
@@ -155,6 +157,10 @@ example.dna.tests(n=n, phi=phi, x0 = c(0, 6), y0 = c(0, -2))
 # Note: (x0, y0) are NOT exact;
 abline(v=6, col="blue")
 
+par(par.old)
+
+
+############
 
 ### TODO: Design of monocyte
 R = 20; n = 10;
