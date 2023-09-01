@@ -117,7 +117,9 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
       lwd0 = lst$lwd; if( ! is.null(lwd0)) lwd = lwd0;
       col0 = lst$col; if( ! is.null(col0)) col = col0;
       lst$lwd = NULL; lst$col = NULL;
-      if(inherits(lst, "lines.list")){
+	  if(is.null(lwd)) lwd = 1;
+	  # Note: lines.list uses the same color for all elements!
+      if(inherits(lst, "lines.list")) {
         lapply(lst, function(lst) {
           lines(lst$x, lst$y, lwd=lwd, col=col, ...);
         });

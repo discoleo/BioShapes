@@ -303,7 +303,6 @@ circle.hash = function(n, center = c(0, 0), r = 1, phi = 0, scale = 1,
 	ty = sqrt(1 - tx^2);
 	tx = r * tx; ty = r * ty;
 	cs = cos(phi); sn = sin(phi);
-	# print(c(cs, sn, slope.sqrt))
 	x1 = tx * cs + ty * sn + center[1];
 	y1 = (tx * sn - ty * cs) * scale + center[2];
 	x2 = tx * cs - ty * sn + center[1];
