@@ -101,14 +101,27 @@ test.circle.p2s(slope = -2, add=T)
 
 ### Hashed Circle
 
-plot.base()
-tmp = circle.hash(11, phi = pi/5, r = 2, center = c(4,4), lty = 2, col = "red")
-lines(tmp)
+test.circle.hash = function(n, phi, r = 1, scale = 1, center = c(4,4), ...) {
+	tmp = circle.hash(n, phi=phi, r=r, center=center, scale=scale, ...)
+	plot.base(asp = 1/scale)
+	lines(tmp)
+	abline(v = center[1] + c(-r,r), col = "green")
+}
+
+
+###
+par.old = par(mfrow = c(2,2))
+
+### Base:
+test.circle.hash(11, phi = pi/5, r = 2, center = c(4,4), lty = 2, col = "red")
 
 ### Scale
-n = 13; r = 2; scale = 2; phi = pi/3;
-tmp = circle.hash(n, phi = phi, r = r, center = c(4,4), scale=scale)
-plot.base(asp = 1/scale)
-lines(tmp)
-abline(v = 4 + c(-r,r), col = "green")
+n = 13; r = 2; scale = 2;
+test.circle.hash(n, phi = pi/3, r=r, scale=scale)
+#
+test.circle.hash(n, phi = pi/2 + 0.2, r=r, scale=scale)
+#
+test.circle.hash(n, phi = pi - 0.2, r=r, scale=scale)
+
+par(par.old)
 
