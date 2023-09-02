@@ -425,15 +425,16 @@ which.intersect.sin = function(phi, n, from = 0, to = NULL) {
 #' @export
 is.helix.rev = function(phi, debug=FALSE) {
 	# Warning: phi needs to be normalized to [0, 2*pi);
+	if(phi[1] == pi/2) return(FALSE);
 	phi.c = as.sin.intersect(phi[1]);
 	isInc = phi.c[1] <= phi.c[2];
 	if(debug) print(cbind(phi, phi.c));
 	if(isInc) {
 		# Note: strictly "<", but ">=";
 		if(phi[2] < phi.c[1] || phi[2] >= phi.c[2]) {
-			return(TRUE);
+			return(FALSE);
 		}
-	} else if(phi[2] > phi.c[2] && phi[2] < phi.c[1]) {
+	} else if(phi[2] < phi.c[2] || phi[2] >= phi.c[1]) {
 		return(TRUE);
 	}
 	return(FALSE);

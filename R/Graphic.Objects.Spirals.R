@@ -226,8 +226,8 @@ dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
 		pp = seq(pS, pE, length.out = n.lines + 2);
 	}
 	tmp  = as.lines.dna(pp);
-    colL = if(i %% 2 == 1) col.lines[2] else col.lines[1];
-	tmp$lwd = lwd.lines;
+    colL = if(i %% 2 == 1) col.lines[1] else col.lines[2];
+    tmp$lwd = lwd.lines;
     tmp$col = colL;
     lstLL = c(lstLL, list(tmp));
   }
@@ -239,9 +239,9 @@ dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
   if(dnE >= S1$LE2) {
     lenS1 = round(dnE) + 2;
     pp   = seq(pS, pE, length.out = lenS1);
-	tmp  = as.lines.dna(pp);
-    colL = if(len %% 2 == 1) col.lines[1] else col.lines[2];
-	tmp$lwd = lwd.lines;
+    tmp  = as.lines.dna(pp);
+    colL = if(len %% 2 == 1) col.lines[2] else col.lines[1];
+    tmp$lwd = lwd.lines;
     tmp$col = colL;
     lstLL = c(lstLL, list(tmp));
   }
