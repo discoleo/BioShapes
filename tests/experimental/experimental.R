@@ -116,13 +116,18 @@ abline(v = p0, col="purple")
 
 ### DNA
 
-h2 = dna.new(c(1,8), c(1,6), phi = c(0, pi), n.lin=6)
-plot.base()
-lines(h2, lwd=1)
+par.old = par(mfrow = c(2,1))
 
-h2 = dna.new(c(1,8), c(1,6), phi = c(pi/2, pi), n.lin=5)
-plot.base()
-lines(h2, lwd=2)
+h2 = dna.new(c(1,8), c(1,6), phi = c(0, pi), n.lin=6)
+plot.base(ylim = c(0, 8))
+lines(h2)
+
+h2 = dna.new(c(1,8), c(1,6), phi = c(pi/2, pi), n.lin=5, lwd=2)
+plot.base(ylim = c(0, 8))
+lines(h2)
+
+par(par.old)
+
 
 # TODO: Example showing design of DNA
 # Intersection of 2 shifted-Sine Functions
@@ -137,27 +142,31 @@ points(pp$x0, sin(pp$x1), col="green", lwd=2)
 
 ### Tests for DNA
 
-par.old = par(mfrow = c(2,2))
-
 ###
-phi = c(pi, -pi/2); n = 3;
-example.dna.tests(n=n, phi=phi)
+test.dna.nb = function(phi, n = c(3, 3.4, 3, 1.7), y = list(c(0, -2))) {
+	par.old = par(mfrow = c(2,2))
+	###
+	example.dna.tests(n = n[1], phi=phi)
+	
+	###
+	example.dna.tests(n = n[2], phi=phi)
 
-###
-phi = c(pi, -pi/2); n = 3.4;
-example.dna.tests(n=n, phi=phi)
+	###
+	example.dna.tests(n = n[3], phi=phi, y0 = y[[1]])
+	
+	###
+	example.dna.tests(n = n[4], phi=phi, x0 = c(0, 6), y0 = y[[1]])
+	# Note: (x0, y0) are NOT exact;
+	abline(v=6, col="blue")
+	
+	par(par.old)
+}
 
-###
-phi = c(pi, -pi/2); n = 3;
-example.dna.tests(n=n, phi=phi, y0 = c(0, -2))
+phi = c(pi, -pi/2);
+test.dna.nb(phi);
 
-###
-phi = c(pi, -pi/2); n = 1.7;
-example.dna.tests(n=n, phi=phi, x0 = c(0, 6), y0 = c(0, -2))
-# Note: (x0, y0) are NOT exact;
-abline(v=6, col="blue")
-
-par(par.old)
+phi = c(pi/2, pi);
+test.dna.nb(phi);
 
 
 ############
