@@ -336,8 +336,10 @@ example.dna = function(n = 3, n.lin = 6, phi = c(0, pi),
 #' @export
 example.dna.tests = function(n = 3, phi = c(pi, -pi/2), A = 1,
 		x0 = c(0, 8), y0 = c(0, 0), dy = 3,
-		dphi = c(0, pi/6, pi/3, pi/2), col = c("red", "green"),
-		xlim = NULL, ylim = NULL, axt = c(1,2)) {
+		dphi = c(0, pi/6, pi/3, pi/2), both.phi = TRUE,
+		col = c("red", "green"),
+		xlim = NULL, ylim = NULL, axt = c(1,2), verbose = FALSE) {
+	if(length(n) > 1) stop("Invalid number of helix turns!");
 	LEN = length(dphi);
 	if(length(dy) == 1) {
 		dy = seq(0, LEN - 1) * dy;
@@ -349,7 +351,9 @@ example.dna.tests = function(n = 3, phi = c(pi, -pi/2), A = 1,
 	if(is.null(ylim)) ylim = c(-2, 10);
 	plot.base(xlim=xlim, ylim=ylim, axt=axt);
 	for(i in seq(LEN)) {
-		lines(dna.new(x0, y0 + dy[i], A=A, col=col, n=n, phi = phi + dphi[i]));
+		phi_i = phi + if(both.phi) dphi[i] else c(0, dphi[i]);
+		if(verbose) cat("Phi = ", phi_i / pi, "\n");
+		lines(dna.new(x0, y0 + dy[i], A=A, col=col, n=n, phi = phi_i));
 	}
 }
 
