@@ -121,7 +121,9 @@ test.circle.hash(n, phi = pi/3, r=r, scale=scale)
 #
 test.circle.hash(n, phi = pi/2 + 0.2, r=r, scale=scale)
 #
-test.circle.hash(n, phi = pi - 0.2, r=r, scale=scale)
+phi = pi - 0.2
+test.circle.hash(n, phi = phi, r=r, scale=scale)
+lines(circle.hash(11, phi = phi + pi/2, r=r, scale=scale, center = c(4,4), col = "red"))
 
 par(par.old)
 
