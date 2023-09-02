@@ -422,22 +422,32 @@ which.intersect.sin = function(phi, n, from = 0, to = NULL) {
 }
 
 ### Order of 2 Helices
+# phi = phase shift of the 2 helices;
 #' @export
 is.helix.rev = function(phi, debug=FALSE) {
 	# Warning: phi needs to be normalized to [0, 2*pi);
-	if(phi[1] == pi/2) return(FALSE);
-	phi.c = as.sin.intersect(phi[1]);
-	isInc = phi.c[1] <= phi.c[2];
-	if(debug) print(cbind(phi, phi.c));
-	if(isInc) {
-		# Note: strictly "<", but ">=";
-		if(phi[2] < phi.c[1] || phi[2] >= phi.c[2]) {
-			return(FALSE);
-		}
-	} else if(phi[2] < phi.c[2] || phi[2] >= phi.c[1]) {
-		return(TRUE);
+	# Note: Case phi[2] == phi[1] is indeterminate;
+	if(phi[1] < pi/2) {
+		isRev = (phi[2] > phi[1]) && (phi[2] <= pi - phi[1]);
+		return(isRev);
 	}
-	return(FALSE);
+	if(phi[1] == pi/2) return(FALSE); # always FALSE;
+	if(phi[1] < pi) {
+		isRev = (phi[2] < phi[1]) && (phi[2] > pi - phi[1]);
+		return(isRev);
+	}
+	if(phi[1] < 3*pi/2) {
+		isRev = (phi[2] < phi[1]) || (phi[2] > 3*pi - phi[1]);
+		return(isRev);
+	}
+	if(phi[1] == 3*pi/2) return(TRUE); # always TRUE;
+	# Case: phi[1] > 3*pi/2;
+	isRev = phi[2] > phi[1] || phi[2] <= 3*pi - phi[1];
+	return(isRev);
+	
+	# TODO: [old] cleanup?
+	# phi.c = as.sin.intersect(phi[1]);
+	# isInc = phi.c[1] <= phi.c[2];
 }
 
 
