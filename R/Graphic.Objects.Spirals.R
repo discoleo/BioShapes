@@ -1,26 +1,31 @@
-###################
+#######################################
 #
-# Bachelor Thesis
+# BioShapes
+# Maintainer: L. Mada
 #
-# Title: BioShapes
+# https://github.com/discoleo/BioShapes
 #
-# Candidate: Adrian Cotoc
+# Continuation of:
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
+#   in collaboration with Syonic SRL
 # GitHub: https://github.com/Adi131313/BioShapes
+#
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
 
+
+### Spiral
 # p1, p2 = endpoints of spiral;
 #  OR if slope specified = starting point + length;
-
+# n = number of turns;
+# slope = slope of the inner core;
+# N = number of points used to draw the spiral;
 #' @export
-spirals = function(p1, p2, n=5.5, A=1, phi=0, N=128, slope=NULL) {
+spirals = function(p1, p2, n=5.5, A=1, phi=0, slope=NULL, N=128) {
   if(is.null(slope)) {
     x = c(p1[1], p2[1]);
     y = c(p1[2], p2[2]);
