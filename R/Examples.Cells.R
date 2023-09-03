@@ -4,16 +4,17 @@
 #
 # Maintainer: L. Mada
 #
-# Based on: Bachelor Thesis (2022-2023)
-# Adrian Cotoc
+#
+# Continuation of:
+# 1. Bachelor Thesis: Adrian Cotoc (BSc 2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
+#   in collaboration with Syonic SRL
 #
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda (BSc 2021-2022)
+# 2. Bachelor Thesis: Darian Voda (BSc 2021-2022)
 #
 # GitHub: https://github.com/discoleo/BioShapes
 # [old]
@@ -175,15 +176,23 @@ example.neurons = function(n = 5, col = "red",
 
 ### Epithelia
 
-
 ### Brush-Border Epithelium
 #' @export
-example.Epithelium.BB = function(x = c(0,8), y = c(1,1), n = 8,
+example.Epithelium.BB = function(x = c(0,8), y = c(1,1), n = 8, dy = 6, h = ~2,
 		col = 1, col.nc = 1, fill = "#FFFF80", fill.nc = "#9648C0") {
 	plot.base();
-	ep = epithelium.brush(x=x, y=y, n=n, col=col, col.nc=col.nc,
+	# Ep 1:
+	ep = epithelium.brush(x=x, y=y, n=n, h=h, col=col, col.nc=col.nc,
 		fill=fill, fill.nc=fill.nc);
 	lines(ep);
-	invisible(ep);
+	if(is.null(dy)) return(invisible(ep));
+	# Ep 2:
+	h = if(inherits(h, "formula")) formula.neg(h) else - h;
+	ep2 = epithelium.brush(x=x, y = y + dy, n=n, h=h, col=col, col.nc=col.nc,
+		fill=fill, fill.nc=fill.nc);
+	lines(ep2);
+	#
+	ep = list(Ep1 = ep, Ep2 = ep2)
+	invisible(as.bioshape(ep));
 }
 

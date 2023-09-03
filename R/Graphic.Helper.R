@@ -1,13 +1,13 @@
 #######################################
 #
-# BioShapes
+# Title: BioShapes
+#
 # Maintainer: L. Mada
 #
 # https://github.com/discoleo/BioShapes
 #
 # Continuation of:
-# 1. Bachelor Thesis (2022-2023)
-# Candidate: Adrian Cotoc
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
@@ -46,6 +46,16 @@ rep.all.list = function(x, len) {
 		if(length(tmp) == 1) x[[id]] = rep(tmp, len);
 	}
 	return(x);
+}
+
+
+### Negate Formula
+#' @export
+formula.neg = function(x) {
+	tmp = expression(- (0))[[1]];
+	tmp[[2]][[2]] = x[[2]];
+	x[[2]] = tmp;
+	return(x)
 }
 
 
