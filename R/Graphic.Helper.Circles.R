@@ -298,8 +298,8 @@ circle.ArcByDist = function(x, y, d, col=NULL, fill=NULL, lwd=1, tol=1E-8) {
 #' @export
 circle.hash = function(n, center = c(0, 0), r = 1, phi = 0, scale = 1,
 		lwd = 1, lty = 1, col = NULL, neps = 1/(2*n)) {
-	n0 = 1 - neps;
-	tx = seq(- n0, n0, length.out = n);
+	n0 = c(-1, 1) + if(length(neps) == 1) c(neps, - neps) else neps;;
+	tx = seq(n0[1], n0[2], length.out = n);
 	ty = sqrt(1 - tx^2);
 	tx = r * tx; ty = r * ty;
 	cs = cos(phi); sn = sin(phi);
@@ -318,3 +318,28 @@ circle.hash = function(n, center = c(0, 0), r = 1, phi = 0, scale = 1,
 	xy = as.bioshape(xy);
 	return(xy);
 }
+
+
+### Simulate Emboss
+# - but larger lwd.bg causes line to extend beyond circle boundary:
+#   is NOT a good replacement for the blur/diffusion operation;
+#' @export
+circle.hashEmboss = function(n, center = c(0, 0), r = 1, phi = 0, scale = 1,
+		d = - lwd/(3*n), lwd = 1, lwd.bg = 1.5 * lwd, lty = 1,
+		col = NULL, col.bg = "#A0A0A0") {
+	# cBG = circle.hash(n=n, center=center, r=r, phi=phi, scale=scale,
+	#	lwd = lwd.bg, col = col.bg, neps = c(1/2 + 1/3, - 1/2 + 1/3) / n);
+	lst = circle.hash(n=n, center=center, r=r, phi=phi, scale=scale,
+		lwd=lwd, lty=lty, col=col);
+	slope = tan(phi + pi/2);
+	cBG = lapply(seq(n), function(id) {
+		ln = lst[[id]];
+		pp = shift.ortho(ln$x, ln$y, slope=slope, d=d, scale=scale, id.offset=id);
+	})
+	cBG = do.call(rbind, cBG);
+	cBG = list(cBG, lwd = lwd.bg, col = col.bg);
+	cBG = as.bioshape(cBG);
+	lst = list(BG = cBG, Lines = lst);
+	return(as.bioshape(lst));
+}
+
