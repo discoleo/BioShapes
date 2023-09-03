@@ -170,3 +170,20 @@ example.neurons = function(n = 5, col = "red",
   lines(tmp)
 }
 
+
+###################
+
+### Epithelia
+
+
+### Brush-Border Epithelium
+#' @export
+example.Epithelium.BB = function(x = c(0,8), y = c(1,1), n = 8,
+		col = 1, col.nc = 1, fill = "#FFFF80", fill.nc = "#9648C0") {
+	plot.base();
+	ep = epithelium.brush(x=x, y=y, n=n, col=col, col.nc=col.nc,
+		fill=fill, fill.nc=fill.nc);
+	lines(ep);
+	invisible(ep);
+}
+
