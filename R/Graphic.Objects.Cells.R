@@ -82,7 +82,15 @@ cell.BrushBorder = function(p1, w, h, slope=0, r.nc = ~ 1/5, t.nc = c(1/2, 7/20)
 		brush.options = list(n=6.5, A=0.5, N=128, phi=0)) {
 	# Cell:
 	p11 = p1;
-	p12 = shiftPoint( p1, d=w, slope=slope);
+	if(is.null(slope)) {
+		if(length(w) < 2) stop("Provide slope or the 2 base points!");
+		x = c(p1[1], w[1]); y = c(p1[2], w[2]);
+		p12 = w; w = dist.xy(x, y);
+		slope = slope(x, y);
+	} else {
+		if(length(w) > 1) warning("Wrong width!");
+		p12 = shiftPoint(p1, d=w, slope=slope);
+	}
 	p21 = shift.ortho(p1, d=h, slope=slope);
 	p21 = unlist(p21);
 	p22 = shiftPoint(p21, d=w, slope=slope);
@@ -113,6 +121,27 @@ cell.BrushBorder = function(p1, w, h, slope=0, r.nc = ~ 1/5, t.nc = c(1/2, 7/20)
 	}
   return(as.bioshape(lst));
 }
+
+###
+#' @export
+epithelium.brush = function(x, y, n=5, h = ~ 2, r.nc = ~ 1/5, t.nc = c(1/2, 7/20),
+		lwd = 1, lwd.nc = lwd, col = NULL, fill = NULL, col.nc = 1, fill.nc = NULL,
+		brush.options = list(n=6.5, A=0.5, N=128, phi=0)) {
+	d0 = dist.xy(x, y);
+	d1 = d0 / n;
+	h  = if(inherits(h, "formula")) eval(h[[2]]) * d1 else h;
+	xy = split.line(x, y, n=n);
+	lst.args = list(h=h, r.nc=r.nc, t.nc=t.nc, slope = NULL, lwd=lwd, lwd.nc=lwd.nc,
+		col=col, fill=fill, col.nc=col.nc, fill.nc=fill.nc, brush.options=brush.options);
+	ep = lapply(seq(1, n), function(id) {
+		p1 = c(xy$x[[id]], xy$y[[id]]);
+		p2 = c(xy$x[[id + 1]], xy$y[[id + 1]]);
+		lst.args$p1 = p1; lst.args$w = p2;
+		do.call(cell.BrushBorder, lst.args);
+	})
+	return(as.bioshape(ep));
+}
+
 
 ### Muscle tissue ###
 #' @export

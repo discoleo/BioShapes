@@ -224,7 +224,7 @@ synapse = function(p, phi, type = c("Solid", "Tree", "Arrow", "SArrow",
 		xy = list(x = c(p[1], px), y = c(p[2], py), col=col, fill=fill);
 		class(xy) = c("polygon", "list");
 	}
-  }  else if(type == "Solid") {
+  } else if(type == "Solid") {
     px = l * cos(th) + p[1];
     py = l * sin(th) + p[2];
     xy = list(x = c(p[1], px), y = c(p[2], py), col=col, fill=fill);
