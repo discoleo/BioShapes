@@ -65,17 +65,23 @@ examples.bioshapes = function(col = list("#48B000", c("#FFFF80", "#9648C0"),
 
 	### Row 2:
 
-	### Ex 4: Vertical Helix
+	### Ex 4a: dsDNA Helix
+	x = c(0.5, 0.5); y = c(0.5, 5);
+	lst1 = dna.new(x, y, lwd=lwd[4]);
+	lines(lst1)
+
+	### Ex 4b: Vertical Helix
 	# Note: explicit function for DNA also available!
-	p1 = c(2.5, 0.5); p2 = c(p1[1], 5);
-	lst1 = helix(p1, p2);
-	lst2 = helix(p1, p2, phi=-pi/2);
-	lines(lst1, col=col[[4]][1], lwd=lwd[4])
-	lines(lst2, col=col[[4]][2], lwd=lwd[4])
+	# (see Ex. 4a)
+	p1 = c(3, 0.5); p2 = c(p1[1], 5);
+	lst1 = helix(p1, p2, col=col[[4]][1], lwd=lwd[4]);
+	lst2 = helix(p1, p2, col=col[[4]][2], lwd=lwd[4], phi=-pi/2);
+	lines(lst1)
+	lines(lst2)
 	text(2.5, y.txt[2], "Helix/DNA");
 
 	### Ex 5: Vertical Spirals
-	p1 = c(5.5, 1.5); p2 = c(p1[1], 4); dx = c(2.25, 0);
+	p1 = c(6, 1.5); p2 = c(p1[1], 4); dx = c(2.25, 0);
 	lst1 = spirals(p1, p2)
 	lst2 = spirals(p2 + dx, p1 + dx)
 	lines(lst1, col=col[[5]][1], lwd=lwd[5])

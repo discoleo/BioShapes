@@ -188,6 +188,8 @@ dna.new = function(x, y, n=3, phi=c(pi/2, pi) + pi/4, A=1, n.lines = 6,
   if(is.helix.rev(phi)) {
     col.lines = rev(col.lines);
   }
+  # TODO: verify & correct;
+  if(x[1] == x[2]) col.lines = rev(col.lines);
   pp  = which.intersect.sin(phi, n);
   len = length(pp$x0);
   pi2 = 2*pi*n;
