@@ -188,7 +188,8 @@ example.Epithelium.BB = function(x = c(0,8), y = c(1,1), n = 8, dy = 6, h = ~2,
 	if(is.null(dy)) return(invisible(ep));
 	# Ep 2:
 	h = if(inherits(h, "formula")) formula.neg(h) else - h;
-	ep2 = epithelium.brush(x=x, y = y + dy, n=n, h=h, col=col, col.nc=col.nc,
+	xy  = shift.ortho(x, y, d = dy);
+	ep2 = epithelium.brush(x = xy$x, y = xy$y, n=n, h=h, col=col, col.nc=col.nc,
 		fill=fill, fill.nc=fill.nc);
 	lines(ep2);
 	#

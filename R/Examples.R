@@ -78,7 +78,7 @@ examples.bioshapes = function(col = list("#48B000", c("#FFFF80", "#9648C0"),
 	lst2 = helix(p1, p2, col=col[[4]][2], lwd=lwd[4], phi=-pi/2);
 	lines(lst1)
 	lines(lst2)
-	text(2.5, y.txt[2], "Helix/DNA");
+	text(1.5, y.txt[2], "Helix/DNA");
 
 	### Ex 5: Vertical Spirals
 	p1 = c(6, 1.5); p2 = c(p1[1], 4); dx = c(2.25, 0);
@@ -86,7 +86,7 @@ examples.bioshapes = function(col = list("#48B000", c("#FFFF80", "#9648C0"),
 	lst2 = spirals(p2 + dx, p1 + dx)
 	lines(lst1, col=col[[5]][1], lwd=lwd[5])
 	lines(lst2, col=col[[5]][2], lwd=lwd[5])
-	text(6.5, y.txt[2], "Spirals/Coils");
+	text(7.2, y.txt[2], "Spirals/Coils");
 }
 
 
