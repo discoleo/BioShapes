@@ -62,7 +62,7 @@ formula.neg = function(x) {
 ################
 ### Geometry ###
 
-#' @export
+# Deprecated:
 compute_slope = function(x, y) {
   warning("Deprecated");
   return(slope(x, y));
@@ -153,13 +153,25 @@ reflect = function(x, y, p, slope=NULL) {
   return(c(x.rfl, y.rfl));
 }
 
+
+### Shift Points
+
+#' @export
+shift = function(x, y, d = 1, slope = NULL, scale = 1, ...) {
+	UseMethod("shift");
+}
+#' @export
+shift.point = function(p, x, y, d = 1, slope = NULL, scale = 1, ...) {
+	UseMethod("shift.point");
+}
+
 ### Shift Point or Line
 # Shifts a point orthogonal to a given line;
 # d = distance to shift (translate);
-# Note: direction of shift is independent of quadrant;
+# Note: direction of shift is not normalized with respect to quadrant;
 #' @export
 shiftLine = function(x, y, d = 1, slope = NULL,
-			scale = 1, id.offset = 0) {
+		scale = 1, id.offset = 0) {
 	shift.ortho(x=x, y=y, d=d, slope=slope, scale=scale, id.offset=id.offset);
 }
 #' @export
@@ -171,7 +183,7 @@ shift.ortho.df = function(xy, d = 1, slope = NULL,
 }
 #' @export
 shift.ortho = function(x, y, d=1, slope=NULL,
-                     scale=1, id.offset = 0) {
+		scale=1, id.offset = 0) {
   if(is.null(slope)) {
     if(length(x) < 2 || length(y) < 2)
       stop("The base-line requires 2 points!");
@@ -248,12 +260,14 @@ shift.points.df = function(p, x, y, d=1, slope=NULL, scale=1, simplify = TRUE) {
 	}
 	return(lst);
 }
+shiftPoint = function(p, x, y, d = 1, slope = NULL, scale = 1) {
+	shift.point(p=p, x=x, y=y, d=d, slope=slope, scale=scale);
+}
 #' @export
-shiftPoint = function(p, x, y, d=1, slope=NULL, scale=1) {
+shift.point.default = function(p, x, y, d = 1, slope = NULL, scale = 1) {
   if(is.null(slope)) {
     if(length(x) < 2 || length(y) < 2)
       stop("The base-line requires 2 points!");
-    # TODO: handle if more than 2 points!
     slope = slope(x,y);
   }
   if(length(p) < 2) stop("Point needs both x & y coordinates!");
