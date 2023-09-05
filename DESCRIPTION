@@ -1,6 +1,6 @@
 Package: BioShapes
 Title: Methods to Generate Biological Shapes
-Version: 0.0.5
+Version: 0.1.1
 Authors@R:
     person("Leonard", "Mada", "leo.mada@syonic.eu", role = c("aut", "cre"))
     person("Darian-Florian", "Voda", role = c("aut"))
