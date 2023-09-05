@@ -333,3 +333,25 @@ lines(mol.Ig(c( 0,1), phi = 3*pi/2))
 lines(mol.Ig(c( 1,3), phi = 2*pi - pi/4))
 lines(mol.Ig(c( 3,6), phi = 2*pi - pi/12))
 
+
+######################
+
+### Lines / Connectors
+
+par.old = par(mfrow = c(1,2))
+
+plot.base()
+x = c(1,6); y = c(1,6)
+lines(connect.lines.stairs(x, y, slope=1/2))
+points(x, y, col="red")
+
+
+plot.base()
+x = c(0, 8); y = c(0, 8)
+tmp = sapply(c(1.2, 1.6, 2.2, 3.5), \(id) {
+	lines(connect.lines.stairs(x, y, slope = id, t = 1/id))
+})
+points(x, y, col="red")
+
+par(par.old)
+
