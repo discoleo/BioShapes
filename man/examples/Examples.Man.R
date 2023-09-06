@@ -1,20 +1,23 @@
-###################
-#
-# Bachelor Thesis
+#######################################
 #
 # Title: BioShapes
 #
-# Candidate: Adrian Cotoc
+# Maintainer: L. Mada
+#
+# https://github.com/discoleo/BioShapes
+#
+# Continuation of:
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
+#   in collaboration with Syonic SRL
 # GitHub: https://github.com/Adi131313/BioShapes
+#
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
+
 
 
 #' @example man/examples/Examples.Man.R
@@ -35,19 +38,16 @@ examples.bioshapes()
 ### Liposomes
 
 ### Description of a Liposome
-
 diagramLiposome()
 
 ### Liposome Measurements
-
 measureLiposome()
 
 
 #######################
 
 ### Enzymes: Arrows
-plot.base()
-enzymeReaction(lbl = c("A2", "B2", "Enz2", "Inhibitor 2"))
+enzymeReaction(lbl = c("A2", "B2", "Enz2", "Inhibitor 2"), new = TRUE)
 enzymeReaction(y = 6, lbl = c("A1", "B1", "Enz1", "Inhibitor 1"))
 
 
@@ -57,7 +57,7 @@ enzymeReaction(y = 6, lbl = c("A1", "B1", "Enz1", "Inhibitor 1"))
 
 ### Star Shape ###
 
-example.star(n=5, fill = "yellow")
+example.star(n=5, fill = "#B0D064")
 
 
 ### Arcs
