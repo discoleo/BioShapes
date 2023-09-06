@@ -1,21 +1,28 @@
-###################
-#
-# Bachelor Thesis
+#######################################
 #
 # Title: BioShapes
 #
-# Candidate: Adrian Cotoc
+# Maintainer: L. Mada
+#
+# https://github.com/discoleo/BioShapes
+#
+# Continuation of:
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
+#   in collaboration with Syonic SRL
 # GitHub: https://github.com/Adi131313/BioShapes
+#
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
 
+
+### Examples: Arrows & Labels
+
+
+### Arrows: Summary
 #' @export
 examples.arrows = function(new.plot = TRUE, lwd = 2) {
   ### Plot
@@ -36,10 +43,12 @@ examples.arrows = function(new.plot = TRUE, lwd = 2) {
        "Simple", cex = 0.75);
 
   # Double ArrowHead
+  # Note: use join = 1 to keep the lines non-joined;
+  # - join = 0: use default = joined;
   x = c(1, 1);
   d = -0.3;
   d.head=-0.5
-  a2 = arrowDouble(x, y, d=d, d.head=d.head, lwd=lwd);
+  a2 = arrowDouble(x, y, d=d, d.head=d.head, lwd=lwd, join = 1);
   text(1, yt,
        "Double", cex = 0.75);
 
@@ -88,11 +97,12 @@ examples.arrows = function(new.plot = TRUE, lwd = 2) {
   text(1, yt,
        "Square Shape", cex = 0.70);
 
-  # Square Flag
+  # Rectangular Flag: (2*d) x d
+  # Note: use c(0, d) for real square;
   x = c(3, 3);
   arrowSquare(x, y, d=-0.5, d.head=c(0, 2*d), lwd=lwd);
   text(3.5, yt,
-       "Square Flag", cex = 0.70);
+       "Rectangle Flag", cex = 0.70);
 
   # Multiple-Lined ArrowHead
   n = 3; d = 0.5;
