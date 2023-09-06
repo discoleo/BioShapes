@@ -1,24 +1,29 @@
-###################
-#
-# Bachelor Thesis
+#######################################
 #
 # Title: BioShapes
 #
-# Candidate: Adrian Cotoc
+# Maintainer: L. Mada
+#
+# https://github.com/discoleo/BioShapes
+#
+# Continuation of:
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-# continues the work of Darian Voda
-#
+#   in collaboration with Syonic SRL
 # GitHub: https://github.com/Adi131313/BioShapes
+#
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
+
+
 
 # TODO: create complex examples in R/Examples.R
 # TODO: Centers for muscles
 # TODO: Genome for examples.virus
+# TODO: description for Virus
 
 
 ######################
@@ -184,9 +189,16 @@ lines(xy, col="red")
 
 ### Neuron
 
-# Test function
-# TODO: Also one for Virus
-description.neuron()
+### Test Neuron Synapses
+plot.neuron = function(p, phi, type, dphi = c(0, -pi/9, pi/9)) {
+  for(dp in dphi) {
+    tmp = neuron(p, phi= phi + dp, type=type);
+    lines(tmp);
+  }
+}
+
+###
+par.old = par(mfrow = c(2,2))
 
 ### Synapse
 plot.base()
@@ -199,26 +211,20 @@ tmp = neuron(c(0,2), phi=pi/6)
 lines(tmp)
 
 ###
+tmp = neuron(c(0,2), phi=pi/6, type.syn = "Tree", r.synapse = 2)
 plot.base()
-tmp = neuron(c(0,2), phi=pi/6, type.syn = "Tree")
 lines(tmp)
-# TODO: BUG for tree
-lines(synapse(c(tmp[[6]]$x[2], tmp[[6]]$y[2]), slope=tan(pi/6), type="Tree", l=1.8, alpha=120))
 
-### Test Neuron Synapses
-plot.neuron = function(p, phi, type, dphi = c(0, -pi/9, pi/9)) {
-  for(dp in dphi) {
-    tmp = neuron(p, phi= phi + dp, type=type);
-    lines(tmp);
-  }
-}
-
+###
 type = "Tree"
 plot.base(ylim = c(-10, 10))
 plot.neuron(c(4,8), phi = -pi/2, type=type)
 plot.neuron(c(8,4), phi = pi, type=type)
 plot.neuron(c(4,-8), phi = pi/2, type=type)
 plot.neuron(c(0,-4), phi = 0, type=type)
+
+par(par.old);
+
 
 ### TODO 1: Dendrite as tree
 
