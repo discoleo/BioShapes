@@ -137,3 +137,59 @@ examples.arrows = function(new.plot = TRUE, lwd = 2) {
   text(5, yt,
        "Simple Circle", cex = 0.70);
 }
+
+########################
+########################
+
+### Boxes & Labels
+
+### Basic Test
+# scale = 1 / aspect ration, used in 1 test;
+#' @export
+test.box.cap = function(scale = 2) {
+	par.old = par(mfrow = c(2,3))
+	
+	plot.base()
+	tmp = box.cap(c(1,7), c(2,7), fill = "red", col="#FFA0A0")
+	lines(tmp)
+	tmp = box.cap(c(7,1), c(4,-1), fill = "red", col="#FFA0A0")
+	lines(tmp)
+	
+	plot.base()
+	tmp = box.cap(c(1,7), c(4,4), fill = "red", col="#FFA0A0")
+	lines(tmp)
+	tmp = box.cap(c(7,1), c(2,2), fill = "red", col="#FFA0A0")
+	lines(tmp)
+	lines(arrowSimple(c(2,6), c(6,6)))
+	lines(arrowSimple(c(6,2), c(0,0)))
+	
+	plot.base(asp=1/scale)
+	tmp = box.cap(c(1,7), c(2,7), fill = "red", col="#FFA0A0", scale=scale)
+	lines(tmp)
+	tmp = box.cap(c(7,1), c(3,-2), fill = "red", col="#FFA0A0", scale=scale)
+	lines(tmp)
+	text(4, 16, paste0("Scale = ", scale, " : 1"), cex = 1.75)
+	
+	### Row 2:
+	plot.base()
+	tmp = box.cap(c(1,7), c(2,7))
+	lines(tmp)
+	tmp = box.cap(c(1,7), c(0,5))
+	lines(tmp)
+	
+	plot.base()
+	tmp = box.cap(c(1,7), c(7,2))
+	lines(tmp)
+	tmp = box.cap(c(7,1), c(0,5))
+	lines(tmp)
+	
+	plot.base()
+	tmp = box.cap(c(2,2), c(2, 7))
+	lines(tmp)
+	tmp = box.cap(c(5,5), c(7,2))
+	lines(tmp)
+	
+	par(par.old)
+	invisible()
+}
+
