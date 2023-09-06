@@ -1,13 +1,13 @@
-###################
+#######################################
 #
-# BioShapes
+# Title: BioShapes
+#
 # Maintainer: L. Mada
 #
 # https://github.com/discoleo/BioShapes
 #
 # Continuation of:
-# 1. Bachelor Thesis
-# Candidate: Adrian Cotoc
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
@@ -16,8 +16,8 @@
 #   in collaboration with Syonic SRL
 # GitHub: https://github.com/Adi131313/BioShapes
 #
-# 2. Bachelor Thesis: Darian Voda
-#
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
+
 
 
 ### Functions to Generate Neuron
@@ -44,7 +44,7 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
   phi0 = - phin/2;
   pi20 = pi/2; pi32 = 3*pi/2;
   phiD = seq(n) * phin + phi;
-  phiR = phiD - (2*pi) * floor(phiD / (2*pi));
+  phiR = as.radians0(phiD);
   x0 = r * cos(phiD + pi20) + R * cos(phiD + phi0);
   y0 = r * sin(phiD + pi20) + R * sin(phiD + phi0);
   x0 = x0 + center[1];
@@ -63,7 +63,7 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
     if( ! is.null(type.syn)) {
       syn  = synapse(xy, phi = phiA, type = type.syn, l = r.synapse,
 		col = col.synapse, fill = fill.synapse);
-      axon = c(axon, syn);
+      axon = c(Axon = axon, Synapse = syn);
     }
   } else {
     axon = NULL;
@@ -95,8 +95,9 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
 	} else nucleus = NULL;
 	
 	### Neuron
-	neuron = c(Body = body, Axon = axon,
+	neuron = c(Body = body, axon,
 		Dendrites = dend, Nucleus = nucleus);
+	class(neuron) = c("neuron", "list");
 	return(as.bioshape(neuron));
 }
 
@@ -233,4 +234,16 @@ synapse = function(p, phi, type = c("Solid", "Tree", "Arrow", "SArrow",
   xy$col = col;
   xy = as.bioshape(list(xy));
   return(xy);
+}
+
+#' @export
+synapse.neuron = function(x, type = c("Solid", "Tree", "Arrow", "SArrow",
+			"Detail", "Radial", "T"), col=1, fill="#808080",
+			l = 1/2, n = 4, alpha = 120, helix.scale = 1/12, ...) {
+	A = x$Axon;
+	phi = atan2(A$y[2] - A$y[1], A$x[2] - A$x[1]);
+	len = length(A$x);
+	syn = synapse(c(A$x[len], A$y[len]), phi=phi, type=type, col=col, fill=fill,
+		l=l, n=n, alpha=alpha, helix.scale=helix.scale, ...);
+	return(syn);
 }
