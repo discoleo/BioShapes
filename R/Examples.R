@@ -147,22 +147,18 @@ measureLiposome = function(lbl = c("D = 60 nm", "d=50"), center=c(0,0), add=FALS
   text(xy[1], xy[2], lbl[2]);
 }
 
-### Example Enzyme ####
+
+### Example Enzymes
 #' @export
 enzymeReaction = function(x = c(2,5), y = c(1,1),
 		lbl = c("A", "B", "Enzyme", "Inhibitor"),
-		col = c("black", "black", "black", "red", "red"),
-		dx=1, dy=c(0.1, 0.1, 0.5), dI= - c(2, 0.75, 2.4), dH=0.5,
-		lwd=c(1, 2), scale=1) {
+		col = c("blue", "black", "black", "red", "red"),
+		dx=1, dy=c(0.1, -0.1, 0.5), dI= - c(2, 0.75, 2.4), dH=0.5,
+		lwd=c(1, 2), scale=1, new = FALSE) {
   if(length(y) == 1) y = c(y, y);
   slope = slope(x, y);
-  qd = which.quadrant(x, y);
-  l1 = shiftLine(x, y, d = dy[[1]], slope=slope, scale=scale);
-  l2 = shiftLine(rev(x), rev(y), d = - dy[[2]], slope=slope, scale=scale);
-  #
-  d.head = c(0, 0.5);
-  arrowSimple(l1$x, l1$y, d = -dH, d.head = d.head, col=col[[1]], lwd=lwd[[1]]);
-  arrowSimple(l2$x, l2$y, d = -dH, d.head = - d.head, col=col[[1]], lwd=lwd[[1]]);
+  if(new) plot.base();
+  arrowDHalf(x, y, d = dy[1:2], col=col[[1]], lwd=lwd[[1]], plot = TRUE);
   text(x[1] - dx, y[1], lbl[[1]], col=col[[2]]);
   text(x[2] + dx, y[2], lbl[[2]], col=col[[2]]);
   # Enzyme

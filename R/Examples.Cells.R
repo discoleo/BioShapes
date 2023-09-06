@@ -120,7 +120,7 @@ example.neurons = function(n = 5, col = "red",
   lim = c(-15, 15);
   plot.base(xlim = lim, ylim = lim, axt = NULL)
 
-  ### First group
+  ### Bottom Row:
   
   phi = -pi/2;
   center2 = center + c(-6, -10)
@@ -128,7 +128,7 @@ example.neurons = function(n = 5, col = "red",
 	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl, r.synapse=2);
   lines(tmp)
 
-  ###
+  ### Middle Row:
   phi = -pi/1.5;
   center2 = center + c(-1, -2)
   tmp = neuron(n = n, center = center2, phi = phi, type = "Tree",
@@ -142,7 +142,7 @@ example.neurons = function(n = 5, col = "red",
 	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl);
   lines(tmp)
 
-  ### Second group
+  ### Top Rows: The Square
   
   # TODO: All synapse types
   phi = 0;

@@ -148,6 +148,17 @@ examples.arrows = function(new.plot = TRUE, lwd = 2) {
        "Simple Circle", cex = 0.70);
 }
 
+
+### Double Halves
+#' @export
+test.arrow.Half = function(lwd = 2, col = c(2,3,4)) {
+	plot.base()
+	arrowDHalf(c(2, 6), c(3, 3), lwd=lwd, col = col[1], plot = TRUE)
+	arrowDHalf(c(2, 6), c(4, 7), lwd=lwd, col = col[2], plot = TRUE)
+	arrowDHalf(c(1, 1), c(3, 7), lwd=lwd, col = col[3], plot = TRUE)
+}
+
+
 ########################
 ########################
 

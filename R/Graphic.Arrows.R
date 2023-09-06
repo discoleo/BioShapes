@@ -72,7 +72,7 @@ arrowTail = function(x, y, d.lines, lwd=1, slope=NULL) {
 # - for consistency: join = 0;
 #' @export
 arrowSimple = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
-                       h.lwd=lwd, col="red", scale=1, join=0) {
+                       h.lwd=lwd, col="red", scale=1, join=0, plot = TRUE) {
   slope = slope(x, y);
   qd = which.quadrant(x, y);
   sg = if(qd == 1 || qd == 4) 1 else -1;
@@ -84,11 +84,10 @@ arrowSimple = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
   ### ArrowTail
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=ahead);
+  lst = list(Arrow=arrow, Head=ahead, col=col);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  print("Finished")
-  lines(lst, col=col);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
@@ -460,6 +459,34 @@ arrowSquareWave = function(x, y, n, d=-0.5, dV=c(-1,1), d.head=c(-d,d),
   # Plot lines:
   lines(lst, col=col);
   invisible(lst);
+}
+
+
+######################
+
+### Specialized Arrows
+
+### Chemical Reactions: Double Halves
+#' @export
+arrowDHalf = function(x, y, d = 0.1, dH = 0.5, d.head = c(0, dH), scale = 1,
+		lwd = 1, col = NULL, plot = FALSE) {
+	slope = slope(x, y);
+	if(length(d) == 1) d = c(d, -d);
+	qd = which.quadrant(x, y);
+	l1 = shiftLine(x, y, d = d[1], slope=slope, scale=scale);
+	l2 = shiftLine(rev(x), rev(y), d = d[2], slope=slope, scale=scale);
+	#
+	if(length(lwd) == 1) lwd = c(lwd, lwd);
+	if(length(col) == 1) col = c(col, col);
+	a1 = arrowSimple(l1$x, l1$y, d = -dH, d.head = d.head, col=col[[1]], lwd=lwd[[1]],
+		scale=scale, plot = FALSE);
+	a2 = arrowSimple(l2$x, l2$y, d = -dH, d.head = - d.head, col=col[[2]], lwd=lwd[[2]],
+		scale=scale, plot = FALSE);
+	lst = list(A1 = a1, A2 = a2);
+	class(lst) = c("multiArrow", "list");
+	# Plot arrow:
+	if(plot) lines(lst);
+	invisible(lst);
 }
 
 

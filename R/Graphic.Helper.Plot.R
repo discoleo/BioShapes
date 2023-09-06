@@ -139,15 +139,24 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 
 ### list(Tail=list(...), Head=list(...))
 #' @export
-lines.arrow = function(x, lwd=NULL, col=1, lty=1, ...) {
-  ### ArrowTail
-  arrow = x[[1]];
-  lines.object.base(arrow, lwd=lwd, col=col, lty=lty, ...)
-  ### ArrowHead
-  ahead = x[[2]];
-  lines.object.base(ahead, lwd=lwd, col=col, ...);
-  #
-  invisible();
+lines.arrow = function(x, lwd = NULL, col = NULL, lty = 1, ...) {
+	if(is.null(col)) {
+		col = x$col;
+		if(is.null(col)) col = 1;
+	}
+	### ArrowTail
+	arrow = x[[1]];
+	lines.object.base(arrow, lwd=lwd, col=col, lty=lty, ...)
+	### ArrowHead
+	ahead = x[[2]];
+	lines.object.base(ahead, lwd=lwd, col=col, ...);
+	#
+	invisible();
+}
+#' @export
+lines.multiArrow = function(x, lwd=NULL, col = NULL, lty = 1, ...) {
+	lapply(x, function(x) lines.arrow(x, lwd=lwd, col=col, lty=lty));
+	invisible();
 }
 
 ### Chemistry
