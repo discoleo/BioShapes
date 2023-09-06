@@ -77,6 +77,7 @@ box.cap = function(x, y, h = 1, lwd = 1, col = NULL, fill = NULL, scale = 1) {
 	### Caps
 	phi0 = atan(slope / scale);
 	if(qd == 2 || qd == 4) phi0 = pi/2 - phi0;
+	if(slope == -Inf) phi0 = pi/2;
 	phiA = c(phi0 + pi/2, phi0 + 3*pi/2);
 	phiB = c(phi0 + 3*pi/2, phi0 + pi/2);
 	# 2 | 1
