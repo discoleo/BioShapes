@@ -338,7 +338,7 @@ lines(mol.Ig(c( 3,6), phi = 2*pi - pi/12))
 
 ### Lines / Connectors
 
-par.old = par(mfrow = c(1,2))
+par.old = par(mfrow = c(2,2))
 
 plot.base()
 x = c(1,6); y = c(1,6)
@@ -352,6 +352,23 @@ tmp = sapply(c(1.2, 1.6, 2.2, 3.5), \(id) {
 	lines(connect.lines.stairs(x, y, slope = id, t = 1/id))
 })
 points(x, y, col="red")
+
+
+###
+plot.base()
+x = c(1,6); y = c(1,6)
+lines(connect.lines.stairsEq(x, y))
+points(x, y, col="red")
+
+x = c(-1, 4, 9, 4, -1); y = c(4, 9, 4, -1, 4);
+plot.base()
+for(i in seq(4)) {
+	id = c(i, i+1);
+	lines(connect.lines.stairsEq(x[id], y[id]))
+	lines(connect.lines.stairsEq(x[id], y[id], up = FALSE))
+}
+points(x, y, col="red")
+
 
 par(par.old)
 
