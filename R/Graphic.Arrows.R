@@ -1,20 +1,23 @@
-###################
-#
-# Bachelor Thesis
+#######################################
 #
 # Title: BioShapes
 #
-# Candidate: Adrian Cotoc
+# Maintainer: L. Mada
+#
+# https://github.com/discoleo/BioShapes
+#
+# Continuation of:
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
+#   in collaboration with Syonic SRL
 # GitHub: https://github.com/Adi131313/BioShapes
+#
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
+
 
 ### Functions to Generate Arrows
 
@@ -32,7 +35,7 @@ arrow = function(x, y, type = "Simple", d=1, lwd=1, ...) {
   } else {
     types = c("Simple", "Double", "Diamond",
               "Square", "Inverted", "T", "X", "N",
-              "DoubleInverted", "Circle", "SolidSquare"); # de completat
+              "DoubleInverted", "Circle", "SolidSquare"); # TODO
     type = call[[idType]];
     type = pmatch(type, types);
     if(is.na(type)) stop("Invalid type!");
@@ -71,6 +74,9 @@ arrowTail = function(x, y, d.lines, lwd=1, slope=NULL) {
 arrowSimple = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
                        h.lwd=lwd, col="red", scale=1, join=0) {
   slope = slope(x, y);
+  qd = which.quadrant(x, y);
+  sg = if(qd == 1 || qd == 4) 1 else -1;
+  d  = sg * d;
   ### Head
   ahead = list(arrowHeadSimple(x[2], y[2], slope=slope, d=d, dV = d.head, scale=scale),
                lwd = h.lwd);

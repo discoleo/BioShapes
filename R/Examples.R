@@ -110,8 +110,7 @@ diagramLiposome = function(lbl = c("Outer lipid layer",
   if( ! is.null(title)) text(xy.title[1], xy.title[2], title, cex=cex.title);
 
   # Left arrow
-  # TODO: fix (-d)!
-  a1 = arrowSimple(x=c(-2.7,-5), y=c(-4.6,-8), d=-d, lwd=lwd);
+  a1 = arrowSimple(x=c(-2.7,-5), y=c(-4.6,-8), d=d, lwd=lwd);
   text(-5.5, -9, lbl[[1]])
 
   # Right arrow
@@ -157,11 +156,13 @@ enzymeReaction = function(x = c(2,5), y = c(1,1),
 		lwd=c(1, 2), scale=1) {
   if(length(y) == 1) y = c(y, y);
   slope = slope(x, y);
+  qd = which.quadrant(x, y);
   l1 = shiftLine(x, y, d = dy[[1]], slope=slope, scale=scale);
   l2 = shiftLine(rev(x), rev(y), d = - dy[[2]], slope=slope, scale=scale);
   #
-  arrowSimple(l1$x, l1$y, d = -dH, d.head=c(0, 0.5), col=col[[1]], lwd=lwd[[1]]);
-  arrowSimple(l2$x, l2$y, d = dH, d.head=c(0, - 0.5), col=col[[1]], lwd=lwd[[1]]);
+  d.head = c(0, 0.5);
+  arrowSimple(l1$x, l1$y, d = -dH, d.head = d.head, col=col[[1]], lwd=lwd[[1]]);
+  arrowSimple(l2$x, l2$y, d = -dH, d.head = - d.head, col=col[[1]], lwd=lwd[[1]]);
   text(x[1] - dx, y[1], lbl[[1]], col=col[[2]]);
   text(x[2] + dx, y[2], lbl[[2]], col=col[[2]]);
   # Enzyme

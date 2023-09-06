@@ -125,7 +125,7 @@ example.neurons = function(n = 5, col = "red",
   phi = -pi/2;
   center2 = center + c(-6, -10)
   tmp = neuron(n = n, center = center2, phi = phi, type = "SArrow",
-	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl);
+	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl, r.synapse=2);
   lines(tmp)
 
   ###
