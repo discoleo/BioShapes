@@ -1,26 +1,17 @@
-# Bachelor Thesis R Package: BioShapes
-## University
-West University Of Timișoara, Timiș County, Romania
-
-## Graduate
-Cotoc Adrian-Valentin
-
-Group 3, Subgroup 3, Year 3
-
-Faculty of Mathematics and Computer Science
-
-Graduation Year: 2022-2023
-
-## Supervisors
-Prof. Dr. Daniela Zaharie 
-
-Dr. med. Leonard Mada (Syonic SRL)
-
-In collaboration with Syonic SRL
-
+# Package BioShapes
 
 ## Description
-The main purpose of this thesis is to create an R package that will instantiate multiple biological templates as diagrams which are generated without manual contribution. These templates could be such as biological DNA, microbiology molecules and different types of cells specific to this domain.
+The main purpose of this package is to facilitate the generation of graphical objects resembling biological and chemical entities, enabling the construction of diagrams based on these objects. It currently includes functions to generate diagrams depicting viral particles, liposomes, double helix / DNA strands, various cell types (like neurons, brush-border cells and duct cells), Ig-domains, as well as more basic shapes.
 
-## Acknowledgement
-This project continuos the previous project of: BSc Thesis Darian Voda (2022).
+It should offer researchers in the field of biological and chemical sciences a tool to easily generate diagrams depicting the studied biological processes.
+
+## Authors
+
+1. Author, Maintainer: L. Mada
+
+Continuous previous projects:
+
+2. B.Sc. Thesis Adrian Cotoc (2022 - 2023);
+> https://github.com/Adi131313/BioShapes
+3. B.Sc. Thesis Darian Voda (2021 - 2022);
+
