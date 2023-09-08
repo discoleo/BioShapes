@@ -281,6 +281,11 @@ points(5,5)
 
 ###################
 
+### DH Arrows
+
+test.arrow.Half()
+
+
 ### Tests: Boxes
 
 test.box.cap()

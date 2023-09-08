@@ -22,35 +22,41 @@
 
 ### Functions to Generate Neuron
 
+### Synapse Object
+#' @export
+as.synapse = function(x) {
+	class(x) = c("synapse", "bioshape", "list");
+	return(x);
+}
+
 
 ### Neuron: Main function
 #' @export
 neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
-			axon.length = 3 * r, r.synapse = 2/3 * r,
-			dendrite.length = ~ r/2, r.nucl = ~ (R - r)/2,
+			axon.length = 3 * r, dendrite.length = ~ r/2, r.nucl = ~ (R - r)/2,
 			type.syn = c("Solid", "Tree", "Arrow", "SArrow",
 				"Detail", "Radial", "T"),
 			lwd = 1, lwd.axon = lwd, lwd.dendrite = lwd, lwd.nucl = 1,
 			col = 1, col.nucl = 1, fill.nucl = NULL,
-			col.dendrite = col,
-			col.axon = col, col.synapse = col, fill.synapse = col) {
+			col.dendrite = col, col.axon = col,
+			synapse = list()) {
 	body = neuron.body(center = center, n = n, r = r, phi = phi,
 		lwd = lwd, col = col);
 	### Init
-  axon.length = axon.length; # force = scale * r;
-  R = r;
-  r = attr(body, "r");
-  phin = 2 * pi/n;
-  phi0 = - phin/2;
-  pi20 = pi/2; pi32 = 3*pi/2;
-  phiD = seq(n) * phin + phi;
-  phiR = as.radians0(phiD);
-  x0 = r * cos(phiD + pi20) + R * cos(phiD + phi0);
-  y0 = r * sin(phiD + pi20) + R * sin(phiD + phi0);
-  x0 = x0 + center[1];
-  y0 = y0 + center[2];
-  sg = ifelse(phiR > pi/2 & phiR <= pi32, - 1, 1);
-  ### Axon
+	axon.length = axon.length; # force = scale * r;
+	R = r;
+	r = attr(body, "r");
+	phin = 2 * pi/n;
+	phi0 = - phin/2;
+	pi20 = pi/2; pi32 = 3*pi/2;
+	phiD = seq(n) * phin + phi;
+	phiR = as.radians0(phiD);
+	x0 = r * cos(phiD + pi20) + R * cos(phiD + phi0);
+	y0 = r * sin(phiD + pi20) + R * sin(phiD + phi0);
+	x0 = x0 + center[1];
+	y0 = y0 + center[2];
+	sg = ifelse(phiR > pi/2 & phiR <= pi32, - 1, 1);
+	### Axon
   if(axon.length != 0) {
     phiA  = phiR[n];
     slope = if(abs(phiA - pi20) < 1E-2 || abs(phiA - pi32) < 1E-2) Inf
@@ -61,8 +67,17 @@ neuron = function(center = c(0, 0), n = 5, r = 2, phi = 0,
     axon = list(axon);
     lenDendites = n - 1;
     if( ! is.null(type.syn)) {
-      syn  = synapse(xy, phi = phiA, type = type.syn, l = r.synapse,
-		col = col.synapse, fill = fill.synapse);
+      if(inherits(synapse, "synapse")) {
+	    syn = synapse;
+	  } else if(is.function(synapse)) {
+		syn = synapse(xy, phi = phiA);
+	  } else {
+		if(is.null(synapse$l)) synapse$l = 2/3 * r;
+		if(is.null(synapse$col)) synapse$col = col;
+		if(is.null(synapse$fill)) synapse$fill = col;
+        synapse = c(list(p = xy, phi = phiA, type = type.syn), synapse);
+        syn = do.call("synapse", synapse);
+	  }
       axon = c(Axon = axon, Synapse = syn);
     }
   } else {
@@ -182,7 +197,7 @@ synapse = function(p, phi, type = c("Solid", "Tree", "Arrow", "SArrow",
     lst$col = col; lst$fill = fill;
     class(lst) = c("polygon", "list")
     lst = list(lst);
-    return(as.bioshape(lst));
+    return(as.synapse(lst));
   }
   # Tree Types
   if(type == "T") {
@@ -232,7 +247,7 @@ synapse = function(p, phi, type = c("Solid", "Tree", "Arrow", "SArrow",
     class(xy) = c("polygon", "list");
   } else stop("Not yet implemented!");
   xy$col = col;
-  xy = as.bioshape(list(xy));
+  xy = as.synapse(list(xy));
   return(xy);
 }
 

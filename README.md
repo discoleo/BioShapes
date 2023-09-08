@@ -1,12 +1,26 @@
-# BioShapes: Create biological shapes in R
+# Bachelor Thesis R Package: BioShapes
+## University
+West University Of Timișoara, Timiș County, Romania
 
-Enables users to create various biological shapes in R.
+## Graduate
+Cotoc Adrian-Valentin
 
-1. Maintainer: L. Mada
+Group 3, Subgroup 3, Year 3
 
-Continous previous projects:
+Faculty of Mathematics and Computer Science
 
-2. B.Sc. Thesis Adrian Cotoc (2022 - 2023);
-> https://github.com/Adi131313/BioShapes
-3. B.Sc. Thesis Darian Voda (2021 - 2022);
+Graduation Year: 2022-2023
 
+## Supervisors
+Prof. Dr. Daniela Zaharie 
+
+Dr. med. Leonard Mada (Syonic SRL)
+
+In collaboration with Syonic SRL
+
+
+## Description
+The main purpose of this thesis is to create an R package that will instantiate multiple biological templates as diagrams which are generated without manual contribution. These templates could be such as biological DNA, microbiology molecules and different types of cells specific to this domain.
+
+## Acknowledgement
+This project continuos the previous project of: BSc Thesis Darian Voda (2022).

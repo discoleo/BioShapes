@@ -80,7 +80,7 @@ example.neuronDesign = function(n = 5, r = 2, col.mark = "red") {
 example.neuron = function(phi = 0, n = 5, type = "Tree",
 		col = NULL, fill.nucl = NULL, center = c(2, 3)) {
   plot.base()
-  tmp = neuron(n = n, center = center, phi = phi, type = type,
+  tmp = neuron(n = n, center = center, phi = phi, type.syn = type,
 	col = col, fill.nucl = fill.nucl);
   lines(tmp);
   invisible(tmp);
@@ -125,7 +125,7 @@ example.neurons = function(n = 5, col = "red",
   phi = -pi/2;
   center2 = center + c(-6, -10)
   tmp = neuron(n = n, center = center2, phi = phi, type = "SArrow",
-	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl, r.synapse=2);
+	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl, synapse = list(l = 2));
   lines(tmp)
 
   ### Middle Row:
@@ -155,7 +155,7 @@ example.neurons = function(n = 5, col = "red",
   center = c(-10, 4)
   tmp = neuron(n = n, center = center, phi = phi, type = "Solid",
 	col=col, lwd=lwd, lwd.axon = lwd.axon, lwd.nucl = lwd.nucl,
-	fill.synapse = "#E08064");
+	synapse = list(fill = "#E08064"));
   lines(tmp)
   ###
   phi = -pi;
