@@ -70,15 +70,15 @@ lines.list = function(x, y, lwd=NULL, ...) {
 ### Base function
 #' @export
 lines.object.base = function(x, lwd, col, fill=NULL, ...) {
-  # do NOT overwrite user-value;
-  if(is.null(lwd)) {
-    lwd = if(is.null(x$lwd)) 1 else x$lwd;
-  }
-  if(is.null(col)) {
-    col = if(is.null(x$col)) 1 else x$col;
-  }
-  x$lwd = NULL; x$col = NULL;
-  # Actual components:
+	# do NOT overwrite user-value;
+	if(is.null(lwd)) {
+		lwd = if(is.null(x$lwd)) 1 else x$lwd;
+	}
+	if(is.null(col)) {
+		col = if(is.null(x$col)) 1 else x$col;
+	}
+	x$lwd = NULL; x$col = NULL;
+	# Actual components:
   basef = function(lst, lwd, col, ...) {
     if(! is.null(lst$lwd)) { lwd = lst$lwd; lst$lwd = NULL; }
     if(! is.null(lst$col)) { col = lst$col; lst$col = NULL; }
@@ -90,13 +90,24 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 	if(inherits(lst, "circle")) {
       if(is.null(fill)) fill = lst$fill;
       if(inherits(lst$center, "matrix")){
-        lapply(seq(nrow(lst$center)), function(nr){
+        lapply(seq(nrow(lst$center)), function(nr) {
           shape::plotellipse(rx = lst$r, ry = lst$r, mid = lst$center[nr, ],
                              lcol=col, col=fill, lwd=lwd, ...);
         })
       } else {
            shape::plotellipse(rx = lst$r, ry = lst$r,
             mid = lst$center, lcol=col, col=fill, lwd=lwd, ...);
+      }
+    } else if(inherits(lst, "ellipse")) {
+      fill = lst$fill;
+      if(inherits(lst$center, "matrix")) {
+	    print("TODO")
+        lapply(seq(nrow(lst$center)), function(nr){
+          # TODO
+        })
+      } else {
+           plot.ellipse(r = lst$r, center = lst$center, phi = lst$phi, th = lst$th,
+            lwd=lwd, col=col, fill=fill);
       }
     } else if(inherits(lst, "circle.arc")) {
       if(is.null(fill)) fill = lst$fill;
