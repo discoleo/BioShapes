@@ -165,7 +165,7 @@ test.arrow.Half = function(lwd = 2, col = c(2,3,4)) {
 ### Boxes & Labels
 
 ### Basic Test
-# scale = 1 / aspect ration, used in 1 test;
+# scale = 1 / aspect ratio, used in 1 test;
 #' @export
 test.box.cap = function(scale = 2) {
 	par.old = par(mfrow = c(2,3))
@@ -212,5 +212,26 @@ test.box.cap = function(scale = 2) {
 	
 	par(par.old)
 	invisible()
+}
+
+
+### Elliptic Cap
+# scale = 1 / aspect ratio;
+#' @export
+test.box.capEllipse = function(y.rel = 1/4, lwd = 1, col = "black", fill = NULL, scale = 1) {
+	boxf = function(x, y) {
+		box.capEllipse(x, y, y.rel=y.rel, lwd=lwd, col=col, fill=fill, scale=scale);
+	}
+	plot.base(asp = 1 / scale);
+	lines(boxf(c(1, 4), c(3.5, 0)))
+	lines(boxf(c(4, 1), c(3.5, 0)))
+	# for visibility:
+	dy0 = if(scale <= 1) 0 else 3 / scale;
+	dy2 = 3*dy0; dy1 = dy2 + dy0;
+	lines(boxf(c(0, 5), c(7, 7) + dy1))
+	lines(boxf(c(5, 0), c(5, 5) + dy2))
+	#
+	lines(boxf(c(6, 6), c(0, 4) - 0.25))
+	lines(boxf(c(8, 8), c(4, 0) - 0.25))
 }
 

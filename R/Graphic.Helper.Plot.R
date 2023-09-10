@@ -50,9 +50,16 @@ plot.circle.arc = function(r, center, phi, col=1, fill=NULL, ...) {
 
 #' @export
 plot.ellipse = function(r, center, phi = c(0, pi), th = 0, lwd = 1,
-		col = 1, fill = NULL, ...) {
-	shape::plotellipse(rx = r[1], ry = r[2], mid = center, angle = th * 180 / pi,
-		from = phi[1], to = phi[2], lwd=lwd, lcol = col, col = fill, ...);
+		col = 1, fill = NULL, scale = 1, ..., N = 64) {
+	# shape::plotellipse(rx = r[1], ry = r[2], mid = center, angle = th * 180 / pi,
+	#	from = phi[1], to = phi[2], lwd=lwd, lcol = col, col = fill, ...);
+	dr = max(r) / N;
+	xy = shape::getellipse(rx = r[1], ry = r[2], mid = center, angle = th * 180 / pi,
+		from = phi[1], to = phi[2], dr = dr);
+	if(scale != 1) xy = shape::rotatexy(xy, angle = 0, mid = center, asp = TRUE);
+	if ( ! is.null(fill))
+        polygon(xy, col = fill, border = NA);
+	lines(xy, lwd=lwd, col=col, ...);
 }
 
 ### Plot:
@@ -107,7 +114,7 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
         })
       } else {
            plot.ellipse(r = lst$r, center = lst$center, phi = lst$phi, th = lst$th,
-            lwd=lwd, col=col, fill=fill, ...);
+            lwd=lwd, col=col, fill=fill, scale = lst$scale, ...);
       }
     } else if(inherits(lst, "circle.arc")) {
       if(is.null(fill)) fill = lst$fill;

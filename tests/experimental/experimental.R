@@ -291,6 +291,22 @@ test.arrow.Half()
 test.box.cap()
 
 
+### Box with Elliptic Cap
+
+###
+par.old = par(mfrow = c(2,2))
+
+test.box.capEllipse()
+
+test.box.capEllipse(fill = "red")
+
+test.box.capEllipse(scale = 2)
+
+test.box.capEllipse(scale = 1/2)
+
+par(par.old)
+
+
 ###################
 
 ### Ig-like Domains

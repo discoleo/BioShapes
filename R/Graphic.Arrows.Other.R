@@ -15,6 +15,8 @@
 ### Arrows: Other Types
 
 # - Pins/Tags;
+# - Boxes & Labels;
+
 
 #######################
 
@@ -107,6 +109,51 @@ box.cap = function(x, y, h = 1, lwd = 1, col = NULL, fill = NULL, scale = 1) {
 	}
 	class(cap1) = c("circle.arc", "list");
 	class(cap2) = c("circle.arc", "list");
+	cap = as.bioshape(list(Cap1 = cap1, Cap2 = cap2))
+	lst = c(lst, Cap = cap);
+	return(as.bioshape(lst));
+}
+
+
+#' @export
+box.capEllipse = function(x, y, h = 1, y.rel = 0.25, lwd = 1, col = NULL, fill = NULL, scale = 1) {
+	slope = slope(x, y);
+	h2 = h/2;
+	xy = shift.ortho(x, y, slope=slope, d = c(-h2, h2), scale=scale);
+	lst  = list(Poly = xy, lwd = lwd);
+	### Caps
+	isV  = (x[2] == x[1]);
+	phi0 = if(isV) atan2(y[2] - y[1], 0)
+		else atan2(y[2] - y[1], (x[2] - x[1]) * scale);
+	pi2  = pi / 2;
+	if(slope == -Inf) phi0 = pi2;
+	th = phi0 + pi2;
+	phi1 = c(0, pi); phi2 = c(pi, 2*pi);
+	# BUG: in shape::getellipse ???
+	if(isV && y[2] < y[1]) {
+		tmp = phi1; phi1 = phi2; phi2 = tmp;
+	}
+	r = c(h2, y.rel * h2 / scale);
+	cap1 = list(r=r, center = c(x[1], y[1]), th = th, phi = phi1, lwd=lwd, scale=scale);
+	cap2 = list(r=r, center = c(x[2], y[2]), th = th, phi = phi2, lwd=lwd, scale=scale);
+	if( ! is.null(col)) {
+		lst$col = col;
+		cap1$col = col;
+		cap2$col = col;
+	}
+	if( ! is.null(fill)) {
+		cap1$fill = fill;
+		cap2$fill = fill;
+		# Polygon:
+		pp = list(
+			x = lst$Poly$x[c(1,2,4,3)],
+			y = lst$Poly$y[c(1,2,4,3)]);
+		pp$fill = fill; pp$col = NA;
+		class(pp) = c("polygon", "list");
+		lst = c(PolyFill = list(pp), lst);
+	}
+	class(cap1) = c("ellipse", "list");
+	class(cap2) = c("ellipse", "list");
 	cap = as.bioshape(list(Cap1 = cap1, Cap2 = cap2))
 	lst = c(lst, Cap = cap);
 	return(as.bioshape(lst));
