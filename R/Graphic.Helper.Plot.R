@@ -79,26 +79,26 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 	}
 	x$lwd = NULL; x$col = NULL;
 	# Actual components:
-  basef = function(lst, lwd, col, ...) {
-    if(! is.null(lst$lwd)) { lwd = lst$lwd; lst$lwd = NULL; }
-    if(! is.null(lst$col)) { col = lst$col; lst$col = NULL; }
-	#
-    if(inherits(lst, "bioshape")) {
-      lapply(lst, basef, lwd = lwd, col = col, ...);
-	  return();
-    }
-	if(inherits(lst, "circle")) {
-      if(is.null(fill)) fill = lst$fill;
-      if(inherits(lst$center, "matrix")){
-        lapply(seq(nrow(lst$center)), function(nr) {
-          shape::plotellipse(rx = lst$r, ry = lst$r, mid = lst$center[nr, ],
-                             lcol=col, col=fill, lwd=lwd, ...);
-        })
-      } else {
-           shape::plotellipse(rx = lst$r, ry = lst$r,
-            mid = lst$center, lcol=col, col=fill, lwd=lwd, ...);
-      }
-    } else if(inherits(lst, "ellipse")) {
+	basef = function(lst, lwd, col, ...) {
+		if(! is.null(lst$lwd)) { lwd = lst$lwd; lst$lwd = NULL; }
+		if(! is.null(lst$col)) { col = lst$col; lst$col = NULL; }
+		#
+		if(inherits(lst, "bioshape")) {
+			lapply(lst, basef, lwd = lwd, col = col, ...);
+			return();
+		}
+		if(inherits(lst, "circle")) {
+			if(is.null(fill)) fill = lst$fill;
+			if(inherits(lst$center, "matrix")) {
+				lapply(seq(nrow(lst$center)), function(nr) {
+					shape::plotellipse(rx = lst$r, ry = lst$r, mid = lst$center[nr, ],
+						lcol=col, col=fill, lwd=lwd, ...);
+				})
+			} else {
+				shape::plotellipse(rx = lst$r, ry = lst$r,
+					mid = lst$center, lcol=col, col=fill, lwd=lwd, ...);
+			}
+	} else if(inherits(lst, "ellipse")) {
       fill = lst$fill;
       if(inherits(lst$center, "matrix")) {
 	    print("TODO")
@@ -107,7 +107,7 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
         })
       } else {
            plot.ellipse(r = lst$r, center = lst$center, phi = lst$phi, th = lst$th,
-            lwd=lwd, col=col, fill=fill);
+            lwd=lwd, col=col, fill=fill, ...);
       }
     } else if(inherits(lst, "circle.arc")) {
       if(is.null(fill)) fill = lst$fill;
