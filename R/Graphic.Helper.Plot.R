@@ -48,6 +48,13 @@ plot.circle.arc = function(r, center, phi, col=1, fill=NULL, ...) {
   shape::plotcircle(r, mid=center, from=phi[1], to=phi[2], lcol=col, col=fill, ...);
 }
 
+#' @export
+plot.ellipse = function(r, center, phi = c(0, pi), th = 0, lwd = 1,
+		col = 1, fill = NULL, ...) {
+	shape::plotellipse(rx = r[1], ry = r[2], mid = center, angle = th * 180 / pi,
+		from = phi[1], to = phi[2], lwd=lwd, lcol = col, col = fill, ...);
+}
+
 ### Plot:
 #' @export
 lines.list = function(x, y, lwd=NULL, ...) {
@@ -73,14 +80,15 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
   x$lwd = NULL; x$col = NULL;
   # Actual components:
   basef = function(lst, lwd, col, ...) {
+    if(! is.null(lst$lwd)) { lwd = lst$lwd; lst$lwd = NULL; }
+    if(! is.null(lst$col)) { col = lst$col; lst$col = NULL; }
+	#
     if(inherits(lst, "bioshape")) {
-      if(! is.null(lst$lwd)) { lwd = lst$lwd; lst$lwd = NULL; }
-      if(! is.null(lst$col)) { col = lst$col; lst$col = NULL; }
       lapply(lst, basef, lwd = lwd, col = col, ...);
-    } else if(inherits(lst, "circle")) {
+	  return();
+    }
+	if(inherits(lst, "circle")) {
       if(is.null(fill)) fill = lst$fill;
-      if(! is.null(lst$col)) col = lst$col;
-      if(! is.null(lst$lwd)) lwd = lst$lwd;
       if(inherits(lst$center, "matrix")){
         lapply(seq(nrow(lst$center)), function(nr){
           shape::plotellipse(rx = lst$r, ry = lst$r, mid = lst$center[nr, ],
@@ -92,8 +100,6 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
       }
     } else if(inherits(lst, "circle.arc")) {
       if(is.null(fill)) fill = lst$fill;
-      col = if(is.null(lst$col)) col else lst$col;
-      lwd = if(is.null(lst$lwd)) lwd else lst$lwd;
       if(inherits(lst$center, "matrix")){
         lapply(seq(nrow(lst$center)), function(nr){
           plot.circle.arc(
@@ -108,15 +114,10 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 
     } else if(inherits(lst, "polygon")) {
       # if(is.null(fill)) fill = lst$fill;
-      lwd = if(is.null(lst$lwd)) lwd else lst$lwd;
-      col = if(is.null(lst$col)) col else lst$col;
       fill = if(is.null(lst$fill)) NA else lst$fill;
       polygon(lst$x, lst$y, col=fill, border=col, lwd = lwd, ...);
     } else {
       # warning("Only lines");
-      lwd0 = lst$lwd; if( ! is.null(lwd0)) lwd = lwd0;
-      col0 = lst$col; if( ! is.null(col0)) col = col0;
-      lst$lwd = NULL; lst$col = NULL;
 	  if(is.null(lwd)) lwd = 1;
 	  # Note: lines.list uses the same color for all elements!
       if(inherits(lst, "lines.list")) {
