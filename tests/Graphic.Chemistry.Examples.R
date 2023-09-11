@@ -31,3 +31,14 @@ lines.arrow(list(parseCycles("5-5"), list()))
 #### Sesquifulvalene backbone ####
 plot.base()
 lines.arrow(list(parseCycles("7=5"), list()))
+
+################
+
+################
+### Analysis ###
+
+### Newman Projection
+
+plot.base()
+lines(proj.newman(c("F", "H", "H"), c("OH", "CH3", "H"), pos = list(c(4,3,1), c(3,2,1))))
+

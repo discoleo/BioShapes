@@ -70,6 +70,11 @@ testFilledCircle = function(xy, r=NULL, R=NULL, lim=NULL, line=TRUE,
 # phi = rotation (counter-clockwise);
 #' @export
 pointsCircle = function(n, r, center = c(0,0), phi=0) {
+	pp = points.circle(n=n, r=r, center=center, phi=phi);
+	return(pp);
+}
+#' @export
+points.circle = function(n, r, center = c(0,0), phi=0) {
   x = r * cos(seq(0, n-1) * 2*pi/n + phi) + center[1];
   y = r * sin(seq(0, n-1) * 2*pi/n + phi) + center[2];
   lst = list(x=x, y=y);

@@ -1,20 +1,18 @@
 #######################################
 #
-# BioShapes
+# Title: BioShapes
 # Maintainer: L. Mada
 #
 # https://github.com/discoleo/BioShapes
 #
 # Continuation of:
-# 1. Bachelor Thesis (2022-2023)
-# Candidate: Adrian Cotoc
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
-#
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
 #   in collaboration with Syonic SRL
-# GitHub: https://github.com/Adi131313/BioShapes
+#   GitHub: https://github.com/Adi131313/BioShapes
 #
 # 2. Bachelor Thesis: Darian Voda (2021-2022)
 
