@@ -134,7 +134,14 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
       # if(is.null(fill)) fill = lst$fill;
       fill = if(is.null(lst$fill)) NA else lst$fill;
       polygon(lst$x, lst$y, col=fill, border=col, lwd = lwd, ...);
-    } else {
+    } else if(inherits(lst, "text")) {
+		len = length(lst);
+		if(len == 3) { text(lst$x, lst$y, lst$labels, col=col); }
+		else {
+			if( ! is.null(col)) lst$col = col;
+			do.call("text", lst);
+		}
+	} else {
       # warning("Only lines");
 	  if(is.null(lwd)) lwd = 1;
 	  # Note: lines.list uses the same color for all elements!
