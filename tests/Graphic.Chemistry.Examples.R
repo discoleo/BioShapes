@@ -1,36 +1,43 @@
 #### Poly-cyclic chemical molecules ####
 
-#### Cholesterol backbone ####
-plot.base()
+
+par.old = par(mfrow = c(3,2))
+
+### Cholesterol backbone
+plot.base(ylim = c(-2,4))
 lines(parseCycles("6|6\\6|5"))
 
-##### [1] Pentacyclic Triterpene backbone ####
-plot.base()
+### [1] Pentacyclic Triterpene backbone
+plot.base(ylim = c(-2,4))
 lines(parseCycles("6|6\\6|6\\6"))
 
-#### [3] Molecules from vegetables; ####
-##### Psoralens & Pabulenol quasi-backbone #####
+### [3] Molecules from vegetables
+### Psoralens & Pabulenol quasi-backbone
 # - vegetables: parsnip (pastarnac) & parsley (patrunjel);
-plot.base()
+plot.base(ylim = c(-2,4))
 lines(parseCycles("6|6|5"))
 
-#### Spiro-Derivatives ####
-plot.base()
-lines.arrow(list(parseCycles("6|6|5<5"), list()))
+### Spiro-Derivatives
+plot.base(ylim = c(-2,4))
+lines(parseCycles("6|6|5<5"))
 
-plot.base()
-lines.arrow(list(parseCycles("6|6|5<7"), list()))
+plot.base(ylim = c(-2,4))
+lines(parseCycles("6|6|5<7"))
 
-#### Other ####
-plot.base()
-lines.arrow(list(parseCycles("6|6|6|5<3"), list()))
+### Other
+plot.base(ylim = c(-2,4))
+lines(parseCycles("6|6|6|5<3"))
 
-plot.base()
-lines.arrow(list(parseCycles("5-5"), list()))
+par(par.old)
 
-#### Sesquifulvalene backbone ####
+###
 plot.base()
-lines.arrow(list(parseCycles("7=5"), list()))
+lines(parseCycles("5-5"))
+
+### Sesquifulvalene backbone
+plot.base()
+lines(parseCycles("7=5"))
+
 
 ################
 

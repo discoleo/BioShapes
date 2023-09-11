@@ -69,8 +69,9 @@ parseCycles = function(x, r=1, d2=0.0625) {
       x1 = x0 + r0;
       l1 = list(x = c(x0, x1), y = c(y0, y0));
       if(s == "=") {
-        l2 = shiftLine(l1$x, l1$y, d = c(-d2, d2));
-        l1 = split(l2[, 1:2], l2$id);
+        l1 = shiftLine(l1$x, l1$y, d = c(-d2, d2));
+		l1 = as.bioshape(list(DB = l1));
+        # l1 = split(l2[, 1:2], l2$id);
       } else l1 = list(l1);
       l = c(l, l1);
       x0 = x1;
