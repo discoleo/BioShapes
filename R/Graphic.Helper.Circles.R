@@ -343,3 +343,68 @@ circle.hashEmboss = function(n, center = c(0, 0), r = 1, phi = 0, scale = 1,
 	return(as.bioshape(lst));
 }
 
+
+#########################
+
+### Ellipse
+
+# - returns solution closest to "y.guess";
+#' @export
+solve.ellipse.closest = function(x, y.guess = NULL, r, phi = 0, center = c(0,0), tol = 1E-10) {
+	cc = as.coeff.ellipse(r, phi=phi);
+	x0 = center[1]; y0 = center[2];
+	xx = x - x0;
+	y  = solve.ellipse.v0(xx, coef = cc, tol=tol);
+	y  = y + y0;
+	# NO Guess:
+	if(is.null(y.guess) || length(y) == 1) return(y);
+	# Solution closest to "y.guess"
+	# Note: solution must be valid!
+	dG = abs(y - y.guess);
+	y  = ifelse(dG[1] <= dG[2], y[1], y[2]);
+}
+
+#' @export
+solve.ellipse.all = function(x, r, phi = 0, center = c(0,0), tol = 1E-10) {
+	x0 = center[1]; y0 = center[2];
+	xx = x - x0;;
+	cc = as.coeff.ellipse(r, phi=phi);
+	y = sapply(xx, function(xx) {
+		y = solve.ellipse.v0(xx, coef = cc, tol=tol);
+		if(length(y) == 1) y = c(y, y);
+		return(y);
+	});
+	y = y + y0;
+	return(y);
+}
+
+### Basic Solver
+#' @export
+solve.ellipse.v0 = function(x, coef, tol = 1E-10) {
+	cc = coef;
+	cc[2] = cc[2]*x;
+	cc[3] = cc[3]*x^2 - 1;
+	Delta = cc[2]^2 - 4*cc[1]*cc[3];
+	if(abs(Delta) <= tol) {
+		y = - cc[2] / (2*cc[1]);
+		return(y);
+	}
+	if(Delta < 0) return(NA);
+	Delta = sqrt(Delta);
+	y = (- cc[2] + c(-1, 1)*Delta) / (2*cc[1]);
+	return(y);
+}
+
+
+### Coefficients
+# Eq: c[1]*(y - y0)^2 + c[2]*(x - x0)*(y - y0) + c[3]*(x - x0)^2 - 1 = 0;
+# - Note: c[] does NOT include: - 1;
+#' @export
+as.coeff.ellipse = function(r, phi = 0) {
+	sn = sin(phi); cs = cos(phi);
+	a = r[1]; b = r[2];
+	cc = c((sn^2 / a^2 + cs^2 / b^2),
+		(1/a^2 - 1/b^2)*sin(2*phi), (cs^2 / a^2 + sn^2 / b^2));
+	return(cc);
+}
+
