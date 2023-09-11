@@ -408,3 +408,15 @@ as.coeff.ellipse = function(r, phi = 0) {
 	return(cc);
 }
 
+### Slope of Tangents to Ellipse
+# (x, y) = given points on ellipse;
+#' @export
+slope.ellipse = function(x, y, r, phi = 0, center = c(0,0)) {
+	# Note: does NOT check validity of point (x, y);
+	cc = as.coeff.ellipse(r, phi=phi);
+	xx = x - center[1];
+	yy = y - center[2];
+	sl = - (2*cc[3]*xx + cc[2]*yy) / (2*cc[1]*yy + cc[2]*xx);
+	return(sl);
+}
+
