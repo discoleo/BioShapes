@@ -408,6 +408,21 @@ as.coeff.ellipse = function(r, phi = 0) {
 	return(cc);
 }
 
+
+### Ellipse: x-Range
+#' @export
+range.ellipse.x = function(r, phi = 0, center = c(0,0)) {
+	cc = as.coeff.ellipse(r, phi=phi);
+	# 2*c1*y + c2*x = 0
+	# (4*c1*c3 - c2^2)*x^2 - 4*c1 # = 0
+	x = 4*cc[1] / (4*cc[1]*cc[3] - cc[2]^2);
+	# TODO: check explicit sin/cos formula;
+	if(x < 0) warning("Invalid solution!");
+	x = sqrt(x);
+	x = center[1] + c(-x, x);
+	return(x);
+}
+
 ### Slope of Tangents to Ellipse
 # (x, y) = given points on ellipse;
 #' @export

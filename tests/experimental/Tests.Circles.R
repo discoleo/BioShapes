@@ -127,3 +127,14 @@ lines(circle.hash(11, phi = phi + pi/2, r=r, scale=scale, center = c(4,4), col =
 
 par(par.old)
 
+
+################
+
+################
+### Ellipses ###
+
+### Tangents at Ellipse
+test.ellipse.tan(c(2,4.5), r=c(1, 3), phi = -pi/5, center = c(3,5))
+
+test.ellipse.tan(c(2,4.5), r=c(1, 3), phi = pi/3, center = c(3,5))
+

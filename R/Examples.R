@@ -404,6 +404,47 @@ example.complexDuct = function(n = 8, lim = c(-10, 10)){
 
 ###################
 
+### Ellipses
+
+### Test Ellipses
+# - Range & Tangents to given points;
+#' @export
+test.ellipse.tan = function(x, r, phi = 0, center = c(0,0), dx = c(-2, 2), N = 64,
+		col.xlim = "#FF6496", lbl = "Tangents") {
+	x0 = range.ellipse.x(r=r, phi=phi, center=center);
+	xx = seq(x0[1], x0[2], length.out = N);
+	y = solve.ellipse.all(xx, r=r, phi=phi, center=center);
+	plot.base()
+	lines(xx, y[1,])
+	lines(xx, y[2,])
+	
+	sol = sapply(x, function(x) {
+		solve.ellipse.all(x=x, r=r, phi=phi, center=center);
+	});
+	idNA = which(is.na(sol[1,]));
+	if(length(idNA) > 0) warning("NAs for solutions: ", paste0(idNA, collapse = ", "));
+	# Slope:
+	sl = sapply(seq_along(x), function(id) {
+		slope.ellipse(x[id], y = sol[, id], r=r, phi=phi, center=center);
+	});
+	for(id in seq_along(x)) {
+		yi = sol[, id]; si = sl[, id];
+		xT = x[id] + dx;
+		yT = si[1] * dx + yi[1];
+		lines(xT, yT, col = "green");
+		# Set 2
+		yT = si[2] * dx + yi[2];
+		lines(xT, yT, col = "green");
+		points(rep(x[id], 2), yi, col = "red");
+	}
+	abline(v = x0, col=col.xlim);
+	if( ! is.null(lbl)) {
+		text(3, 0, labels = lbl);
+	}
+}
+
+
+
 ### Examples: Arcs
 
 ### Design of Lens: Simple Arcs
