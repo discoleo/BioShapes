@@ -89,32 +89,49 @@ parseCycles = function(x, r=1, d2=0.0625) {
   return(l)
 }
 
-#### Simple Ligands ####
+
+### Pi-Bonds
 #' @export
-ligandArrow = function(x, y, slope=Inf, solid=TRUE, d=0.75, w= 0.125 * d) {
+as.piBond = function(xy, which, d = 1/8) {
+	len = length(xy);
+	if(len == 0) return(xy);
+	if(length(d) == 1) d = rep(d, len);
+	ln = lapply(seq(len), function(id) {
+		ln = shiftLine(xy[[id]]$x[which], xy[[id]]$y[which], d = d[id]);
+	})
+}
+
+### Simple Ligands
+#' @export
+ligandArrow = function(x, y, slope=Inf, solid=TRUE, d = 0.75, w = 0.125 * d) {
   pxy = if(missing(y)) x else c(x, y);
-  if(slope < 0) d = -d;
+  # if(slope < 0) d = -d;
   p  = shiftPoint(pxy, slope=slope, d=d);
   pV = shiftLine(p, slope=slope, d = c(-w, w));
   list(x = c(pxy[1], pV$x), y = c(pxy[2], pV$y));
 }
 
-ligand = function(x, cyc, i, slope=Inf, solid=TRUE, col=NULL) {
+#' @export
+ligand = function(x, cyc, i, slope=Inf, solid = TRUE, col = NULL, col.grey = "grey50", ...) {
   ligandBase = function(id) {
     cyc = if(length(cyc) == 1) cyc else cyc[[id]];
     tmp = x[[cyc]];
     pol = ligandArrow(tmp$x[i[[id]]], tmp$y[i[[id]]],
-                      slope=slope[[id]], solid=solid[[id]]);
-    if(is.null(col)) {
-      col = if(solid[[id]]) 1 else "grey50";
-    } else col = if(length(col) == 1) col else col[[id]];
-    lst = list(x = pol$x, y = pol$y, col=col);
+                      slope=slope[[id]], solid=solid[[id]], ...);
+	if(is.null(col)) {
+		col  = if(solid[[id]]) 1 else col.grey;
+		fill = col;
+    } else {
+		col  = if(length(col) == 1) col else col[[id]];
+		fill = NA;
+	}
+    lst = c(pol, col=col, fill=fill);
     class(lst) = c("polygon", class(lst));
     return(lst);
   }
   len = length(i);
   pol = lapply(seq(len), ligandBase);
-  class(pol) = c("chemistry", class(pol))
+  class(pol) = c("bioshape", class(pol))
   return(pol);
 }
 

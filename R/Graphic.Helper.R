@@ -165,6 +165,19 @@ shift.point = function(p, x, y, d = 1, slope = NULL, scale = 1, ...) {
 	UseMethod("shift.point");
 }
 
+### Translate All Points
+# non-recursive list;
+#' @export
+shift.listNR = function(x, by = c(0, 0)) {
+	for(i in seq_along(x)) {
+			tmp = x[[i]];
+			tmp$x = tmp$x + by[1];
+			tmp$y = tmp$y + by[2];
+			x[[i]] = tmp;
+	}
+	return(x);
+}
+
 ### Shift Point or Line
 # Shifts a point orthogonal to a given line;
 # d = distance to shift (translate);
