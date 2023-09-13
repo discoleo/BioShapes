@@ -46,6 +46,13 @@ lines(parseCycles("7=5"))
 
 ### Newman Projection
 
+###
+test.proj.newman()
+
+###
+test.proj.newman(phi = c(0, pi/3), ligand = "CH3,H3C,F|Me,t-Bu,HO")
+
+
 # compact
 plot.base()
 lines(proj.newman(c("F,H,H|OH,CH3,H"), pos = list(c(4,3,1), c(3,2,1))))

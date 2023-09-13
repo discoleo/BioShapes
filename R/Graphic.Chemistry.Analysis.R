@@ -60,21 +60,44 @@ proj.newman = function(lbl1, lbl2, phi = c(0, pi/length(lbl1)), r = 1, center = 
 		BB1 = as.bioshape(list(bb1, lwd = lwd[1])),
 		BB2 = as.bioshape(list(bb2, lwd = lwd[2])));
 	# Labels:
-	if(is.null(pos)) {
-		# TODO:
-	} else {
-		lT1 = lapply(seq(n1), function(id) {
-			lst = list(x = b1E$x[id], y = b1E$y[id], labels = lbl1[id], pos = pos[[1]][id]);
+	lblf = function(n, xy, lbl, POS, name) {
+		lapply(seq(n), function(id) {
+			lst = list(x = xy$x[id], y = xy$y[id], labels = lbl[id], POS = POS[[id]]);
+			names(lst)[[4]] = name;
 			class(lst) = c("text", "list");
 			return(lst);
 		});
-		lT2 = lapply(seq(n2), function(id) {
-			lst = list(x = b2E$x[id], y = b2E$y[id], labels = lbl2[id], pos = pos[[2]][id]);
-			class(lst) = c("text", "list");
-			return(lst);
-		});
-		lT = c(lT1, lT2);
-		lst$T = as.bioshape(lT);
 	}
+	if(is.null(pos)) {
+		i1 = seq(0, n1 - 1) * 2*pi/n1;
+		i2 = seq(0, n2 - 1) * 2*pi/n2;
+		adj1 = adjust.proj.radial(as.radians0(i1 + phi[1]));
+		adj2 = adjust.proj.radial(as.radians0(i2 + phi[2]));
+		lT1 = lblf(n1, xy = b1E, lbl = lbl1, POS = adj1, name = "adj");
+		lT2 = lblf(n2, xy = b2E, lbl = lbl2, POS = adj2, name = "adj");
+	} else {
+		lT1 = lblf(n1, xy = b1E, lbl = lbl1, POS = pos[[1]], name = "pos");
+		lT2 = lblf(n2, xy = b2E, lbl = lbl2, POS = pos[[2]], name = "pos");
+	}
+	lT = c(lT1, lT2);
+	lst$T = as.bioshape(lT);
 	return(as.bioshape(lst));
+}
+
+
+#' @export
+adjust.proj.radial = function(phi) {
+	phi = phi / pi;
+	# TODO: fine tune;
+	lapply(phi, function(phi) {
+		if(phi >= 0    && phi <= 0.25) return(c(- 0.35, 0.4));
+		if(phi > 0.25  && phi <= 0.475) return(c(- 0.15, 0.25));
+		if(phi > 0.475 && phi <= 0.5) return(c(0.25, - 0.1));
+		if(phi > 0.5   && phi <= 0.525) return(c(0.25, - 0.25));
+		if(phi > 0.525 && phi <= 1) return(c(1.15, 0.4));
+		if(phi > 1     && phi <= 1.475) return(c(1.2, 0.5));
+		if(phi > 1.475 && phi < 1.5) return(c(0.45, 1.05));
+		if(phi >= 1.5  && phi < 1.525) return(c(0.5, 1));
+		if(phi > 1.525 && phi <= 2) return(c(- 0.25, 0.55));
+	})
 }
