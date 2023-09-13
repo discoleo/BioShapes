@@ -46,6 +46,11 @@ lines(parseCycles("7=5"))
 
 ### Newman Projection
 
+# compact
+plot.base()
+lines(proj.newman(c("F,H,H|OH,CH3,H"), pos = list(c(4,3,1), c(3,2,1))))
+
+# explicit
 plot.base()
 lines(proj.newman(c("F", "H", "H"), c("OH", "CH3", "H"), pos = list(c(4,3,1), c(3,2,1))))
 

@@ -27,6 +27,15 @@
 #' @export
 proj.newman = function(lbl1, lbl2, phi = c(0, pi/length(lbl1)), r = 1, center = c(4,4),
 		pos = NULL, dr = r/4, lwd = c(2, 1)) {
+	if(missing(lbl2)) {
+		if(length(lbl1) > 1) stop("Missing 2nd group of ligands!");
+		lbl1 = strsplit(lbl1, "\\||\n");
+		lbl1 = lbl1[[1]];
+		if(length(lbl1) != 2) stop("Invalid number of ligands!");
+		lbl1 = strsplit(lbl1, ",");
+		lbl2 = lbl1[[2]]; lbl1 = lbl1[[1]];
+		
+	}
 	# Circle:
 	lst = list(r=r, center=center);
 	class(lst) = c("circle", "list");
