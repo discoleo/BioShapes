@@ -26,13 +26,16 @@
 
 #' @export
 proj.newman = function(lbl1, lbl2, phi = c(0, pi/length(lbl1)), r = 1, center = c(4,4),
-		pos = NULL, dr = r/4, lwd = c(2, 1)) {
-	if(missing(lbl2)) {
+		pos = NULL, dr = r/4, lwd = c(2, 1), split = c("\\||\n", ",")) {
+	noLbl2 = missing(lbl2);
+	if(noLbl2 && is.list(lbl1) && length(lbl1) == 2) {
+		lbl2 = lbl1[[2]]; lbl1 = lbl1[[1]];
+	} else if(noLbl2) {
 		if(length(lbl1) > 1) stop("Missing 2nd group of ligands!");
-		lbl1 = strsplit(lbl1, "\\||\n");
+		lbl1 = strsplit(lbl1, split[1]);
 		lbl1 = lbl1[[1]];
 		if(length(lbl1) != 2) stop("Invalid number of ligands!");
-		lbl1 = strsplit(lbl1, ",");
+		lbl1 = strsplit(lbl1, split[2]);
 		lbl2 = lbl1[[2]]; lbl1 = lbl1[[1]];
 		
 	}
@@ -62,7 +65,12 @@ proj.newman = function(lbl1, lbl2, phi = c(0, pi/length(lbl1)), r = 1, center = 
 	# Labels:
 	lblf = function(n, xy, lbl, POS, name) {
 		lapply(seq(n), function(id) {
-			lst = list(x = xy$x[id], y = xy$y[id], labels = lbl[id], POS = POS[[id]]);
+			lbl = lbl[id];
+			lbl = if(substr(lbl, 1, 1) == "\\") {
+				# TODO: more advanced processing;
+				lbl = parse(text = substr(lbl, 2, nchar(lbl)));
+			} else lbl;
+			lst = list(x = xy$x[id], y = xy$y[id], labels = lbl, POS = POS[[id]]);
 			names(lst)[[4]] = name;
 			class(lst) = c("text", "list");
 			return(lst);

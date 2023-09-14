@@ -49,7 +49,7 @@ example.cholesterol = function(origin = c(0,0)) {
 ### Test: Newman Projection
 
 #' @export
-test.proj.newman = function(phi.add = c(0,0), ligand = "F,H,H|OH,CH3,H") {
+test.proj.newman = function(phi.add = c(0,0), ligand = "F,H,H|OH,\\CH[3],H") {
 	plot.base()
 	# Row 1:
 	lines(proj.newman(ligand, center = c(1,6), phi = c(0.7, 1) + phi.add))
