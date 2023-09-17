@@ -35,7 +35,7 @@ rep.all.list = function(x, len) {
 
 
 # xy    = list(x, y);
-# new   = data.frame(x, y) with new values;
+# new   = list(x, y) of matrixes with new values;
 # which = ids (in x & y) to replace;
 #' @export
 replace.byVal = function(xy, new, which) {
@@ -80,9 +80,26 @@ drop.col = function(x, name) {
 apply.roll = function(x, FUN, ...) {
 	len = length(x);
 	id  = seq(len);
-	idc = c(id[-1], 1);
+	idc = c(id[-1], 1); # cyclic shift left: Next element;
 	rr  = lapply(id, function(id) FUN(x[[id]], x[[idc[id]]], ...));
 	do.call(rbind, rr);
+}
+
+
+### Replace with Midline
+# xy = list of elements of type list(x, y);
+#' @export
+as.mean.xy = function(xy, which1, which2) {
+	mean.xy2 = function(e1, e2, which1, which2) {
+		x = (e1$x[which1] + e2$x[which2]) / 2;
+		y = (e1$y[which1] + e2$y[which2]) / 2;
+		data.frame(x = x, y = y);
+	}
+	mxy = apply.roll(xy, mean.xy2, which1=which1, which2=which2);
+	x = matrix(mxy$x, nrow=2);
+	y = matrix(mxy$y, nrow=2);
+	mxy = list(x = rbind.shiftR(x), y = rbind.shiftR(y));
+	replace.byVal(xy, mxy, which = c(which1, which2));
 }
 
 ##################

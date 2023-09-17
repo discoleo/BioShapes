@@ -17,9 +17,12 @@
 # 2. Bachelor Thesis: Darian Voda (2021-2022)
 
 
-#### poly-cyclic chemical molecules ####
-# numbers = dimension of cycle;
-# separators: type of junction between cycles;
+### Poly-cyclic chemical molecules
+
+### Parser
+# x = String encoding structure;
+#   - numbers = dimension of cycle;
+#   - separators = type of junction between cycles;
 #' @export
 parseCycles = function(x, r=1, d2=0.0625) {
   reg = "(?<=[0-9])(?=[^0-9])|(?<=[^0-9])(?=[0-9])";
@@ -89,6 +92,21 @@ parseCycles = function(x, r=1, d2=0.0625) {
   return(l)
 }
 
+
+### Polycyclic Cycles
+#' @export
+polycycle.cyc = function(n = 14, ngon = 7, R = 4) {
+	if(ngon < 3) stop("Invalid cycle!");
+	# ngon = 4: does not work either;
+	gg = circle.spiro(n=n, ngon=ngon, R=R, type = "in");
+	if(ngon == 3) return(gg);
+	bb = c(ngon, ngon - 1);
+	gg = as.mean.xy(gg, bb, c(2,3));
+	return(invisible(gg));
+}
+
+##################
+### Transforms ###
 
 ### Pi-Bonds
 #' @export
