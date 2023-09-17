@@ -21,6 +21,9 @@
 #### Helper Functions ####
 #### Demo / Examples  ####
 
+test = function(...) {
+	UseMethod("test");
+}
 
 ### Various BioShapes
 #' @export
@@ -407,12 +410,12 @@ example.complexDuct = function(n = 8, lim = c(-10, 10)){
 ### Test Ellipses
 # - Range & Tangents to given points;
 #' @export
-test.ellipse.tan = function(x, r, phi = 0, center = c(0,0), dx = c(-2, 2), N = 64,
-		col.xlim = "#FF6496", lbl = "Tangents") {
+test.ellipse.tan = function(x = c(0.5), r = c(1,3), phi = 0, center = c(0,0),
+		dx = c(-2, 2), N = 64, col.xlim = "#FF6496", lbl = "Tangents") {
 	x0 = range.ellipse.x(r=r, phi=phi, center=center);
 	xx = seq(x0[1], x0[2], length.out = N);
 	y = solve.ellipse.all(xx, r=r, phi=phi, center=center);
-	plot.base()
+	plot.base(ylim = range(y) + c(-3, 3));
 	lines(xx, y[1,])
 	lines(xx, y[2,])
 	

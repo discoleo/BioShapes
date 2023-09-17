@@ -1,7 +1,6 @@
 #######################################
 #
 # Title: BioShapes
-#
 # Maintainer: L. Mada
 #
 # https://github.com/discoleo/BioShapes
@@ -9,12 +8,11 @@
 # Continuation of:
 # 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
-#
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
 #   in collaboration with Syonic SRL
-# GitHub: https://github.com/Adi131313/BioShapes
+#   GitHub: https://github.com/Adi131313/BioShapes
 #
 # 2. Bachelor Thesis: Darian Voda (2021-2022)
 
@@ -37,30 +35,19 @@ as.bioshape = function(x) {
 }
 
 
-#' @export
-rep.all.list = function(x, len) {
-	if(len == 1) return(x);
-	ll = length(x);
-	for(id in seq(ll)) {
-		tmp = x[[id]];
-		if(length(tmp) == 1) x[[id]] = rep(tmp, len);
-	}
-	return(x);
-}
-
-
-### Negate Formula
-#' @export
-formula.neg = function(x) {
-	tmp = expression(- (0))[[1]];
-	tmp[[2]][[2]] = x[[2]];
-	x[[2]] = tmp;
-	return(x)
-}
-
-
 ################
 ### Geometry ###
+
+### Distance
+#' @export
+dist.xy = function(x, y, as.sqrt = TRUE) {
+  xy = (x[1] - x[2])^2 + (y[1] - y[2])^2;
+  if(as.sqrt) xy = sqrt(xy);
+  return(xy);
+}
+
+
+### Slope
 
 # Deprecated:
 compute_slope = function(x, y) {
@@ -120,6 +107,8 @@ center.p4 = function(p1, p2, p3, p4, t = c(1/2, 1/2)) {
 	return(center);
 }
 
+
+### Basic Operations
 
 ### Reflect Point across line
 # p = c(x, y) # the point to reflect;
@@ -244,6 +233,7 @@ shift.ortho = function(x, y, d=1, slope=NULL,
     y.sh  = y - delta*sl.orto;
     data.frame(x=x.sh, y=y.sh, id = id + id.offset);
   }
+  # Note: inconsistency when d = 1 between slope = Inf vs generic val;
   rez = lapply(seq(along = d), function(id) shift.f(x, y, id))
   rez = data.frame(do.call(rbind, rez));
   return(rez);
@@ -365,26 +355,6 @@ split.AltLines.matrix = function(xy) {
 	return(xy);
 }
 
-
-### Distance
-#' @export
-dist.xy = function(x, y, as.sqrt = TRUE) {
-  xy = (x[1] - x[2])^2 + (y[1] - y[2])^2;
-  if(as.sqrt) xy = sqrt(xy);
-  return(xy);
-}
-
-### Drop column
-#' @export
-drop.col = function(x, name) {
-  id = match(name, names(x));
-  isNA = is.na(id);
-  if(any(isNA))
-    warning("Names not found: ", paste0(name[isNA], collapse=", "));
-  id = id[ ! isNA];
-  if(length(id) == 0) return(x);
-  return(x[, -id]);
-}
 
 # p1 = Translate to p1;
 #' @export

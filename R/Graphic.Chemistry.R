@@ -97,8 +97,13 @@ as.piBond = function(xy, which, d = 1/8) {
 	if(len == 0) return(xy);
 	if(length(d) == 1) d = rep(d, len);
 	ln = lapply(seq(len), function(id) {
-		ln = shiftLine(xy[[id]]$x[which], xy[[id]]$y[which], d = d[id]);
-	})
+		xy = xy[[id]];
+		ln = shift.ortho(xy$x[which], xy$y[which], d = d[id]);
+		ln = list(x = ln$x, y = ln$y);
+		return(ln)
+	});
+	class(ln) = c("lines.list", "list");
+	invisible(ln);
 }
 
 ### Simple Ligands
