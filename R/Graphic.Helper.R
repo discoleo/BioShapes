@@ -170,11 +170,14 @@ shift.listNR = function(x, by = c(0, 0)) {
 ### Shift Point or Line
 # Shifts a point orthogonal to a given line;
 # d = distance to shift (translate);
+# simplify = TRUE: if(length(d) == 1) return a simple list(x, y);
+#    otherwise return a data.frame;
 # Note: direction of shift is not normalized with respect to quadrant;
 #' @export
 shiftLine = function(x, y, d = 1, slope = NULL,
-		scale = 1, id.offset = 0) {
-	shift.ortho(x=x, y=y, d=d, slope=slope, scale=scale, id.offset=id.offset);
+		scale = 1, id.offset = 0, simplify = TRUE) {
+	shift.ortho(x=x, y=y, d=d, slope=slope, scale=scale,
+		id.offset=id.offset, simplify=simplify);
 }
 #' @export
 shift.ortho.df = function(xy, d = 1, slope = NULL,
@@ -185,7 +188,7 @@ shift.ortho.df = function(xy, d = 1, slope = NULL,
 }
 #' @export
 shift.ortho = function(x, y, d=1, slope=NULL,
-		scale=1, id.offset = 0) {
+		scale=1, id.offset = 0, simplify = TRUE) {
   if(is.null(slope)) {
     if(length(x) < 2 || length(y) < 2)
       stop("The base-line requires 2 points!");
@@ -199,7 +202,7 @@ shift.ortho = function(x, y, d=1, slope=NULL,
   }
   ### Vertical Line
   if(abs(slope) == Inf) {
-    if(length(d) == 1) {
+    if(length(d) == 1 && simplify) {
       r = data.frame(x = x - d, y = y);
     } else {
       r = lapply(seq(along = d), function(id) {
@@ -212,7 +215,7 @@ shift.ortho = function(x, y, d=1, slope=NULL,
   ### Horizontal Line
   if(slope == 0) {
     d = d * scale;
-    if(length(d) == 1) {
+    if(length(d) == 1 && simplify) {
       r = data.frame(x = x, y = y + d);
     } else {
       r = lapply(seq(along = d), function(id) {
