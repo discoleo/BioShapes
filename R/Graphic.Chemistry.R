@@ -95,10 +95,10 @@ parseCycles = function(x, r=1, d2=0.0625) {
 
 ### Polycyclic Cycles
 #' @export
-polycycle.cyc = function(n = 14, ngon = 7, R = 4) {
+polycycle.cyc = function(n = 14, ngon = 7, R = 4, center = c(0,0)) {
 	if(ngon < 3) stop("Invalid cycle!");
 	# ngon = 4: does not work either;
-	gg = circle.spiro(n=n, ngon=ngon, R=R, type = "in");
+	gg = circle.spiro(n=n, ngon=ngon, R=R, center=center, type = "in");
 	if(ngon == 3) return(gg);
 	bb = c(ngon, ngon - 1);
 	gg = as.mean.xy(gg, bb, c(2,3));
@@ -109,7 +109,7 @@ polycycle.cyc = function(n = 14, ngon = 7, R = 4) {
 ### Polyene
 #' @export
 polycycle.polyene = function(n = 14, ngon = 7, R = 4, d = 0.125, center = c(0,0)) {
-	gg = polycycle.cyc(n=n, ngon=ngon, R=R);
+	gg = polycycle.cyc(n=n, ngon=ngon, R=R, center=center);
 	gg = list(Polycycle = gg);
 	### Double Bonds
 	whichq = function(id) {
@@ -164,7 +164,7 @@ piBond.polycycle = function(x, d = 0.4, center = c(0, 0), dpi = 0.0625) {
 	px = lapply(x, function(gg) c(center[1], gg$x[1]));
 	py = lapply(x, function(gg) c(center[2], gg$y[1]));
 	#
-	qd = which.quadrant.polycycle(x); print(qd);
+	qd = which.quadrant.polycycle(x);
 	d  = ifelse(qd == 1 | qd == 4, -d, d);
 	pO = lapply(seq(along = x), function(id) {
 		shiftPoint(p1[[id]], px[[id]], py[[id]], d = d[[id]]);
