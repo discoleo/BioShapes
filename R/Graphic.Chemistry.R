@@ -108,7 +108,7 @@ polycycle.cyc = function(n = 14, ngon = 7, R = 4) {
 
 ### Polyene
 #' @export
-polycycle.polyene = function(n = 14, ngon = 7, R = 4, d = 0.125) {
+polycycle.polyene = function(n = 14, ngon = 7, R = 4, d = 0.125, center = c(0,0)) {
 	gg = polycycle.cyc(n=n, ngon=ngon, R=R);
 	gg = list(Polycycle = gg);
 	### Double Bonds
@@ -150,6 +150,52 @@ annotate.polycycle = function(n, R = 4, center = c(0,0), lwd = 1, col = "red",
 	return(as.bioshape(lst));
 }
 
+#' @export
+polycycle.polyEE = function(n = 14, ngon = 7, R = 4, dB = 0.4, dpi = 0.125, center = c(0,0)) {
+	gg = polycycle.polyene(n=n, ngon=ngon, R=R, d = dpi, center=center);
+	gg$EE = piBond.polycycle(gg$Polycycle, d = dB, dpi = dpi/2, center=center);
+	invisible(gg);
+}
+
+#' @export
+piBond.polycycle = function(x, d = 0.4, center = c(0, 0), dpi = 0.0625) {
+	if(length(x) == 0) return(NULL);
+	p1 = lapply(x, function(gg) c(gg$x[1], gg$y[1]));
+	px = lapply(x, function(gg) c(center[1], gg$x[1]));
+	py = lapply(x, function(gg) c(center[2], gg$y[1]));
+	#
+	qd = which.quadrant.polycycle(x); print(qd);
+	d  = ifelse(qd == 1 | qd == 4, -d, d);
+	pO = lapply(seq(along = x), function(id) {
+		shiftPoint(p1[[id]], px[[id]], py[[id]], d = d[[id]]);
+	});
+	pO = do.call(rbind, pO);
+	p1 = do.call(rbind, p1); colnames(p1) = c("x1", "y1");
+	pO = cbind(pO, p1);
+	pD = lapply(seq(along = x), function(id) {
+			shiftLine(pO[id, c("x", "x1")], pO[id, c("y", "y1")], d = c(-dpi, dpi),
+				id.offset = 2*(id - 1));
+		});
+	pD = do.call(rbind, pD);
+	pD = list(pD);
+	invisible(as.bioshape(pD));
+}
+
+#' @export
+which.quadrant.polycycle = function(x) {
+	sapply(x, function(gg) {
+		n  = length(gg$x);
+		n2 = (n %/% 2) + 1;
+		if(n %% 2 == 0) {
+			x = gg$x[c(1, n2)];
+			y = gg$y[c(1, n2)];
+		} else {
+			x = c(gg$x[1], (gg$x[n2] + gg$x[n2 + 1]) / 2);
+			y = c(gg$y[1], (gg$y[n2] + gg$y[n2 + 1]) / 2);
+		}
+		which.quadrant(x, y);
+	});
+}
 
 ##################
 ### Transforms ###
