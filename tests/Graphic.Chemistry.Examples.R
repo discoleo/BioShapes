@@ -46,6 +46,7 @@ lines(parseCycles("7=5"))
 lim = c(-5,5)
 plot.base(xlim=lim, ylim=lim, axt=NULL, asp=1)
 lines(polycycle.polyene(14, 7))
+lines(annotate.polycycle(14))
 
 
 ################

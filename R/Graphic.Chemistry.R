@@ -137,6 +137,19 @@ polycycle.polyene = function(n = 14, ngon = 7, R = 4, d = 0.125) {
 	invisible(as.bioshape(gg));
 }
 
+### Annotate Cycles
+#' @export
+annotate.polycycle = function(n, R = 4, center = c(0,0), lwd = 1, col = "red",
+		as.letters = FALSE, phi = - 2*pi/n) {
+	x = R * cos(2*pi*seq(n) / n + phi) + center[1];
+	y = R * sin(2*pi*seq(n) / n + phi) + center[2];
+	lbl = if(as.letters) LETTERS[seq(n)] else seq(n);
+	lst = list(x = x, y = y, labels = lbl, lwd = lwd, col = col);
+	class(lst) = c("text", "list");
+	lst = list(lst);
+	return(as.bioshape(lst));
+}
+
 
 ##################
 ### Transforms ###
