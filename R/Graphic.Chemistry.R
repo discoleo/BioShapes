@@ -105,6 +105,39 @@ polycycle.cyc = function(n = 14, ngon = 7, R = 4) {
 	return(invisible(gg));
 }
 
+
+### Polyene
+#' @export
+polycycle.polyene = function(n = 14, ngon = 7, R = 4, d = 0.125) {
+	gg = polycycle.cyc(n=n, ngon=ngon, R=R);
+	gg = list(Polycycle = gg);
+	### Double Bonds
+	whichq = function(id) {
+		sapply(gg$Polycycle, function(gg) {
+			which.quadrant(gg$x[id], gg$y[id]);
+		});
+	}
+	id = c(2,3);
+	qd = whichq(id);
+	d2 = ifelse(qd == 1 | qd == 2, d, - d);
+	ln = as.piBond(gg$Polycycle, id, d = d2);
+	gg$Pi = as.bioshape(ln);
+	# Out:
+	if(ngon >= 7 && ngon %% 2 == 1) {
+		ii = seq(4, ngon - 3, by = 2);
+		n2 = n / 2; n4 = n %/% 4;
+		ln = lapply(ii, function(i) {
+			id = c(i, i+1);
+			qd = whichq(id);
+			d2 = ifelse(qd == 1 | qd == 2, d, - d);
+			ln = as.piBond(gg$Polycycle, id, d = d2);
+		})
+		gg$PiOut = as.bioshape(ln);
+	}
+	invisible(as.bioshape(gg));
+}
+
+
 ##################
 ### Transforms ###
 

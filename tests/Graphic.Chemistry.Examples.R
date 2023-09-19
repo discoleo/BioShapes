@@ -39,6 +39,15 @@ plot.base()
 lines(parseCycles("7=5"))
 
 
+#######################
+
+### Polycyclic Polyenes
+
+lim = c(-5,5)
+plot.base(xlim=lim, ylim=lim, axt=NULL, asp=1)
+lines(polycycle.polyene(14, 7))
+
+
 ################
 
 ################
