@@ -44,6 +44,34 @@ example.cholesterol = function(origin = c(0,0)) {
 }
 
 
+######################
+
+### Polycycles
+
+#' @export
+test.polycycle = function(n = c(14, 17, 11, 19), ngon = 7,
+		Ht = c("O", "S", NA, ""), col = c("red", "#FFE832", "grey", "grey"), R = 4) {
+	if(length(R) == 1) R = rep(R, 4);
+	if(length(ngon) == 1) ngon = rep(ngon, 4);
+	#
+	par.old = par(mfrow = c(2,2));
+	for(i in seq(4)) {
+		lim = R[i] + 1; lim = c(- lim, lim);
+		plot.base(xlim = lim, ylim = lim, axt = NULL, asp = 1);
+		if(is.na(Ht[i])) {
+			lines(polycycle.polyene(n[i], ngon[i]));
+		} else if(nchar(Ht[i]) == 0) {
+			lines(polycycle.polyEE(n[i], ngon[i]));
+		} else {
+			lines(polycycle.polyHt(n[i], ngon[i], Ht = Ht[i], col = col[i]));
+		}
+		lines(annotate.polycycle(n[i]))
+	}
+	par(par.old);
+	invisible();
+}
+
+
 ###########################
 
 ### Test: Newman Projection

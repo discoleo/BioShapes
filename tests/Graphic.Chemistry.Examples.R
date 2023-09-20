@@ -43,6 +43,7 @@ lines(parseCycles("7=5"))
 
 ### Polycyclic Polyenes
 
+# - looks best with ngon = 7;
 lim = c(-5,5)
 plot.base(xlim=lim, ylim=lim, axt=NULL, asp=1)
 lines(polycycle.polyene(14, 7))
@@ -52,6 +53,10 @@ lines(annotate.polycycle(14))
 plot.base(xlim=lim, ylim=lim, axt=NULL, asp=1)
 lines(polycycle.polyEE(11, 7))
 lines(annotate.polycycle(11))
+
+
+###
+test.polycycle()
 
 
 ################
