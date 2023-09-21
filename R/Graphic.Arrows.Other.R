@@ -155,7 +155,7 @@ box.capEllipse = function(x, y, h = 1, y.rel = 0.25, lwd = 1, col = NULL, fill =
 	class(cap1) = c("ellipse", "list");
 	class(cap2) = c("ellipse", "list");
 	cap = as.bioshape(list(Cap1 = cap1, Cap2 = cap2))
-	lst = c(lst, Cap = cap);
+	lst = c(lst, cap);
 	return(as.bioshape(lst));
 }
 

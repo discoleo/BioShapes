@@ -33,6 +33,12 @@ rep.all.list = function(x, len) {
 	return(x);
 }
 
+#' @export
+merge.first.list = function(x, y) {
+	d = setdiff(y, x);
+	c(x, d);
+}
+
 
 # xy    = list(x, y);
 # new   = list(x, y) of matrixes with new values;

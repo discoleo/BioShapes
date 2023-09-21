@@ -106,16 +106,18 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 					mid = lst$center, lcol=col, col=fill, lwd=lwd, ...);
 			}
 	} else if(inherits(lst, "ellipse")) {
-      fill = lst$fill;
-      if(inherits(lst$center, "matrix")) {
-	    print("TODO")
-        lapply(seq(nrow(lst$center)), function(nr){
-          # TODO
-        })
-      } else {
-           plot.ellipse(r = lst$r, center = lst$center, phi = lst$phi, th = lst$th,
-            lwd=lwd, col=col, fill=fill, scale = lst$scale, ...);
-      }
+		fill = lst$fill;
+		if(inherits(lst$center, "matrix")) {
+			print("TODO")
+			lapply(seq(nrow(lst$center)), function(nr) {
+				# TODO
+			})
+		} else {
+			lst$col = col; lst$fill = fill;
+			do.call("plot.ellipse", lst);
+			# plot.ellipse(r = lst$r, center = lst$center, phi = lst$phi, th = lst$th,
+			#	lwd=lwd, col=col, fill=fill, scale = lst$scale, ...);
+		}
     } else if(inherits(lst, "circle.arc")) {
       if(is.null(fill)) fill = lst$fill;
       if(inherits(lst$center, "matrix")){
@@ -142,21 +144,27 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 			do.call("text", lst);
 		}
 	} else {
-      # warning("Only lines");
-	  if(is.null(lwd)) lwd = 1;
-	  # Note: lines.list uses the same color for all elements!
-      if(inherits(lst, "lines.list")) {
-        lapply(lst, function(lst) {
-          lines(lst$x, lst$y, lwd=lwd, col=col, ...);
-        });
-      } else if(inherits(lst, "data.frame")) {
-        lst = split(lst[, c("x", "y")], lst$id);
-        lapply(lst, function(lst) {
-          lines(lst$x, lst$y, lwd=lwd, col=col, ...);
-        });
-      } else {
-        lines(lst$x, lst$y, lwd=lwd, col=col, ...);
-      }
+		# warning("Only lines");
+		if(is.null(lwd)) lwd = 1;
+		# Note: lines.list uses the same color for all elements!
+		if(inherits(lst, "lines.list")) {
+			lapply(lst, function(lst) {
+				tmp = lst; tmp$lwd = lwd; tmp$col = col;
+				tmp = merge.first.list(lst, list(...));
+				do.call("lines", tmp);
+				# lines(lst$x, lst$y, lwd=lwd, col=col, ...);
+			});
+		} else if(inherits(lst, "data.frame")) {
+			lst = split(lst[, c("x", "y")], lst$id);
+			lapply(lst, function(lst) {
+				lines(lst$x, lst$y, lwd=lwd, col=col, ...);
+			});
+		} else {
+			lst$lwd = lwd; lst$col = col;
+			lst = merge.first.list(lst, list(...));
+			do.call("lines", lst);
+			# lines(lst$x, lst$y, lwd=lwd, col=col, ...);
+		}
     }
   }
   lapply(x, basef, lwd=lwd, col=col, ...);

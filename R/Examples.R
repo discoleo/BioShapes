@@ -587,6 +587,18 @@ example.lens = function(pos = c(0, 1/2, 1), fill = "#6480D0"){
   invisible();
 }
 
+#' @export
+test.cylinder = function(lty.back = 2, col = "red") {
+	plot.base()
+	# "/\"
+	lines(cylinder(c(1, 3), c(2, 6), lty.back=lty.back, col=col));
+	lines(cylinder(c(6, 4), c(2, 6), lty.back=lty.back, col=col));
+	# H:
+	lines(cylinder(c(5, 0), c(8, 8), lty.back=lty.back, col=col));
+	lines(cylinder(c(2, 7), c(0, 0), lty.back=lty.back, col=col));
+}
+
+##########
 
 ### Braces
 #' @export

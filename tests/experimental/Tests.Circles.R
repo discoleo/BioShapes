@@ -138,3 +138,10 @@ test.ellipse.tan(c(2,4.5), r=c(1, 3), phi = -pi/5, center = c(3,5))
 
 test.ellipse.tan(c(2,4.5), r=c(1, 3), phi = pi/3, center = c(3,5))
 
+
+### Cylindeers
+
+test.cylinder()
+
+test.cylinder(lty.back = NULL)
+

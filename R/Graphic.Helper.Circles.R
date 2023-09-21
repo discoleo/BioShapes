@@ -440,3 +440,21 @@ slope.ellipse = function(x, y, r, phi = 0, center = c(0,0)) {
 	return(sl);
 }
 
+
+#####################
+#####################
+
+### Cylinder
+
+#' @export
+cylinder = function(x, y, w = 1, rr = 0.5, lwd = NULL, col = NULL, lty.back = 2) {
+	lst = box.capEllipse(x, y, h = w, y.rel = rr, col=col);
+	lst$Cap2$phi = c(0, 2*pi);
+	if( ! is.null(lty.back)) {
+		lst$Cap3 = lst$Cap1;
+		lst$Cap3$phi = rev(lst$Cap3$phi);
+		lst$Cap3$lty = lty.back;
+	}
+	return(lst)
+}
+
