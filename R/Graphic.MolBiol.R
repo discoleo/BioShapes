@@ -174,9 +174,23 @@ mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.LH = d.HH, d.rel 
 ####################
 ####################
 
+# e.g. Transmembrane receptors;
 #' @export
-protein.domains = function(xy, n, w = 1, h = 4*w, d = 0.25, slope = c(Inf, 0), ...) {
+protein.domains = function(xy, n, w = 1, h = 4*w, d = 0.25, slope = c(Inf, 0),
+		lwd.con = 2, ...) {
 	lst = cylinder.tubes(xy=xy, n=n, w=w, h=h, d=d, slope=slope, ...);
+	applyCon = function(i0, nm, top) {
+		lapply(seq(i0, n - 1, by=2), function(id) {
+			xy1 = lst[[id]][[nm]]$center;
+			xy2 = lst[[id + 1]][[nm]]$center;
+			lst = circle.ArcByDiam.xy(xy1, xy2, top=top);
+			lst$lwd = lwd.con;
+			return(lst);
+		});
+	}
+	conT = applyCon(1, "Cap2", top = TRUE);
+	conB = applyCon(2, "Cap1", top = FALSE);
+	lst = c(lst, conT, conB);
 	invisible(as.bioshape(lst));
 }
 

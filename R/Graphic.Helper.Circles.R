@@ -249,6 +249,22 @@ circle.arc = function(r=1, phi, center = c(0,0), N = 64) {
   return(xy);
 }
 
+#' @export
+circle.ArcByDiam = function(x, y, top = TRUE) {
+		r  = dist.xy(x, y) / 2;
+		cx = (x[1] + x[2]) / 2;
+		cy = (y[1] + y[2]) / 2;
+		phi = atan2(y[2] - y[1], x[2] - x[1]);
+		if( ! top) phi = as.radians0(phi + pi);
+		lst = list(r=r, center = c(cx, cy), phi = c(phi, phi + pi));
+		class(lst) = c("circle.arc", "list");
+		return(lst);
+}
+#' @export
+circle.ArcByDiam.xy = function(p1, p2, top = TRUE) {
+	circle.ArcByDiam(c(p1[1], p2[1]), c(p1[2], p2[2]), top=top);
+}
+
 
 ### Circle arc through p1 & p2
 # d = distance from the p1-p2 segment;
@@ -472,9 +488,9 @@ cylinder.bySlope = function(xy, slope = Inf, w = 1, h = 4*w, rr = 0.5,
 ### Multipple Cyclinders
 # - parallel cylinders:
 #   slope[1] = direction of cylinders;
-#   slope[2] = direction of ensamble;
+#   slope[2] = direction of ensemble;
 #' @export
-cylinder.tubes = function(xy, n, w = 1, h = 4*w, d = 0.25, slope = c(Inf, 0), ...) {
+cylinder.tubes = function(xy, n, w = 1, h = 4*w, d = 0.25, slope = c(Inf, 0), col = NULL, ...) {
 	if(n < 1) stop("Invalid number of domains!");
 	if(n == 1) return(cylinder.bySlope(xy, w=w, h=h, slope = slope[1], ...));
 	#
@@ -483,11 +499,13 @@ cylinder.tubes = function(xy, n, w = 1, h = 4*w, d = 0.25, slope = c(Inf, 0), ..
 	xyE = shift.point(xy, slope = slope[2], d = dH);
 	xyr = shift.point(xy,  slope = slope[1], d = h);
 	xys = shift.point(xyE, slope = slope[1], d = h);
+	if(length(col) == 1) col = rep(col, n);
+	n = n - 1;
 	lst = lapply(seq(0, n), function(id) {
 		tt  = wd * id / dH;
 		xyS = (1 - tt)*xy  + tt*xyE;
 		xyT = (1 - tt)*xyr + tt*xys;
-		cylinder(c(xyS[1], xyT[1]), c(xyS[2], xyT[2]), w=w, ...);
+		cylinder(c(xyS[1], xyT[1]), c(xyS[2], xyT[2]), w=w, col = col[id + 1], ...);
 	});
 	invisible(as.bioshape(lst));
 }
