@@ -458,3 +458,14 @@ cylinder = function(x, y, w = 1, rr = 0.5, lwd = NULL, col = NULL, lty.back = 2)
 	return(lst)
 }
 
+
+#' @export
+cylinder.bySlope = function(xy, slope = Inf, w = 1, h = 4*w, rr = 0.5,
+		lwd = NULL, col = NULL, lty.back = 2) {
+	xyE = shift.point(xy, slope = slope, d = h);
+	x = c(xy[1], xyE[1]);
+	y = c(xy[2], xyE[2]);
+	lst = cylinder(x=x, y=y, w=w, rr=rr, lwd=lwd, col=col, lty.back=lty.back);
+	return(lst);
+}
+

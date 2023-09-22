@@ -593,7 +593,8 @@ test.cylinder = function(lty.back = 2, col = "red") {
 	# "/\"
 	lines(cylinder(c(1, 3), c(2, 6), lty.back=lty.back, col=col));
 	lines(cylinder(c(6, 4), c(2, 6), lty.back=lty.back, col=col));
-	# H:
+	# H: not best visual examples
+	# (just necessary test)
 	lines(cylinder(c(5, 0), c(8, 8), lty.back=lty.back, col=col));
 	lines(cylinder(c(2, 7), c(0, 0), lty.back=lty.back, col=col));
 }
