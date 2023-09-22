@@ -485,6 +485,27 @@ cylinder.bySlope = function(xy, slope = Inf, w = 1, h = 4*w, rr = 0.5,
 	return(lst);
 }
 
+# n = number of filling circles;
+#' @export
+cylinder.circleFill = function(x, y, w = 1, rr = 0.5, n = 15,
+		lwd = NULL, lwd.fill = lwd, col = NULL, col.circles = col, lty.back = NULL) {
+	if(n < 0) stop("Invalid number of circles!");
+	lst = cylinder(x=x, y=y, w=w, rr=rr, lwd=lwd, col=col, lty.back=lty.back);
+	tt = seq(n) / (n+1);
+	cx = (1-tt) * x[1] + tt*x[2];
+	cy = (1-tt) * y[1] + tt*y[2];
+	tmp = lst$Cap1;
+	crc = lapply(seq(n), function(id) {
+		tmp$center = c(cx[id], cy[id]);
+		tmp$lwd = lwd.fill;
+		if( ! is.null(col.circles)) tmp$col = col.circles;
+		return(tmp);
+	});
+	crc = as.bioshape(crc);
+	lst = c(Fill = list(crc), lst);
+	invisible(as.bioshape(lst));
+}
+
 ### Multipple Cyclinders
 # - parallel cylinders:
 #   slope[1] = direction of cylinders;
