@@ -469,3 +469,26 @@ cylinder.bySlope = function(xy, slope = Inf, w = 1, h = 4*w, rr = 0.5,
 	return(lst);
 }
 
+### Multipple Cyclinders
+# - parallel cylinders:
+#   slope[1] = direction of cylinders;
+#   slope[2] = direction of ensamble;
+#' @export
+cylinder.tubes = function(xy, n, w = 1, h = 4*w, d = 0.25, slope = c(Inf, 0), ...) {
+	if(n < 1) stop("Invalid number of domains!");
+	if(n == 1) return(cylinder.bySlope(xy, w=w, h=h, slope = slope[1], ...));
+	#
+	wd  = w + d;
+	dH  = (n - 1) * wd;
+	xyE = shift.point(xy, slope = slope[2], d = dH);
+	xyr = shift.point(xy,  slope = slope[1], d = h);
+	xys = shift.point(xyE, slope = slope[1], d = h);
+	lst = lapply(seq(0, n), function(id) {
+		tt  = wd * id / dH;
+		xyS = (1 - tt)*xy  + tt*xyE;
+		xyT = (1 - tt)*xyr + tt*xys;
+		cylinder(c(xyS[1], xyT[1]), c(xyS[2], xyT[2]), w=w, ...);
+	});
+	invisible(as.bioshape(lst));
+}
+

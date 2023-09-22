@@ -171,3 +171,12 @@ mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.LH = d.HH, d.rel 
 	return(as.bioshape(lst));
 }
 
+####################
+####################
+
+#' @export
+protein.domains = function(xy, n, w = 1, h = 4*w, d = 0.25, slope = c(Inf, 0), ...) {
+	lst = cylinder.tubes(xy=xy, n=n, w=w, h=h, d=d, slope=slope, ...);
+	invisible(as.bioshape(lst));
+}
+
