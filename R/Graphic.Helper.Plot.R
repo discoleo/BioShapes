@@ -63,6 +63,8 @@ plot.ellipse = function(r, center, phi = c(0, pi), th = 0, lwd = 1,
 }
 
 ### Plot:
+
+# Note: represents usually an error;
 #' @export
 lines.list = function(x, y, lwd=NULL, ...) {
   warning("Class is missing: Only list !");
@@ -245,4 +247,20 @@ lines.circles = function(x, R, fill="#B0B032", col=NULL, col.line="green", line=
   }
 }
 
+
+###############
+
+### Other
+
+# L = length of the line segment;
+#' @export
+lines.slope = function(xy, slope, L = 4, ...) {
+	L = L / 2;
+	# (x2 - x1)^2 = L^2 / (sl^2 + 1)
+	dx = L / sqrt(slope^2 + 1);
+	x2 = xy[1] + c(-dx, dx);
+	dy = L / sqrt(1 + 1/slope^2);
+	y2 = xy[2] + c(-dy, dy);
+	lines(x2, y2, ...);
+}
 

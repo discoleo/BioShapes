@@ -456,6 +456,29 @@ slope.ellipse = function(x, y, r, phi = 0, center = c(0,0)) {
 	return(sl);
 }
 
+### Points at which Tangent has given slope
+#' @export
+solve.ellipse.xtan = function(slope, r, phi = 0, center = c(0,0), coeff = NULL) {
+	cc = if( ! is.null(coeff)) coeff else as.coeff.ellipse(r, phi=phi);
+	# (2*sl*cc[1] + cc[2])*yy = - (2*cc[3] + sl*cc[2])*xx
+	c4 = (2*slope*cc[1] + cc[2]);
+	c5 = (2*cc[3] + slope*cc[2]);
+	dv = cc[1]*c5^2 + cc[3]*c4^2 - cc[2]*c4*c5;
+	if(dv < 0) return(c(NA, NA));
+	x = c4 / sqrt(dv);
+	x = c(-x, x) + center[1];
+	return(x);
+}
+#' @export
+solve.ellipse.xytan = function(slope, r, phi = 0, center = c(0,0)) {
+	cc = as.coeff.ellipse(r, phi=phi);
+	xx = solve.ellipse.xtan(slope=slope, coeff = cc, center = c(0,0));
+	yy = - (2*cc[3] + slope*cc[2]) * xx / (2*slope*cc[1] + cc[2]);
+	x  = xx + center[1];
+	y  = yy + center[2];
+	return(cbind(x, y));
+}
+
 
 #####################
 #####################
