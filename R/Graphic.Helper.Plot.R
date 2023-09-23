@@ -260,6 +260,7 @@ lines.slope = function(xy, slope, L = 4, ...) {
 	dx = L / sqrt(slope^2 + 1);
 	x2 = xy[1] + c(-dx, dx);
 	dy = L / sqrt(1 + 1/slope^2);
+	if(slope < 0) dy = - dy;
 	y2 = xy[2] + c(-dy, dy);
 	lines(x2, y2, ...);
 }
