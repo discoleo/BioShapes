@@ -430,12 +430,9 @@ test.ellipse.tan = function(x = c(0.5), r = c(1,3), phi = 0, center = c(0,0),
 	});
 	for(id in seq_along(x)) {
 		yi = sol[, id]; si = sl[, id];
-		xT = x[id] + dx;
-		yT = si[1] * dx + yi[1];
-		lines(xT, yT, col = "green");
-		# Set 2
-		yT = si[2] * dx + yi[2];
-		lines(xT, yT, col = "green");
+		# TODO: both L;
+		lines.slope(c(x[id], yi[1]), slope = si[1], L = 2*max(dx), col = "green");
+		lines.slope(c(x[id], yi[2]), slope = si[2], L = 2*max(dx), col = "green");
 		points(rep(x[id], 2), yi, col = "red");
 	}
 	abline(v = x0, col=col.xlim);
@@ -444,6 +441,51 @@ test.ellipse.tan = function(x = c(0.5), r = c(1,3), phi = 0, center = c(0,0),
 	}
 }
 
+#' @export
+test.ellipse.intersect = function(x0 = c(5.52, 5), y0 = c(3.5, 3),
+		phi = pi - pi/3, r = c(3,2), center = c(4,4), verbose = TRUE) {
+	plot.base()
+	plot.ellipse(r = r, center = center, th = phi, phi = c(0, 2*pi));
+	lines.slope(center, tan(phi), L = 8, col = "green");
+	lines.slope(center, - 1 / tan(phi), L = 7, col = "blue");
+	
+	len = length(x0)
+	for(i in seq_along(x0)) {
+		xy0 = c(x0[i], y0[i]);
+		xy  = intersect.ellipse.ParallelLine(r = r, xy = xy0, center=center, phi=phi)
+		mid = apply(xy, 2, mean);
+		if(verbose) {
+			xym = rbind(x = c(xy[,1], mid[1]), y = c(xy[,2], mid[2]));
+			colnames(xym) = NULL;
+			print(xym);
+		}
+		lines.slope(mid, tan(phi), L = 10, col = "pink");
+		points(c(xy[,1], mid[1]), c(xy[,2], mid[2]), col="red");
+	}
+	# Center:
+	points(center[1], center[2], col="red");
+}
+
+#' @export
+test.ellipse.bySlope = function(
+		d = c(1.5, 1, 1, 1.5, 1),
+		rr = c(3, 3, 1/2, 2, 2)) {
+	ellf = function(d = 1, rr = 2, col = NULL) {
+		lst = solve.ellipse.bySlope(c(2, 7), c(5, 3), d=d, rr=rr)
+		lst$phi = c(0, 2*pi);
+		if( ! is.null(col)) lst$col = col;
+		do.call(plot.ellipse, lst);
+	}
+	#
+	len = length(d);
+	col = list("purple", "#D09600", "#3296E0", "#64D032", "black");
+	col = rep(col, ceiling(len / length(col)));
+	plot.base();
+	for(i in seq_along(d)) {
+		ellf(d = d[[i]], rr = rr[[i]], col = col[[i]]);
+	}
+	points(c(2,7), c(5,3), col = "red")
+}
 
 
 ### Examples: Arcs

@@ -417,6 +417,39 @@ solve.ellipse.v0 = function(x, coef, tol = 1E-10) {
 }
 
 
+### Ellipse:
+# - passing through (x1, y1) & (x2, y2);
+# - with slope = slope(x, y);
+# - center = mid(xy) + d;
+# - rr = ratio of 2 radii;
+#' @export
+solve.ellipse.bySlope = function(x, y, d = 1, rr = 2) {
+	sl = slope(x, y);
+	mid.x = (x[1] + x[2]) / 2;
+	mid.y = (y[1] + y[2]) / 2;
+	xy = shift.ortho(mid.x, mid.y, slope = sl, d=d);
+	xy = unlist(xy[1, c(1,2)]);
+	cc = as.coef.ellipse.slope(x=x, y=y, slope = sl, center = xy);
+	cc = cc[1,];
+	a2 = cc[1] + cc[2] * rr^2;
+	a = sqrt(a2);
+	b = a / rr;
+	return(list(r = c(a, b), center = xy, th = atan(sl)));
+}
+#' @export
+as.coef.ellipse.slope = function(x, y, slope, center = c(0,0)) {
+	sq = sqrt(slope^2 + 1);
+	sn = 1 / sqrt(1 + 1/slope^2);
+	if(slope < 0) sn = - sn;
+	cs = 1 / sq;
+	x = x - center[1];
+	y = y - center[2];
+	coeff = cbind(
+		(cs*x + sn*y)^2,
+		(sn*x - cs*y)^2);
+	return(coeff);
+}
+
 ### Coefficients
 # Eq: c[1]*(y - y0)^2 + c[2]*(x - x0)*(y - y0) + c[3]*(x - x0)^2 - 1 = 0;
 # - Note: c[] does NOT include: - 1;
@@ -479,6 +512,36 @@ solve.ellipse.xytan = function(slope, r, phi = 0, center = c(0,0)) {
 	return(cbind(x, y));
 }
 
+
+### Ellipse tangent to Line
+# - Passing through (x1, y1) and (x2, y2);
+# - Tangent to Lines;
+
+# TODO
+
+
+### Intersection: Ellipse w Line
+# Line passing through xy with same slope as the ellipse;
+#' @export
+intersect.ellipse.ParallelLine = function(r, xy, center = c(0,0), phi = 0) {
+	sn = sin(phi); cs = cos(phi);
+	sl = sn / cs; a = r[1]; b = r[2];
+	xc = center[1]; yc = center[2];
+	sab = sn^2 / a^2 + cs^2 / b^2;
+	dab = 1/a^2 - 1/b^2;
+	ssl = sl*(xc - xy[1]) - yc + xy[2];
+	sn2 = 2*sn*cs;
+	# cc = c((cs^2 / a^2 + sn^2 / b^2) * x^2,
+	#	(1/a^2 - 1/b^2)*sin(2*phi), (sn^2 / a^2 + cs^2 / b^2) * y^2);
+	cc = c(cs^2 / a^2 + sn^2 / b^2 + sl^2*sab + sl*dab*sn2,
+		dab*ssl*sn2 + 2*sl*sab*ssl, sab*ssl^2 - 1);
+	Dt = cc[2]^2 - 4*cc[1]*cc[3];
+	if(Dt < 0) return(NA);
+	Dt = sqrt(Dt);
+	x = center[1] - (cc[2] + c(Dt, - Dt)) / (2*cc[1]);
+	y = sl*(x - xy[1]) + xy[2];
+	return(cbind(x, y));
+}
 
 #####################
 #####################
