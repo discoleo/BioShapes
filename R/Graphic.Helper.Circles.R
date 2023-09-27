@@ -494,9 +494,14 @@ slope.ellipse = function(x, y, r, phi = 0, center = c(0,0)) {
 solve.ellipse.xtan = function(slope, r, phi = 0, center = c(0,0), coeff = NULL) {
 	cc = if( ! is.null(coeff)) coeff else as.coeff.ellipse(r, phi=phi);
 	# (2*sl*cc[1] + cc[2])*yy = - (2*cc[3] + sl*cc[2])*xx
-	c4 = (2*slope*cc[1] + cc[2]);
-	c5 = (2*cc[3] + slope*cc[2]);
-	dv = cc[1]*c5^2 + cc[3]*c4^2 - cc[2]*c4*c5;
+	if(abs(slope) == Inf) {
+		dv = 4*cc[3]*cc[1]^2 - cc[1]*cc[2]^2;
+		c4 = 2*cc[1] * sign(slope);
+	} else {
+		c4 = (2*slope*cc[1] + cc[2]);
+		c5 = (2*cc[3] + slope*cc[2]);
+		dv = cc[1]*c5^2 + cc[3]*c4^2 - cc[2]*c4*c5;
+	}
 	if(dv < 0) return(c(NA, NA));
 	x = c4 / sqrt(dv);
 	x = c(-x, x) + center[1];
@@ -506,7 +511,10 @@ solve.ellipse.xtan = function(slope, r, phi = 0, center = c(0,0), coeff = NULL) 
 solve.ellipse.xytan = function(slope, r, phi = 0, center = c(0,0)) {
 	cc = as.coeff.ellipse(r, phi=phi);
 	xx = solve.ellipse.xtan(slope=slope, coeff = cc, center = c(0,0));
-	yy = - (2*cc[3] + slope*cc[2]) * xx / (2*slope*cc[1] + cc[2]);
+	yy = if(abs(slope) == Inf) { - cc[2] * xx / (2*cc[1]); }
+		else if((div <- 2*slope*cc[1] + cc[2]) == 0) {
+			0; # TODO!
+		} else - (2*cc[3] + slope*cc[2]) * xx / div;
 	x  = xx + center[1];
 	y  = yy + center[2];
 	return(cbind(x, y));
@@ -522,6 +530,7 @@ solve.ellipse.xytan = function(slope, r, phi = 0, center = c(0,0)) {
 
 ### Intersection: Ellipse w Line
 # Line passing through xy with same slope as the ellipse;
+# r = radii of ellipse;
 #' @export
 intersect.ellipse.ParallelLine = function(r, xy, center = c(0,0), phi = 0) {
 	sn = sin(phi); cs = cos(phi);
