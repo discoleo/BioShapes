@@ -66,22 +66,32 @@ test.ellipse.tan = function(x = c(0.5), r = c(1,3), phi = 0, center = c(0,0),
 # - all tangents are drawn for each of the ellipses;
 #' @export
 test.ellipse.whereTan = function(slope = c(0, 1/3, 2, Inf), r = c(1,2),
-		phi = c(0, pi/3, pi/2, 3*pi/5), center = c(0,0), dx = c(-2,2)) {
+		phi = c(0, pi/3, pi/2, 3*pi/5), center = c(0,0), paired = FALSE, dx = c(-2,2)) {
 	xlim = max(abs(r)) + 0.5;
 	ylim = max(abs(r)) + 0.5;
 	xlim = center[1] + c(-xlim, xlim);
 	ylim = center[2] + c(-ylim, ylim);
 	#
+	L = 2*max(dx);
+	doTan = function(slope, phi) {
+		xy = solve.ellipse.xytan(slope=slope, r=r, phi=phi, center=center);
+		lapply(seq(nrow(xy)), function(id) {
+				lines.slope(c(xy[id, 1], xy[id, 2]), slope=slope, L=L, col = "green");
+		});
+		points(xy[,1], xy[,2], col="red");
+	}
 	par.old = par(mfrow = c(2,2));
-	for(phi_i in phi) {
+	if(paired) {
+		for(i in seq_along(phi)) {
+			plot.base(xlim=xlim, ylim=ylim, asp=1);
+			plot.ellipse(r=r, center=center, th = phi[i], phi = c(0, 2*pi));
+			doTan(slope = slope[i], phi = phi[i]);
+		}
+	} else for(phi_i in phi) {
 		plot.base(xlim=xlim, ylim=ylim, asp=1);
 		plot.ellipse(r=r, center=center, th = phi_i, phi = c(0, 2*pi));
 		for(sl in slope) {
-			xy = solve.ellipse.xytan(slope = sl, r=r, phi=phi_i, center=center);
-			lapply(seq(nrow(xy)), function(id) {
-				lines.slope(c(xy[id, 1], xy[id, 2]), slope = sl, L = 2*max(dx), col = "green");
-			});
-			points(xy[,1], xy[,2], col="red");
+			doTan(slope = sl, phi = phi_i);
 		}
 	}
 	

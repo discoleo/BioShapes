@@ -513,7 +513,8 @@ solve.ellipse.xytan = function(slope, r, phi = 0, center = c(0,0)) {
 	xx = solve.ellipse.xtan(slope=slope, coeff = cc, center = c(0,0));
 	yy = if(abs(slope) == Inf) { - cc[2] * xx / (2*cc[1]); }
 		else if((div <- 2*slope*cc[1] + cc[2]) == 0) {
-			0; # TODO!
+			# print("Div 0!")
+			c(-1, 1) / sqrt(cc[1]); # TODO: check!
 		} else - (2*cc[3] + slope*cc[2]) * xx / div;
 	x  = xx + center[1];
 	y  = yy + center[2];
