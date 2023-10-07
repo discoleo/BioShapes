@@ -25,6 +25,26 @@
 
 ################
 
+###############
+### Circles ###
+
+#' @export
+test.circle.uniform.text = function(n = 200, phi = 0, d = 0.5) {
+	xy = uniform.circle(n[1], phi = phi[1], d = d[1]);
+	plot(xy, type="n");
+	text(xy, labels=seq(0, n[1]));
+	len = length(n);
+	if(len > 1) {
+		if(length(phi) == 1) phi = rep(phi, len);
+		if(length(d) == 1) d = rep(d, len);
+		for(id in seq(2, length(n))) {
+			ni = n[id];
+			xy = uniform.circle(ni, phi = phi[id], d = d[id]);
+			text(xy, labels=seq(0, ni), col = "red");
+		}
+	}
+}
+
 ################
 ### Ellipses ###
 

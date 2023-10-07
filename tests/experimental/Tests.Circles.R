@@ -1,8 +1,8 @@
 
 
 
-
-### Circles
+###############
+### Circles ###
 
 test.r = function(x) {
 	test.isNaN(x$r);
@@ -13,6 +13,8 @@ test.isNaN = function(x) {
 	}
 	return(TRUE);
 }
+
+### Constructors
 
 ### Through 3 Points
 
@@ -94,6 +96,14 @@ test.circle.p2s = function(p1 = c(1,8), p2=c(5,5), slope = 1/12, dx=c(-5, 5),
 
 test.circle.p2s()
 test.circle.p2s(slope = -2, add=T)
+
+
+#####################
+
+### Uniform Points
+
+# Spiral Roulette
+test.circle.uniform.text(c(100,100), phi=c(0, - pi))
 
 
 #####################

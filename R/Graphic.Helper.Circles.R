@@ -313,6 +313,20 @@ circle.ArcByDist = function(x, y, d, col=NULL, fill=NULL, lwd=1, tol=1E-8) {
 }
 
 
+### Uniform inside Circle
+# Note: NOT random;
+#' @export
+uniform.circle = function(n, center = c(0,0), phi = 0, d = 0.5, d.sep = 5) {
+	id = seq(0, n) + d;
+	r  = sqrt(id/n);
+	th = pi * (1 + sqrt(d.sep)) * id + phi;
+	xy = cbind(r * cos(th), r * sin(th));
+	xy[,1] = xy[,1] + center[1];
+	xy[,2] = xy[,2] + center[2];
+	return(xy);
+}
+
+
 ### Hashed Circle
 # n = number of lines;
 # phi = counter-clockwise rotation starting at pi/2;
