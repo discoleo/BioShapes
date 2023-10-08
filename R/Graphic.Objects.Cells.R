@@ -223,10 +223,22 @@ tumor.mass = function(n = 50, r = 0.25, R = 6.5*r, r.nc = r/4,
 
 ### Mixed Tumor
 #' @export
-tumor.mix = function(d = c(0.53, 0.49), R = 2, phi = c(0, pi)) {
-	c1 = tumor.mass(60, R=R, d = d[1], phi = phi[1])
-	c2 = tumor.mass(30, R=R, d = d[2], phi = phi[2], fill = "#F09648")
-	c.mix = mix.cells(c1, c2);
+tumor.mix = function(d = c(0.53, 0.49), R = 2, phi = c(0, pi),
+		fill = c("#6480FF", "#F09648"), by = 3) {
+	c1 = tumor.mass(60, R=R, d = d[1], phi = phi[1], fill = fill[[1]]);
+	if(length(d) == 1) {
+		c2  = c1;
+		len = nrow(c1$Cells$center);
+		c1$Cells$center  = c1$Cells$center[- seq(1, len, by=by), ];
+		c1$Nuclei$center = c1$Nuclei$center[- seq(1, len, by=by), ];
+		c2$Cells$center  = c2$Cells$center[seq(1, len, by=by), ];
+		c2$Nuclei$center = c2$Nuclei$center[seq(1, len, by=by), ];
+		c2$Cells$fill = fill[[2]];
+		c.mix = as.bioshape(list(c1, c2));
+	} else {
+		c2 = tumor.mass(30, R=R, d = d[2], phi = phi[2], fill = fill[[2]]);
+		c.mix = mix.cells(c1, c2, by=by);
+	}
 	invisible(c.mix);
 }
 # Mix 2 populations of cells

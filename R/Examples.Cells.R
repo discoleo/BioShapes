@@ -206,13 +206,13 @@ example.Epithelium.BB = function(x = c(0,8), y = c(1,1), n = 8, dy = 6, h = ~2,
 test.tumor.mass2 = function(
 		d = list(
 			c(0.5, 0.43), c(0.5, 0.43),
-			c(0.51, 0.43), c(0.53, 0.43)),
+			c(0.51, 0.43), c(0.53, 0.43)), by = 3,
 		lim = c(-3,3), axt = NULL) {
 	nc = ceiling(length(d) / 2);
 	par.old = par(mfrow = c(2,nc))
 	for(id in seq(length(d))) {
 		plot.base(xlim=lim, ylim=lim, axt=axt);
-		lines(tumor.mix(d = d[[id]]))
+		lines(tumor.mix(d = d[[id]], by=by))
 	}
 	par(par.old)
 }
