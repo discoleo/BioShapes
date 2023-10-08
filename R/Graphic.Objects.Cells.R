@@ -183,3 +183,35 @@ draw_blood_cell = function(center = c(0, 0),
   return(lst)
 
 }
+
+
+########################
+########################
+
+### Tumors
+
+# n = number of cells;
+# r = radius of each cell;
+# R = radius of tumor mass;
+# r.nc = radius of nucleus;
+#' @export
+tumor.mass = function(n = 50, r = 0.25, R = 6*r, r.nc = r/4,
+		center = c(0,0), fill = c("#6480FF", "purple"), phi = 0,
+		top = c("2out", "in", "out"), ...) {
+	xy = uniform.circle(n, r = R, center=center, phi=phi, ...);
+	top = match.arg(top);
+	if(top == "2out") {
+		id = c(seq(1, n, by=2), seq(2, n, by=2));
+		xy = xy[id,];
+	} else if(top == "in") xy = xy[seq(n, 1), ];
+	# Cells:
+	lst = list(r=r, center = xy, fill = fill[1]);
+	class(lst) = c("circle", "list;");
+	lstAll = list(Cells = lst);
+	# Nucleus:
+	lst = list(r = r.nc, center = xy, fill = fill[2]);
+	class(lst) = c("circle", "list;");
+	lstAll$Nuclei = lst;
+	lstAll = as.bioshape(lstAll);
+	invisible(lstAll);
+}
