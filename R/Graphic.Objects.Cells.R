@@ -195,9 +195,9 @@ draw_blood_cell = function(center = c(0, 0),
 # R = radius of tumor mass;
 # r.nc = radius of nucleus;
 #' @export
-tumor.mass = function(n = 50, r = 0.25, R = 6*r, r.nc = r/4,
-		center = c(0,0), fill = c("#6480FF", "purple"), phi = 0,
-		top = c("2out", "in", "out"), ...) {
+tumor.mass = function(n = 50, r = 0.25, R = 6.5*r, r.nc = r/4,
+		center = c(0,0), phi = 0, fill = "#6480FF", fill.nc = "purple",
+		top = c("2out", "in", "out"), adj.nc = TRUE, ...) {
 	xy = uniform.circle(n, r = R, center=center, phi=phi, ...);
 	top = match.arg(top);
 	if(top == "2out") {
@@ -205,13 +205,40 @@ tumor.mass = function(n = 50, r = 0.25, R = 6*r, r.nc = r/4,
 		xy = xy[id,];
 	} else if(top == "in") xy = xy[seq(n, 1), ];
 	# Cells:
-	lst = list(r=r, center = xy, fill = fill[1]);
+	lst = list(r=r, center = xy, fill = fill);
 	class(lst) = c("circle", "list;");
 	lstAll = list(Cells = lst);
 	# Nucleus:
-	lst = list(r = r.nc, center = xy, fill = fill[2]);
+	if( ! is.null(adj.nc)) {
+		r.adj = if(is.logical(adj.nc)) r.nc / 4 else r.nc * adj.nc;
+		xy[,1] = xy[,1] + runif(n, -r.adj, r.adj);
+		xy[,2] = xy[,2] + runif(n, -r.adj, r.adj);
+	}
+	lst = list(r = r.nc, center = xy, fill = fill.nc);
 	class(lst) = c("circle", "list;");
 	lstAll$Nuclei = lst;
 	lstAll = as.bioshape(lstAll);
 	invisible(lstAll);
+}
+
+### Mixed Tumor
+#' @export
+tumor.mix = function(d = c(0.53, 0.49), R = 2, phi = c(0, pi)) {
+	c1 = tumor.mass(60, R=R, d = d[1], phi = phi[1])
+	c2 = tumor.mass(30, R=R, d = d[2], phi = phi[2], fill = "#F09648")
+	c.mix = mix.cells(c1, c2);
+	invisible(c.mix);
+}
+# Mix 2 populations of cells
+#' @export
+mix.cells = function(x1, x2, by = 3) {
+	len = nrow(x1$Cells$center);
+	tmp = x1;
+	x1$Cells$center = x1$Cells$center[seq(1, len, by = by), ];
+	x1$Nuclei$center = x1$Nuclei$center[seq(1, len, by = by), ];
+	tmp$Cells$center = tmp$Cells$center[- seq(1, len, by = by), ];
+	tmp$Nuclei$center = tmp$Nuclei$center[- seq(1, len, by = by), ];
+	lst = list(tmp, x2, x1);
+	lst = as.bioshape(lst);
+	invisible(lst);
 }

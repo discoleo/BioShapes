@@ -105,6 +105,9 @@ test.circle.p2s(slope = -2, add=T)
 # Spiral Roulette
 test.circle.uniform.text(c(100,100), phi=c(0, - pi))
 
+# Tumor Mass: 2 cell types
+test.tumor.mass2()
+
 
 #####################
 #####################
