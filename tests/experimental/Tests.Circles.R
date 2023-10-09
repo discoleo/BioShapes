@@ -164,3 +164,13 @@ test.cylinder()
 
 test.cylinder(lty.back = NULL)
 
+
+#####################
+
+### Circle Chains ###
+
+n = 15
+plot.base()
+lines(circles.TanToOuterShape(n, 4, center = c(4,4), phi = pi/n))
+
+

@@ -22,6 +22,14 @@
 ### Helper Functions to Generate Circles
 
 
+#' @export
+as.circle = function(x) {
+	if( ! inherits(x, "circle")) {
+		class(x) = c("circle", class(x));
+	}
+	return(x);
+}
+
 ### Plot Objects formed from circles;
 # - convenience function;
 # - pin = hack to set par(pin) = mean(...);
@@ -235,9 +243,54 @@ circlesInFixedCircle = function(n, r, center = c(0,0), phi=0) {
   return(xy);
 }
 
+
+### Circles Tangent to a Chain of Circles
+# n = number of circles in chain;
+# R = radius of outer chain;
+# r = radius of cricles in outer chain;
+#' @export
+circles.TanToOuter = function(n, R, r) {
+	# Note: assumes that n circles of radius r form a chain of radius R;
+	fR = R / r; fR2 = fR^2 - 1;
+	dR = R^2 - r^2;
+	b1 = r + fR * sqrt(dR);
+	dd = b1^2 - dR * fR2;
+	dd = sqrt(dd);
+	r2 = (b1 - dd) / fR2;
+	R2 = fR * r2;
+	return(list(R = R2, r = r2));
+}
+#' @export
+circles.TanToOuterFixed = function(n, r, center = c(0,0), phi = 0) {
+	# TODO: type of outer chain;
+	c1 = circlesOnFixedCircle(n=n, r=r, center=center, phi=phi);
+	R1 = r; r1 = attr(c1, "r");
+	R2 = circles.TanToOuter(n=n, R=R1, r=r1);
+	c2 = pointsCircle(n, r = R2$R, center=center, phi = phi + pi/n);
+	attr(c2, "R") = R2$R;
+	attr(c2, "r") = R2$r;
+	lst = list(C1 = c1, C2 = c2);
+	return(lst);
+}
+
+# - Generates the actual shape;
+#' @export
+circles.TanToOuterShape = function(n, r, center = c(0,0), phi = 0) {
+	lst = circles.TanToOuterFixed(n=n, r=r, center=center, phi=phi);
+	cc1 = cbind(lst$C1$x, lst$C1$y);
+	cc2 = cbind(lst$C2$x, lst$C2$y);
+	c1 = list(r = attr(lst$C1, "r"), center = cc1, phi = c(0, 2*pi));
+	c2 = list(r = attr(lst$C2, "r"), center = cc2, phi = c(0, 2*pi));
+	lst = list(as.circle(c1), as.circle(c2));
+	invisible(as.bioshape(lst));
+}
+
+
+###############
 ###############
 
-### Arcs
+############
+### Arcs ###
 
 # Generates the points on an arc of circle.
 #' @export
