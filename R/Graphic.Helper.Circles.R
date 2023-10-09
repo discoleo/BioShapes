@@ -1,6 +1,6 @@
 #######################################
 #
-# BioShapes
+# Title: BioShapes
 # Maintainer: L. Mada
 #
 # https://github.com/discoleo/BioShapes
@@ -24,8 +24,10 @@
 
 ### Plot Objects formed from circles;
 # - convenience function;
+# - pin = hack to set par(pin) = mean(...);
+#   Note: asp = 1 is the better approach (and is set automatically);
 #' @export
-testFilledCircle = function(xy, r=NULL, R=NULL, lim=NULL, line=TRUE,
+test.FilledCircle = function(xy, r=NULL, R=NULL, lim=NULL, line=TRUE,
                             col="#B0B032", col.line="green", add=FALSE, pin = FALSE, ...) {
   if(is.null(r)) {
     r = attr(xy, "r");

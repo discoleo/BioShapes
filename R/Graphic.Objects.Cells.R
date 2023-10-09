@@ -1,6 +1,6 @@
 #######################################
 #
-# BioShapes
+# Title: BioShapes
 # Maintainer: L. Mada
 #
 # https://github.com/discoleo/BioShapes
@@ -24,14 +24,13 @@
 
 ### Smooth muscle cell or Fibroblast
 #' @export
-cell.SmoothMuscle = function(x, y, r = 1, r.nc = r/2, slope = NULL, t.nc = c(0.55, 0.48),
+cell.SmoothMuscle = function(x, y, r = 1, r.nc = r/2.5, slope = NULL, t.nc = c(0.5, 0.5),
 		lwd = 1, col = NULL, fill = NULL, col.nc = 1, fill.nc = NULL, N=128, phi = c(0, pi)) {
 	if(is.null(slope)) slope = slope(x, y);
 	d = sqrt((x[1] - x[2])^2 + (y[1] - y[2])^2);
-	dx = d / N;
-	pL = seq(0, d, by=dx);
-	pp = shiftPoint(c(x[1], y[1]), d=pL, slope=slope);
-	pL = pL + x[1];
+	pL = seq(0, d, length.out = N);
+	pp = shift.point(c(x[1], y[1]), d=pL, slope=slope);
+	pL = seq(x[1], x[2], length.out = length(pL));
 	px = pp[,1] - x[1]; px = px * pi / max(abs(px));
 	# Margin 1:
 	pS = r * sin(px + phi[1]) + pp[,2];

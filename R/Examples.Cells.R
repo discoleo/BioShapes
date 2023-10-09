@@ -59,7 +59,7 @@ example.neuronDesign = function(n = 5, r = 2, col.mark = "red") {
 
   phi = 2*pi/n;
   tmp = circlesOnCircle(n, r[1], phi = pi/n);
-  testFilledCircle(tmp, lim = c(-6, 6), pin = FALSE);
+  test.FilledCircle(tmp, lim = c(-6, 6), pin = FALSE);
   R = attr(tmp, "R");
   tmp = sapply(seq(n), function(k) points(
     r[1] * cos(pi/2 + k * phi) + R * cos(phi * (k-1) + phi/2),

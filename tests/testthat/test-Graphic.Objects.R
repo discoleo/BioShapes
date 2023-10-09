@@ -26,9 +26,9 @@ r = 1
 phi = pi / n; # add some rotation
 # Ex 1a:
 xy = pointsCircle(n, R, phi=phi);
-testFilledCircle(xy, r=r, lim = R+1, lcol=1);
+test.FilledCircle(xy, r=r, lim = R+1, lcol=1);
 # Ex 1b:
-testFilledCircle(xy, r=seq(r,2, length.out=n), lim = R+1, lcol=1);
+test.FilledCircle(xy, r=seq(r,2, length.out=n), lim = R+1, lcol=1);
 
 
 #### Closed Circles ####
@@ -37,7 +37,7 @@ n = 15
 r = 1
 phi = pi / n; # add some rotation
 xy = circlesOnCircle(n, r, phi=phi);
-testFilledCircle(xy);
+test.FilledCircle(xy);
 
 
 ### Radius of Big Circle: known
@@ -46,7 +46,7 @@ testFilledCircle(xy);
 n = 15
 R = 7
 xy = circlesOnFixedCircle(n, r=R, phi=phi);
-testFilledCircle(xy, R=R);
+test.FilledCircle(xy, R=R);
 
 
 #### Inside Circle ####
@@ -59,7 +59,7 @@ n = 19
 R = 15
 phi = pi / n; # add some rotation
 xy = circlesInFixedCircle(n, R, phi=phi);
-testFilledCircle(xy, R=R)
+test.FilledCircle(xy, R=R)
 
 
 ### Example 2:
@@ -68,14 +68,14 @@ n = 19
 r = 1
 phi = pi / n; # add some rotation
 xy = circlesOnCircle(n, r, phi=phi);
-testFilledCircle(xy)
+test.FilledCircle(xy)
 
 # - Circle 2: based on R of Circle 1;
 # Outer Circle: known
 # Inner Circle: unknown
 R = attr(xy, "R") - r;
 xy = circlesInFixedCircle(n, r=R, phi=phi);
-testFilledCircle(xy, add=TRUE, line=FALSE);
+test.FilledCircle(xy, add=TRUE, line=FALSE);
 
 
 #### Outside Circle ####
@@ -85,7 +85,7 @@ n = 13
 R = 6
 phi = pi / n; # add some rotation
 xy = circlesOutsideFixedCircle(n, R, phi=phi);
-testFilledCircle(xy, R=R);
+test.FilledCircle(xy, R=R);
 
 
 #### Shifted Center ####
@@ -97,8 +97,8 @@ phi  = pi / n;
 mid1 = c(-R, 0); mid2 = mid1 + c(2*R, 0);
 xy1 = circlesInFixedCircle(n, r=R, center=mid1);
 xy2 = circlesInFixedCircle(n, r=R, center=mid2, phi=phi);
-testFilledCircle(xy1, R=R, lim = 2*R + 1);
-testFilledCircle(xy2, R=R, add=TRUE);
+test.FilledCircle(xy1, R=R, lim = 2*R + 1);
+test.FilledCircle(xy2, R=R, add=TRUE);
 
 
 #####################
@@ -107,40 +107,36 @@ testFilledCircle(xy2, R=R, add=TRUE);
 
 ### Brush-Border Cell
 p1 = c(0,0)
-cell = cellBrushBorder(p1, w=5, h=8)
+cell = cell.BrushBorder(p1, w=5, h=8)
 plot.base()
 lines(cell)
 
 
 ### Slanted Cell
-p1 = c(0,2); slope = -1;
-cell = cellBrushBorder(p1, w=5, h=8, slope=slope)
+p1 = c(5,8); slope = -1;
+cell = cell.BrushBorder(p1, w=5, h=8, slope=slope)
 plot.base()
 lines(cell)
 
 
 ### Smooth Muscles / Connective Tissue
 plot.base()
-lst = cellSmooth(c(1,5), c(2, 7))
-lines.object.base(lst, lwd=2)
+lst = cell.SmoothMuscle(c(1,8), c(3, 7))
+lines(lst, lwd=2)
 
-lst = cellSmooth(c(2,7), c(1, 5), r=0.6)
-lines.object.base(lst, lwd=2)
+lst = cell.SmoothMuscle(c(2,8), c(1, 5), r=0.6)
+lines(lst, lwd=2)
+abline(v = c(1,8), col = "green")
+abline(h = c(1,7), col = "green")
 
 
 ##################
 
 #### Liposome ####
 
-testLiposome = function(lst, col="#48B000", col.line=1){
-  testFilledCircle(lst[[1]], line = FALSE, add = TRUE, col=col)
-  testFilledCircle(lst[[2]], line = FALSE, add = TRUE, col=col)
-  lines.object.base(lst[3], lwd=1, col=col.line)
-}
-
 plot.base(xlim=c(-10,10), ylim=c(-10,10))
 lst = liposomes(c(30, 17), r=0.5, phi=c(0, pi/34), d=0.2)
-testLiposome(lst)
+lines(lst)
 
 
 ### Helix / DNA
