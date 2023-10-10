@@ -81,7 +81,7 @@ xy = circles.InFixedCircle(n, r=R, phi=phi);
 test.FilledCircle(xy, add=TRUE, line=FALSE);
 
 
-#### Outside Circle ####
+### Outside Circle
 
 # Tangent & Outside given Circle
 n = 13
@@ -91,7 +91,7 @@ xy = circles.OutsideFixedCircle(n, R, phi=phi);
 test.FilledCircle(xy, R=R);
 
 
-#### Shifted Center ####
+### Shifted Center
 
 # 2 Circles
 n = 23
@@ -102,6 +102,13 @@ xy1 = circles.InFixedCircle(n, r=R, center=mid1);
 xy2 = circles.InFixedCircle(n, r=R, center=mid2, phi=phi);
 test.FilledCircle(xy1, R=R, lim = 2*R + 1);
 test.FilledCircle(xy2, R=R, add=TRUE);
+
+
+### Tangent to outer Chain of Circles
+lst = circles.TanToOuterShape(14, 4, center = c(4,4),
+	col = NA, fill = c("#B0B032", "#90B048"))
+plot.base()
+lines(lst)
 
 
 #####################

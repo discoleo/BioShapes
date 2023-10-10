@@ -28,6 +28,48 @@
 ###############
 ### Circles ###
 
+### Plot Objects formed from circles;
+# - convenience function;
+# - pin = hack to set par(pin) = mean(...);
+#   Note: asp = 1 is the better approach (and is set automatically);
+#' @export
+test.FilledCircle = function(xy, r=NULL, R=NULL, lim=NULL, line=TRUE,
+                            col="#B0B032", col.line="green", add=FALSE, pin = FALSE, ...) {
+  if(is.null(r)) {
+    r = attr(xy, "r");
+    if(is.null(r)) stop("Missing r!");
+  } else {
+    attr(xy, "r") = r;
+  }
+  ### New Plot
+  if( ! add) {
+    x = xy$x; y = xy$y;
+    mid = attr(xy, "center");
+    if(is.null(lim)) {
+      R0  = attr(xy, "R");
+      lim = R0 + r + 1;
+      lim = c(-lim, lim);
+    } else if(length(lim) == 1) {
+      lim = c(-lim, lim);
+      mid = c(0, 0); # remove center offset;
+    } else {
+      mid = c(0, 0); # remove center offset;
+    }
+    plot(x, y, xlim = lim + mid[1], ylim = lim + mid[2], asp = 1);
+  }
+  if(pin){
+    pin = mean(par("pin")) + 0.25;
+    par.old = par(pin = c(pin, pin));
+    lines.circles(xy, R=R, line=line, fill=col, col.line=col.line, ...)
+    par(par.old);
+  }
+  else {
+    lines.circles(xy, R=R, line=line, fill=col, col.line=col.line, ...)
+  }
+}
+
+
+### Quasi-Uniform Points inside Circle
 #' @export
 test.circle.uniform.text = function(n = 200, phi = 0, d = 0.5) {
 	xy = uniform.circle(n[1], phi = phi[1], d = d[1]);
