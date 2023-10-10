@@ -142,7 +142,7 @@ tree = function(p, d, slope, n=2, levels=2) {
 neuron.body = function(center = c(0, 0), n = 5, r = 3, phi = 0,
 		lwd = 1, col = 1) {
   phi0 = phi + pi/n;
-  cc = circlesOnFixedCircle(n = n, r = r, center = center, phi = phi0);
+  cc = circles.OnFixedCircle(n = n, r = r, center = center, phi = phi0);
   R = r;
   r = attr(cc, "r");
   phin = 2*pi/n;

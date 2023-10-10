@@ -200,10 +200,18 @@ center.p3 = function(x, y) {
 ### Chains of Circles
 # - Tangent circles forming a large circle;
 
+circles = function(n, r, center = c(0,0), phi = 0, ...) {
+	UseMethod("circles");
+}
+circles.math = function(n, r, ...) {
+	UseMethod("circles.math");
+}
+
+
 ### Large Circle of Unknown Radius
 # - n small circles each of radius r;
 #' @export
-circlesOnCircle = function(n, r, center = c(0,0), phi=0) {
+circles.OnCircle = function(n, r, center = c(0,0), phi=0) {
   R  = r / sin(pi/n);
   xy = pointsCircle(n, r=R, center=center, phi=phi);
   attr(xy, "R") = R;
@@ -213,7 +221,7 @@ circlesOnCircle = function(n, r, center = c(0,0), phi=0) {
 
 ### Outside a large circle of given radius
 #' @export
-circlesOutsideFixedCircle = function(n, r, center = c(0,0), phi=0) {
+circles.OutsideFixedCircle = function(n, r, center = c(0,0), phi=0) {
   r1 = r / (1/sin(pi/n) - 1);
   R1 = r + r1;
   xy = pointsCircle(n, r=R1, center=center, phi=phi);
@@ -224,17 +232,18 @@ circlesOutsideFixedCircle = function(n, r, center = c(0,0), phi=0) {
 
 ### Forming large circle of given radius
 #' @export
-circlesOnFixedCircle = function(n, r, center = c(0,0), phi=0) {
+circles.OnFixedCircle = function(n, r, center = c(0,0), phi=0) {
   r1 = r * sin(pi/n);
   xy = pointsCircle(n, r=r, center=center, phi=phi);
-  attr(xy, "R") = r1 + r; # reuse same attribute name ???
+  # Outer R: reuse same attribute name ???
+  attr(xy, "R") = r1 + r;
   attr(xy, "r") = r1;
   return(xy);
 }
 
 ### Inside a large circle of given radius
 #' @export
-circlesInFixedCircle = function(n, r, center = c(0,0), phi=0) {
+circles.InFixedCircle = function(n, r, center = c(0,0), phi=0) {
   r1 = r / (1 + 1/sin(pi/n));
   R  = r - r1;
   xy = pointsCircle(n, r=R, center=center, phi=phi);
@@ -249,7 +258,7 @@ circlesInFixedCircle = function(n, r, center = c(0,0), phi=0) {
 # R = radius of outer chain;
 # r = radius of cricles in outer chain;
 #' @export
-circles.TanToOuter = function(n, R, r) {
+circles.math.TanToOuter = function(n, R, r) {
 	# Note: assumes that n circles of radius r form a chain of radius R;
 	fR = R / r; fR2 = fR^2 - 1;
 	dR = R^2 - r^2;
@@ -263,9 +272,9 @@ circles.TanToOuter = function(n, R, r) {
 #' @export
 circles.TanToOuterFixed = function(n, r, center = c(0,0), phi = 0) {
 	# TODO: type of outer chain;
-	c1 = circlesOnFixedCircle(n=n, r=r, center=center, phi=phi);
+	c1 = circles.OnFixedCircle(n=n, r=r, center=center, phi=phi);
 	R1 = r; r1 = attr(c1, "r");
-	R2 = circles.TanToOuter(n=n, R=R1, r=r1);
+	R2 = circles.math.TanToOuter(n=n, R=R1, r=r1);
 	c2 = pointsCircle(n, r = R2$R, center=center, phi = phi + pi/n);
 	attr(c2, "R") = R2$R;
 	attr(c2, "r") = R2$r;

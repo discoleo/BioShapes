@@ -76,8 +76,8 @@ ring = function(n, R = c(5, 7), center = c(0,0),
 #### Liposomes ####
 #' @export
 liposomes = function(n, r, center=c(0, 0), phi=c(0, 0), d=0, ...){
-  C1 = circlesOnCircle(n=n[1], r=r, center=center, phi=phi[1])
-  C2 = circlesOnCircle(n=n[2], r=r, center=center, phi=phi[2])
+  C1 = circles.OnCircle(n=n[1], r=r, center=center, phi=phi[1])
+  C2 = circles.OnCircle(n=n[2], r=r, center=center, phi=phi[2])
   R1 = attr(C1, "R")
   R2 = attr(C2, "R")
   R1 = R1 - r

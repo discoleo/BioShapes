@@ -1,24 +1,22 @@
-###################
-#
-# Thesis
+#######################################
 #
 # Title: BioShapes
+# Maintainer: L. Mada
 #
-# Candidate: Darian Voda
-# Faculty of Mathematics and Informatics, UVT
+# https://github.com/discoleo/BioShapes
 #
+# Continuation of:
+# 1. Bachelor Thesis: Darian Voda (2021-2022)
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-#
-# GitHub: https://github.com/DarianFlorianVoda/Diagram-Generator
+#   in collaboration with Syonic SRL
+#   [old] GitHub: https://github.com/DarianFlorianVoda/Diagram-Generator
 
 
 #### Tests ####
 
-#### Simple Circles ####
+### Simple Circles
 # - plot radially n circles;
 n = 10
 R = 8
@@ -31,12 +29,17 @@ test.FilledCircle(xy, r=r, lim = R+1, lcol=1);
 test.FilledCircle(xy, r=seq(r,2, length.out=n), lim = R+1, lcol=1);
 
 
-#### Closed Circles ####
+#####################
+
+#####################
+### Circle Chains ###
+
+### Closed Circles
 # - n & r known, R unknown;
 n = 15
 r = 1
 phi = pi / n; # add some rotation
-xy = circlesOnCircle(n, r, phi=phi);
+xy = circles.OnCircle(n, r, phi=phi);
 test.FilledCircle(xy);
 
 
@@ -45,7 +48,7 @@ test.FilledCircle(xy);
 # - n & R known, r unknown;
 n = 15
 R = 7
-xy = circlesOnFixedCircle(n, r=R, phi=phi);
+xy = circles.OnFixedCircle(n, r=R, phi=phi);
 test.FilledCircle(xy, R=R);
 
 
@@ -58,7 +61,7 @@ test.FilledCircle(xy, R=R);
 n = 19
 R = 15
 phi = pi / n; # add some rotation
-xy = circlesInFixedCircle(n, R, phi=phi);
+xy = circles.InFixedCircle(n, R, phi=phi);
 test.FilledCircle(xy, R=R)
 
 
@@ -67,14 +70,14 @@ test.FilledCircle(xy, R=R)
 n = 19
 r = 1
 phi = pi / n; # add some rotation
-xy = circlesOnCircle(n, r, phi=phi);
+xy = circles.OnCircle(n, r, phi=phi);
 test.FilledCircle(xy)
 
 # - Circle 2: based on R of Circle 1;
 # Outer Circle: known
 # Inner Circle: unknown
 R = attr(xy, "R") - r;
-xy = circlesInFixedCircle(n, r=R, phi=phi);
+xy = circles.InFixedCircle(n, r=R, phi=phi);
 test.FilledCircle(xy, add=TRUE, line=FALSE);
 
 
@@ -84,7 +87,7 @@ test.FilledCircle(xy, add=TRUE, line=FALSE);
 n = 13
 R = 6
 phi = pi / n; # add some rotation
-xy = circlesOutsideFixedCircle(n, R, phi=phi);
+xy = circles.OutsideFixedCircle(n, R, phi=phi);
 test.FilledCircle(xy, R=R);
 
 
@@ -95,8 +98,8 @@ n = 23
 R = 6
 phi  = pi / n;
 mid1 = c(-R, 0); mid2 = mid1 + c(2*R, 0);
-xy1 = circlesInFixedCircle(n, r=R, center=mid1);
-xy2 = circlesInFixedCircle(n, r=R, center=mid2, phi=phi);
+xy1 = circles.InFixedCircle(n, r=R, center=mid1);
+xy2 = circles.InFixedCircle(n, r=R, center=mid2, phi=phi);
 test.FilledCircle(xy1, R=R, lim = 2*R + 1);
 test.FilledCircle(xy2, R=R, add=TRUE);
 
