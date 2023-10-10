@@ -1,22 +1,20 @@
-###################
-#
-# Thesis
+#######################################
 #
 # Title: BioShapes
+# Maintainer: L. Mada
 #
-# Candidate: Darian Voda
-# Faculty of Mathematics and Informatics, UVT
+# https://github.com/discoleo/BioShapes
 #
+# Continuation of:
+# 1. Bachelor Thesis: Darian Voda (2021-2022)
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
-#
-# in collaboration with Syonic SRL
-#
-# GitHub: https://github.com/DarianFlorianVoda/Diagram-Generator
+#   in collaboration with Syonic SRL
+#   [old] GitHub: https://github.com/DarianFlorianVoda/Diagram-Generator
+
 
 # TODO:
-# - verification of formulas; - quite completed
 # - test cases for various types of base-lines and points;
 # - base line:
 #  -- origin: (0, 0), (0, 1), (0, 2), (0, -2), ...;
@@ -36,7 +34,7 @@ testReflection = function(p0, x, y) {
   points(p0[1], p0[2])
   points(p[1], p[2]);
   lines(c(p0[1], p[1]), c(p0[2], p[2]), col="green")
-  #TODO: stopifnot(p == p0);
+  # TODO: stopifnot(p == p0);
   return(p); # others: invisible(p);
 }
 
@@ -321,7 +319,7 @@ p = testReflection(p0, x, y)
 testRoundValues(x, y, p)
 stopifnot(round(p-c( 217.125/49.0625, 102.375/49.0625 ), 6) == 0)
 
-cat("Finished Subsection [Reflections]: Slightly Perturbed Vertical Reflection Reflection - part 6\n");
+cat("Finished Subsection [Reflections]: Slightly Perturbed Vertical Reflection - part 6\n");
 
 
 ###### Slightly Perturbed Horizontal Reflection ######
@@ -374,9 +372,9 @@ p = testReflection(p0, x, y)
 testRoundValues(x, y, p)
 stopifnot(round(p-c( 138.5/25.25, 180.5/25.25 ), 6) == 0)
 
-cat("Finished Subsection [Reflections]: Slightly Perturbed Horizontal Reflection Reflection - part 7\n");
+cat("Finished Subsection [Reflections]: Slightly Perturbed Horizontal Reflection - part 7\n");
 
-cat("Finshed Section: Reflections \n")
+cat("Finished Section: Reflections \n")
 
 ##### Test: Shift point along line #####
 
@@ -675,7 +673,7 @@ testShiftLine(x, y)
 
 cat("Finished Subsection [Shift line]: Slightly Perturbed Horizontal line - part 6\n");
 
-cat("Finshed Section: Shift Line \n")
+cat("Finished Section: Shift Line \n")
 
 
 ###############
