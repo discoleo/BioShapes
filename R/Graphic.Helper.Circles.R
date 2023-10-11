@@ -172,7 +172,7 @@ circles.math = function(n, r, ...) {
 #' @export
 circles.OnCircle = function(n, r, center = c(0,0), phi=0) {
   R  = r / sin(pi/n);
-  xy = pointsCircle(n, r=R, center=center, phi=phi);
+  xy = points.circle(n, r=R, center=center, phi=phi);
   attr(xy, "R") = R;
   attr(xy, "r") = r;
   return(xy);
@@ -183,7 +183,7 @@ circles.OnCircle = function(n, r, center = c(0,0), phi=0) {
 circles.OutsideFixedCircle = function(n, r, center = c(0,0), phi=0) {
   r1 = r / (1/sin(pi/n) - 1);
   R1 = r + r1;
-  xy = pointsCircle(n, r=R1, center=center, phi=phi);
+  xy = points.circle(n, r=R1, center=center, phi=phi);
   attr(xy, "R") = R1;
   attr(xy, "r") = r1;
   return(xy);
@@ -193,7 +193,7 @@ circles.OutsideFixedCircle = function(n, r, center = c(0,0), phi=0) {
 #' @export
 circles.OnFixedCircle = function(n, r, center = c(0,0), phi=0) {
   r1 = r * sin(pi/n);
-  xy = pointsCircle(n, r=r, center=center, phi=phi);
+  xy = points.circle(n, r=r, center=center, phi=phi);
   # Outer R: reuse same attribute name ???
   attr(xy, "R") = r1 + r;
   attr(xy, "r") = r1;
@@ -205,7 +205,7 @@ circles.OnFixedCircle = function(n, r, center = c(0,0), phi=0) {
 circles.InFixedCircle = function(n, r, center = c(0,0), phi=0) {
   r1 = r / (1 + 1/sin(pi/n));
   R  = r - r1;
-  xy = pointsCircle(n, r=R, center=center, phi=phi);
+  xy = points.circle(n, r=R, center=center, phi=phi);
   attr(xy, "R") = R;
   attr(xy, "r") = r1;
   return(xy);
@@ -233,7 +233,7 @@ circles.math.TanToChain = function(n, R, r, type = c("Inner", "Outer")) {
 #' @export
 circles.TanToChain = function(n, r, center = c(0,0), phi = 0,
 		type = c("Inner", "Outer")) {
-	# TODO: type of outer chain;
+	# TODO: type of baseline-chain;
 	c1 = circles.OnFixedCircle(n=n, r=r, center=center, phi=phi);
 	R1 = r; r1 = attr(c1, "r");
 	R2 = circles.math.TanToChain(n=n, R=R1, r=r1, type=type);

@@ -55,7 +55,7 @@ test.FilledCircle = function(xy, r=NULL, R=NULL, lim=NULL, line=TRUE,
     } else {
       mid = c(0, 0); # remove center offset;
     }
-    plot(x, y, xlim = lim + mid[1], ylim = lim + mid[2], asp = 1);
+    plot.base(xlim = lim + mid[1], ylim = lim + mid[2], asp = 1);
   }
   if(pin){
     pin = mean(par("pin")) + 0.25;
@@ -86,6 +86,94 @@ test.circle.uniform.text = function(n = 200, phi = 0, d = 0.5) {
 		}
 	}
 }
+
+
+#####################
+
+#####################
+### Circle Chains ###
+
+# phi = rotation;
+#' @export
+test.Chains = function(n = 15, phi = pi/n) {
+	if(length(phi) == 1) phi = rep(phi, 4);
+	par.old = par(mfrow = c(2,2))
+	
+	### Closed Circles
+	# - n & r known, R unknown;
+	r = 1
+	xy = circles.OnCircle(n, r, phi=phi[[1]]);
+	test.FilledCircle(xy);
+	text(0, 0, "R = unknown", col = "#32B096");
+	text(xy$x, xy$y, seq(n), col = "red");
+	
+	### Radius of Big Circle: known
+	# - small circles: on the big circle;
+	# - n & R known, r unknown;
+	R = 7
+	xy = circles.OnFixedCircle(n, r=R, phi=phi[[2]]);
+	test.FilledCircle(xy, R=R);
+	text(0, 0, "R = known", col = "#32B096");
+	
+	### Inside Circle
+	# Tangent & Inside given Circle
+	# Outer Circle: known
+	R = 15
+	xy = circles.InFixedCircle(n, R, phi=phi[[3]]);
+	test.FilledCircle(xy, R=R)
+	
+	### Outside Circle
+	# Tangent & Outside given Circle
+	R = 6
+	xy = circles.OutsideFixedCircle(n, R, phi=phi[[4]]);
+	test.FilledCircle(xy, R=R);
+	
+	par(par.old);
+}
+
+# phi = rotation;
+#' @export
+test.ChainsCombined = function(n = 15, phi = pi/n) {
+	if(length(phi) == 1) { phi = rep(phi, 4); phi[3] = 0; }
+	par.old = par(mfrow = c(2,2));
+	
+	### Inside Circle / Combined
+	# - Circle 1: R unknown
+	r = 1
+	xy = circles.OnCircle(n, r, phi=phi[[1]]);
+	test.FilledCircle(xy)
+	# - Circle 2: based on R of Circle 1;
+	# Outer Circle: known
+	# Inner Circle: unknown
+	R = attr(xy, "R") - r;
+	xy = circles.InFixedCircle(n, r=R, phi=phi[[1]]);
+	test.FilledCircle(xy, add=TRUE, line=FALSE);
+	
+	### Tangent to outer/inner Chain of Circles
+	R = 3.25;
+	fill = c("#B0B032", "#90B048");
+	lst1 = circles.TanToChainShape(n, R, center = c(4,4), phi=phi[[2]],
+		col = NA, fill=fill);
+	lst2 = circles.TanToChainShape(n, R, center = c(4,4), phi=phi[[2]],
+		col = NA, fill=fill, type = "Outer");
+	plot.base()
+	lines(lst1)
+	lines(lst2)
+	
+	### Outside Circle: Shifted Center
+	# 2 Circles
+	R = 6
+	mid1 = c(-R, 0); mid2 = mid1 + c(2*R, 0);
+	xy1 = circles.InFixedCircle(n, r=R, center=mid1, phi=phi[[3]]);
+	xy2 = circles.InFixedCircle(n, r=R, center=mid2, phi=phi[[4]]);
+	test.FilledCircle(xy1, R=R, lim = 2*R + 1);
+	test.FilledCircle(xy2, R=R, add=TRUE);
+	
+	# TODO: Example 4;
+	
+	par(par.old);
+}
+
 
 ################
 ### Ellipses ###
