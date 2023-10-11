@@ -6,15 +6,13 @@
 # https://github.com/discoleo/BioShapes
 #
 # Continuation of:
-# 1. Bachelor Thesis (2022-2023)
-# Candidate: Adrian Cotoc
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
-#
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
 #   in collaboration with Syonic SRL
-# GitHub: https://github.com/Adi131313/BioShapes
+#   GitHub: https://github.com/Adi131313/BioShapes
 #
 # 2. Bachelor Thesis: Darian Voda (2021-2022)
 
@@ -216,26 +214,29 @@ circles.InFixedCircle = function(n, r, center = c(0,0), phi=0) {
 
 ### Circles Tangent to a Chain of Circles
 # n = number of circles in chain;
-# R = radius of outer chain;
-# r = radius of cricles in outer chain;
+# R = radius of outer/inner chain;
+# r = radius of circles in outer chain;
 #' @export
-circles.math.TanToOuter = function(n, R, r) {
+circles.math.TanToChain = function(n, R, r, type = c("Inner", "Outer")) {
 	# Note: assumes that n circles of radius r form a chain of radius R;
+	type = match.arg(type);
 	fR = R / r; fR2 = fR^2 - 1;
 	dR = R^2 - r^2;
 	b1 = r + fR * sqrt(dR);
 	dd = b1^2 - dR * fR2;
 	dd = sqrt(dd);
+	if(type == "Outer") dd = - dd;
 	r2 = (b1 - dd) / fR2;
 	R2 = fR * r2;
 	return(list(R = R2, r = r2));
 }
 #' @export
-circles.TanToOuterFixed = function(n, r, center = c(0,0), phi = 0) {
+circles.TanToChain = function(n, r, center = c(0,0), phi = 0,
+		type = c("Inner", "Outer")) {
 	# TODO: type of outer chain;
 	c1 = circles.OnFixedCircle(n=n, r=r, center=center, phi=phi);
 	R1 = r; r1 = attr(c1, "r");
-	R2 = circles.math.TanToOuter(n=n, R=R1, r=r1);
+	R2 = circles.math.TanToChain(n=n, R=R1, r=r1, type=type);
 	c2 = pointsCircle(n, r = R2$R, center=center, phi = phi + pi/n);
 	attr(c2, "R") = R2$R;
 	attr(c2, "r") = R2$r;
@@ -245,9 +246,9 @@ circles.TanToOuterFixed = function(n, r, center = c(0,0), phi = 0) {
 
 # - Generates the actual shape;
 #' @export
-circles.TanToOuterShape = function(n, r, center = c(0,0), phi = 0,
-		col = NULL, fill = NULL) {
-	lst = circles.TanToOuterFixed(n=n, r=r, center=center, phi=phi);
+circles.TanToChainShape = function(n, r, center = c(0,0), phi = 0,
+		col = NULL, fill = NULL, type = c("Inner", "Outer")) {
+	lst = circles.TanToChain(n=n, r=r, center=center, phi=phi, type=type);
 	cc1 = cbind(lst$C1$x, lst$C1$y);
 	cc2 = cbind(lst$C2$x, lst$C2$y);
 	c1 = list(r = attr(lst$C1, "r"), center = cc1, phi = c(0, 2*pi));

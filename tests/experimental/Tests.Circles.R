@@ -171,6 +171,6 @@ test.cylinder(lty.back = NULL)
 
 n = 15
 plot.base()
-lines(circles.TanToOuterShape(n, 4, center = c(4,4), phi = pi/n))
+lines(circles.TanToChainShape(n, 4, center = c(4,4), phi = pi/n))
 
 

@@ -104,11 +104,14 @@ test.FilledCircle(xy1, R=R, lim = 2*R + 1);
 test.FilledCircle(xy2, R=R, add=TRUE);
 
 
-### Tangent to outer Chain of Circles
-lst = circles.TanToOuterShape(14, 4, center = c(4,4),
+### Tangent to outer/inner Chain of Circles
+lst1 = circles.TanToChainShape(14, 3.25, center = c(4,4),
 	col = NA, fill = c("#B0B032", "#90B048"))
+lst2 = circles.TanToChainShape(14, 3.25, center = c(4,4),
+	col = NA, fill = c("#B0B032", "#90B048"), type = "Outer")
 plot.base()
-lines(lst)
+lines(lst1)
+lines(lst2)
 
 
 #####################
