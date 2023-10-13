@@ -29,7 +29,7 @@ solve.circle.intersection2 = function(center1, center2, r1, r2, digits=4, debug=
   D = b1^2 - 4*a*b0;
   if(debug) { cat("Coeffs: "); print(c(a, b1, b0, D)); }
   if(round(D, digits) == 0) D = 0;
-  if(D < 0) return(NULL);
+  if(D < 0) return(NA);
   D = sqrt(D);
   # Sol:
   x = ( - b1 + c(-D, D)) / (2*a);

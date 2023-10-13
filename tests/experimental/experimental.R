@@ -172,7 +172,7 @@ lines(xy, col="red")
 ### Test Neuron Synapses
 plot.neuron = function(p, phi, type, dphi = c(0, -pi/9, pi/9)) {
   for(dp in dphi) {
-    tmp = neuron(p, phi= phi + dp, type=type);
+    tmp = neuron(p, phi = phi + dp, type=type);
     lines(tmp);
   }
 }
@@ -191,7 +191,7 @@ tmp = neuron(c(0,2), phi=pi/6)
 lines(tmp)
 
 ###
-tmp = neuron(c(0,2), phi=pi/6, type.syn = "Tree", r.synapse = 2)
+tmp = neuron(c(0,2), phi=pi/6, type.syn = "Tree", synapse = list(l = 2))
 plot.base()
 lines(tmp)
 
@@ -218,34 +218,7 @@ test.helix.directions()
 
 ### Tests: Pins
 
-par.old = par(mfrow = c(3,2))
-
-plot.base()
-lines(pin.center(c(1,5), c(1,5), col.circle="red"))
-points(5,5)
-
-plot.base()
-lines(pin.center(c(1,5), c(1,5), theta = pi/6, col.circle="red", fill="#B280F2", lwd=2))
-points(5,5)
-
-plot.base()
-lines(pin.center(c(1,5), c(5,1), col.circle="red"))
-points(5,1)
-
-plot.base()
-lines(pin.center(c(5,1), c(5,1), theta = pi/6, col.circle="red"))
-points(1,1)
-
-plot.base()
-lines(pin.center(c(5,1), c(1,5), theta = pi/6, col.circle="red"))
-points(1,5)
-
-# TODO: theta >= pi ???
-plot.base()
-lines(pin.center(c(1,5), c(1,5), theta = 4/3*pi, col.circle="red"))
-points(5,5)
-
-par(par.old)
+test.pins()
 
 
 ###################

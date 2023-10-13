@@ -235,3 +235,40 @@ test.box.capEllipse = function(y.rel = 1/4, lwd = 1, col = "black", fill = NULL,
 	lines(boxf(c(8, 8), c(4, 0) - 0.25))
 }
 
+
+####################
+
+### Pins
+
+# Basic Test:
+#' @export
+test.pins = function(theta = c(2,1,2,1,1,8) * pi/6) {
+	par.old = par(mfrow = c(3,2))
+	
+	plot.base()
+	lines(pin.center(c(1,5), c(1,5), theta = theta[1], col.circle="red"))
+	points(5,5)
+	
+	plot.base()
+	lines(pin.center(c(1,5), c(1,5), theta = theta[2], col.circle="red", fill="#B280F2", lwd=2))
+	points(5,5)
+	
+	plot.base()
+	lines(pin.center(c(1,5), c(5,1), theta = theta[3], col.circle="red"))
+	points(5,1)
+	
+	plot.base()
+	lines(pin.center(c(5,1), c(5,1), theta = theta[4], col.circle="red"))
+	points(1,1)
+	
+	plot.base()
+	lines(pin.center(c(5,1), c(1,5), theta = theta[5], col.circle="red"))
+	points(1,5)
+	
+	# TODO: theta >= pi ???
+	plot.base()
+	lines(pin.center(c(1,5), c(1,5), theta = theta[6], col.circle="red"))
+	points(5,5)
+	
+	par(par.old)
+}
