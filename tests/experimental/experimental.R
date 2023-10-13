@@ -1,7 +1,6 @@
 #######################################
 #
 # Title: BioShapes
-#
 # Maintainer: L. Mada
 #
 # https://github.com/discoleo/BioShapes
@@ -14,7 +13,7 @@
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
 #   in collaboration with Syonic SRL
-# GitHub: https://github.com/Adi131313/BioShapes
+#   GitHub: https://github.com/Adi131313/BioShapes
 #
 # 2. Bachelor Thesis: Darian Voda (2021-2022)
 
@@ -97,9 +96,9 @@ lines(virus(r, cc))
 lst = genome(r * 0.5, cc, type="cds", lwd=2)
 lines(lst)
 
-################
 
-### DNA Helix
+#################
+### DNA Helix ###
 
 # old algorithm
 tmp1 = helix(c(0, 0), c(5, 5), n = 2, phi = 0, A = 3/4)
@@ -148,25 +147,6 @@ points(pp$x0, sin(pp$x1), col="green", lwd=2)
 ### Tests for DNA
 
 ###
-test.dna.nb = function(phi, n = c(3, 3.4, 3, 1.7), y = list(c(0, -2))) {
-	par.old = par(mfrow = c(2,2))
-	###
-	example.dna.tests(n = n[1], phi=phi)
-	
-	###
-	example.dna.tests(n = n[2], phi=phi)
-
-	###
-	example.dna.tests(n = n[3], phi=phi, y0 = y[[1]])
-	
-	###
-	example.dna.tests(n = n[4], phi=phi, x0 = c(0, 6), y0 = y[[1]])
-	# Note: (x0, y0) are NOT exact;
-	abline(v=6, col="blue")
-	
-	par(par.old)
-}
-
 phi = c(pi, -pi/2);
 test.dna.nb(phi);
 
@@ -231,27 +211,14 @@ par(par.old);
 ######################
 
 ### Test: Bug in Function helix
-plot.base();
-p1 = c(3,1); p2 = c(1,5)
-xy = helix(p1, p2); lines(xy);
-points(c(p1[1], p2[1]), c(p1[2], p2[2]), col="red")
-#
-p1 = c(4,6); p2 = c(1, 5)
-xy = helix(p1, p2); lines(xy);
-points(c(p1[1], p2[1]), c(p1[2], p2[2]), col="red")
-#
-p1 = c(4,6); p2 = c(6,1)
-xy = helix(p1, p2); lines(xy);
-points(c(p1[1], p2[1]), c(p1[2], p2[2]), col="red")
-#
-p2 = c(4,6); p1 = c(1, 5)
-xy = helix(p1, p2); lines(xy);
-points(c(p1[1], p2[1]), c(p1[2], p2[2]), col="red")
+test.helix.directions()
 
 
 ###################
 
 ### Tests: Pins
+
+par.old = par(mfrow = c(3,2))
 
 plot.base()
 lines(pin.center(c(1,5), c(1,5), col.circle="red"))
@@ -277,6 +244,8 @@ points(1,5)
 plot.base()
 lines(pin.center(c(1,5), c(1,5), theta = 4/3*pi, col.circle="red"))
 points(5,5)
+
+par(par.old)
 
 
 ###################

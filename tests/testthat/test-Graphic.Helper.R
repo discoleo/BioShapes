@@ -685,11 +685,14 @@ alpha = pi/5
 r = 3/2
 # Center 2 is ON circle 1;
 mid2 = center1 + r * c(cos(alpha), sin(alpha));
-p = solve.circle.intersection(mid2, center1, 0.5, r)
+# p = solve.circle.intersection2(mid2, center1, 0.5, r)
+xy = rbind(center1, mid2);
+p = solve.circle.intersection(xy[,1], xy[,2], c(r, 0.5))
 plot.base()
 shape::plotellipse(r, r, mid=center1)
 shape::plotellipse(0.5, 0.5, mid=mid2, lcol="red")
 points(p$x, p$y, col="green", lwd=2)
-stopifnot(round(p$x - c(2.856325, 3.435889), 5) == 0)
-stopifnot(round(p$y - c(4.231547, 3.433845), 5) == 0)
+id = c(2,1)
+stopifnot(round(p$x - c(2.856325, 3.435889)[id], 5) == 0)
+stopifnot(round(p$y - c(4.231547, 3.433845)[id], 5) == 0)
 

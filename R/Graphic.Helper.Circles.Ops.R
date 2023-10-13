@@ -11,7 +11,7 @@
 
 ### Intersection: 2 Circles
 #' @export
-solve.circle.intersection = function(center1, center2, r1, r2, digits=4, debug=TRUE) {
+solve.circle.intersection2 = function(center1, center2, r1, r2, digits=4, debug=TRUE) {
   xp = center1[[1]]; yp = center1[[2]];
   xc = center2[[1]]; yc = center2[[2]];
   d  = r1; r = r2;
@@ -38,5 +38,23 @@ solve.circle.intersection = function(center1, center2, r1, r2, digits=4, debug=T
   y = y / div;
   sol = data.frame(x=x, y=y);
   return(sol);
+}
+
+# simplified approach
+#' @export
+solve.circle.intersection = function(x, y, r) {
+	dL = dist.xy(x, y);
+	dr = (r[1] + r[2] - dL) / 2;
+	if(dr < 0) return(NA);
+	ss = (r[1] + r[2] + dL) / 2;
+	area = sqrt(ss * dr * (ss - r[1]) * (ss - r[2]));
+	slope = slope(x, y);
+	h  = 2 * area / dL;
+	d1 = sqrt(r[1]^2 - h^2);
+	t1 = d1 / dL;
+	xc = (1 - t1)*x[1] + t1*x[2];
+	yc = (1 - t1)*y[1] + t1*y[2];
+	xy = shift.ortho(xc, yc, d = c(-h, h), slope=slope);
+	return(xy);
 }
 
