@@ -272,6 +272,17 @@ circles.TanToChainShape = function(n, r, center = c(0,0), phi = 0,
 ############
 ### Arcs ###
 
+### Arc: Start & Stop-Angles
+# Note:
+# - does NOT need r, as it does NOT verify
+#   that the points are on a circle of given radius!
+#' @export
+arc.circle = function(x, y, center = c(0, 0)) {
+	dx = x - center[1];
+	dy = y - center[2];
+	atan2(dy, dx);
+}
+
 # Generates the points on an arc of circle.
 #' @export
 circle.arc = function(r=1, phi, center = c(0,0), N = 64) {

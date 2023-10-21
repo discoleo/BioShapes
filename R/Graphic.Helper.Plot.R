@@ -265,3 +265,28 @@ lines.slope = function(xy, slope, L = 4, ...) {
 	lines(x2, y2, ...);
 }
 
+######################
+
+######################
+### Plot Functions ###
+
+### Plot Torus
+#' @export
+lines.torus = function(r, center = c(0,0), col = c(1,1), fill = col,
+		lwd = c(1,1), lwd.fill = 1, ..., N = c(64, 32)) {
+	xy1 = points.circle(N[1], r[1], center=center);
+	xy2 = points.circle(N[2], r[2], center=center);
+	as.xym = function(x) {
+		x$x = c(x$x, x$x[1]);
+		x$y = c(x$y, x$y[1]);
+		cbind(x$x, x$y);
+	}
+	if(! is.null(fill)) {
+		shape::filledshape(as.xym(xy1), as.xym(xy2), lcol = NA, col = fill, lwd = lwd.fill);
+	}
+	if(length(col) == 1) col = c(col, col);
+	if(length(lwd) == 1) lwd = c(lwd, lwd);
+	polygon(xy1, border = col[1], lwd = lwd[1], ...);
+	polygon(xy2, border = col[2], lwd = lwd[2], ...);
+}
+
