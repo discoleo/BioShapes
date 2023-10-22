@@ -181,7 +181,7 @@ test.ChainsCombined = function(n = 15, phi = pi/n) {
 ### Test Ellipses
 # - Range & Tangents to given points;
 #' @export
-test.ellipse.tan = function(x = c(0.5), r = c(1,3), phi = 0, center = c(0,0),
+test.ellipse.tan = function(x = c(2.5, 1.5), r = c(1,3), phi = 0, center = c(2,0),
 		dx = c(-2, 2), N = 64, col.xlim = "#FF6496", lbl = "Tangents") {
 	x0 = range.ellipse.x(r=r, phi=phi, center=center);
 	xx = seq(x0[1], x0[2], length.out = N);
@@ -193,8 +193,25 @@ test.ellipse.tan = function(x = c(0.5), r = c(1,3), phi = 0, center = c(0,0),
 	sol = sapply(x, function(x) {
 		solve.ellipse.all(x=x, r=r, phi=phi, center=center);
 	});
-	idNA = which(is.na(sol[1,]));
-	if(length(idNA) > 0) warning("NAs for solutions: ", paste0(idNA, collapse = ", "));
+	idNA  = which(is.na(sol[1,]));
+	hasNA = length(idNA) > 0;
+	if(hasNA) warning("NAs for solutions: ", paste0(idNA, collapse = ", "));
+	# Arc:
+	toArc = function(x, y) {
+		arc.ellipse(rep(x, each=2), as.vector(y), r=r, center=center, theta = phi);
+	}
+	arc.phi = if(hasNA) {
+		toArc(x[- idNA], sol[, - idNA]);
+	} else toArc(x, sol);
+	arc.phi = matrix(arc.phi, nrow=2);
+	lapply(seq(1, length.out = ncol(arc.phi)), function(nc) {
+		arc.phi = arc.phi[, nc];
+		if(arc.phi[2] - arc.phi[1] >= pi) {
+			tmp = arc.phi[1]; arc.phi[1] = arc.phi[2]; arc.phi[2] = tmp;
+		}
+		plot.ellipse(r=r, center=center, theta = phi, phi = arc.phi,
+			lwd = 2, col = "#6432E0");
+	})
 	# Slope:
 	sl = sapply(seq_along(x), function(id) {
 		slope.ellipse(x[id], y = sol[, id], r=r, phi=phi, center=center);
@@ -207,6 +224,7 @@ test.ellipse.tan = function(x = c(0.5), r = c(1,3), phi = 0, center = c(0,0),
 		points(rep(x[id], 2), yi, col = "red");
 	}
 	abline(v = x0, col=col.xlim);
+	abline(v = x, lty = 2, col = "#A0D032");
 	if( ! is.null(lbl)) {
 		text(3, 0, labels = lbl);
 	}

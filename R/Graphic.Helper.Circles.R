@@ -373,6 +373,18 @@ solve.ellipse.v0 = function(x, coef, tol = 1E-10) {
 	return(y);
 }
 
+### Arc Angles
+# - computes Start & Stop-Angles;
+#' @export
+arc.ellipse = function(x, y, r = c(1,2), center = c(0,0), theta = 0) {
+	x0 = x - center[1];
+	y0 = y - center[2];
+	sn = sin(theta); cs = cos(theta);
+	B  = matrix(c(r[1]*cs, r[1]*sn, - r[2]*sn, r[2]*cs), nrow=2);
+	trig.phi = solve(B, rbind(x0, y0));
+	atan2(trig.phi[2,], trig.phi[1,]);
+}
+
 
 ### Ellipse:
 # - passing through (x1, y1) & (x2, y2);

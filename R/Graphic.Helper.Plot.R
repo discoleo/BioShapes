@@ -49,12 +49,12 @@ plot.circle.arc = function(r, center, phi, col=1, fill=NULL, ...) {
 }
 
 #' @export
-plot.ellipse = function(r, center, phi = c(0, pi), th = 0, lwd = 1,
+plot.ellipse = function(r, center, phi = c(0, pi), theta = 0, lwd = 1,
 		col = 1, fill = NULL, scale = 1, ..., N = 64) {
 	# shape::plotellipse(rx = r[1], ry = r[2], mid = center, angle = th * 180 / pi,
 	#	from = phi[1], to = phi[2], lwd=lwd, lcol = col, col = fill, ...);
 	dr = max(r) / N;
-	xy = shape::getellipse(rx = r[1], ry = r[2], mid = center, angle = th * 180 / pi,
+	xy = shape::getellipse(rx = r[1], ry = r[2], mid = center, angle = theta * 180 / pi,
 		from = phi[1], to = phi[2], dr = dr);
 	if(scale != 1) xy = shape::rotatexy(xy, angle = 0, mid = center, asp = TRUE);
 	if ( ! is.null(fill))
