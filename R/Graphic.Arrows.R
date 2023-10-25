@@ -1,7 +1,6 @@
 #######################################
 #
 # Title: BioShapes
-#
 # Maintainer: L. Mada
 #
 # https://github.com/discoleo/BioShapes
@@ -14,7 +13,7 @@
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
 #   in collaboration with Syonic SRL
-# GitHub: https://github.com/Adi131313/BioShapes
+#   [old] GitHub: https://github.com/Adi131313/BioShapes
 #
 # 2. Bachelor Thesis: Darian Voda (2021-2022)
 
@@ -51,10 +50,10 @@ arrow = function(x, y, type = "Simple", d=1, lwd=1, ...) {
 
 ### Arrow Tail:
 #' @export
-arrowTail = function(x, y, d.lines, lwd=1, slope=NULL) {
+arrowTail = function(x, y, d.lines, lwd=1, slope=NULL, scale = 1) {
   if(is.null(slope)) slope = slope(x, y);
   if(any(d.lines != 0)) {
-    arrTail = shiftLine(x, y, d = d.lines, slope=slope);
+    arrTail = shift.ortho(x, y, d = d.lines, slope=slope, scale=scale);
   } else {
     arrTail = list(x=x, y=y);
   }
@@ -82,7 +81,7 @@ arrowSimple = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
                lwd = h.lwd);
 
   ### ArrowTail
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=ahead, col=col);
   class(lst) = c("arrow", "list");
