@@ -346,6 +346,77 @@ rotate = function(x, y, slope, p1=c(0,0)) {
 }
 
 
+######################
+
+### Intersect Function
+
+# Intersection between 2 line segments
+# Returns:
+#  - (x, y) of intersection(s);
+#  - corresponding t1, t2, and
+#  - n = number of (virtual) intersection points (0, 1, or 2 if overlapping);
+# Real intersection only if: 0 <= t1 <= 1 & 0 <= t2 <= 1;
+#' @export
+intersect.lines = function(x, y, xB, yB) {
+	xA1 = x[1]; xA2 = x[2]; xB1 = xB[1]; xB2 = xB[2];
+	yA1 = y[1]; yA2 = y[2]; yB1 = yB[1]; yB2 = yB[2];
+	#
+	dyB = yB1 - yB2; dxB = xB1 - xB2;
+	dyA = yA1 - yA2; dxA = xA1 - xA2;
+	#
+	div = dyB*dxA - dyA*dxB;
+	# TODO: remaining special cases;
+	if(div == 0) {
+		# Parallel lines
+		d = (xA1*yA2 - xA2*yA1)*dxB - (xB1*yB2 - xB2*yB1)*dxA;
+		if(d == 0) {
+			# Overlapping lines
+			if(dxA == 0) {
+				t1 = c(yB1 - yA2, yB2 - yA2) / dyA;
+			} else {
+				t1 = c(xB1 - xA2, xB2 - xA2) / dxA;
+			}
+			if(t1[1] > t1[2]) { tmp = t1[1]; t1[1] = t1[2]; t1[2] = tmp; }
+			x = NA; y = NA; t1c = NA;
+			if(t1[1] < 0) {
+				# t1[1] = after start of 2nd segment;
+				if(t1[2] >= 0) {
+					t1c = c(0, min(1, t1[2]));
+				}
+			} else if(t1[1] <= 1) {
+				t1c = c(t1[1], min(1, t1[2]));
+			}
+			if( ! is.na(t1c[1])) {
+				x = xA1*t1c + (1-t1c)*xA2;
+				y = yA1*t1c + (1-t1c)*yA2;
+			}
+			return(list(x=x, y=y, t1=t1, t2=Inf, n=2));
+		} else {
+			return(list(x=NA, y=NA, t1=Inf, t2=Inf, n=0));
+		}
+	}
+	# Computations:
+	t1  = (yA2 - yB1)*xB2 + dyB*xA2 + (yB2 - yA2)*xB1;
+	t1  = - t1 / div;
+	#
+	div = dyB;
+	t2  = yA2 - yB2 + dyA*t1;
+	# TODO: div == 0
+	t2  = t2 / div;
+	#
+	x = xA1*t1 + (1-t1)*xA2;
+	y = yA1*t1 + (1-t1)*yA2;
+	return(list(x=x, y=y, t1=t1, t2=t2, n=1));
+}
+
+#' @export
+is.intersect.lines = function(x) {
+	any(x$t1 >=0 & x$t1 <= 1 & x$t2 >= 0 & x$t2 <= 1);
+}
+
+
+###################
+
 ### Helix / Spirals
 
 ### Radians: between [0, 2*pi);

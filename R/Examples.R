@@ -25,6 +25,73 @@ test = function(...) {
 	UseMethod("test");
 }
 
+######################
+
+### Line Intersections
+
+#' @export
+test.lines.simple = function(x = c(1, 5), y = c(1, 9), xB = c(2,7), yB = c(7, 3),
+		lty = c(1, 2), col = c("black", "blue", "green"), ylim = c(0, 12)) {
+	if(inherits(x, "matrix")) {
+		y = x[,2];
+		xB = x[c(3,4)]; xA = x[c(1,2)];
+		yB = y[c(3,4)]; yA = y[c(1,2)];
+	} else { xA = x; yA = y; }
+	plot.base(ylim=ylim);
+	lines(xA, yA, col = col[1], lty = lty[[1]]);
+	lines(xB, yB, col = col[2], lty = lty[[2]]);
+	p = intersect.lines(xA, yA, xB, yB);
+	# NONE of the segments:
+	if(any(is.na(p$x))) {
+		text(sum(xA, xB)/4, sum(yA, yB)/4, "NO", col = "red");
+	}
+	points(p$x, p$y, col = col[3]);
+}
+# Helper:
+test.lines.list = function(xy, lty = c(1, 2), col = c("black", "blue", "green")) {
+	plotf = function(xA, xB, yA, yB) {
+		plot.base(ylim = c(0, 12))
+		lines(xA, yA, col = col[1], lty = lty[[1]]);
+		lines(xB, yB, col = col[2], lty = lty[[2]]);
+		p = intersect.lines(xA, yA, xB, yB);
+		if(any(is.na(p$x))) {
+			text(sum(xA, xB)/4, sum(yA, yB)/4, "NO", col = "red");
+		}
+		points(p$x, p$y, col = col[3]);
+	}
+	lapply(xy, function(xy) {
+		plotf(xy$xA, xy$xB, xy$yA, xy$yB);
+	})
+	invisible();
+}
+#' @export
+test.lines.special = function(lty = c(1, 2), col = c("black", "blue", "green")) {
+	par.old = par(mfrow = c(2,2))
+
+	### Test
+	lst = list(
+		list(xA = c(1,6),yA = c(1,8),
+			xB = c(1,7), yB = c(4,2)),
+		### Special Cases:
+		# Overlap
+		list(xA = c(1,3), yA = c(1,5),
+			xB = c(2,6), yB = c(3,11)),
+		# NO
+		list(xA = c(1,3), yA = c(1,5),
+			xB = c(4,6), yB = c(7,11)),
+		# Overlap
+		list(xA = c(1,6), yA = c(1,11),
+			xB = c(3,5), yB = c(5,9))
+	);
+	
+	test.lines.list(lst);
+	
+	par(par.old);
+	invisible();
+}
+
+#####################
+
 ### Various BioShapes
 #' @export
 examples.bioshapes = function(col = list("#48B000", c("#FFFF80", "#9648C0"),
