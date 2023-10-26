@@ -1,7 +1,6 @@
 #######################################
 #
 # Title: BioShapes
-#
 # Maintainer: L. Mada
 #
 # https://github.com/discoleo/BioShapes
@@ -14,7 +13,7 @@
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
 #   in collaboration with Syonic SRL
-# GitHub: https://github.com/Adi131313/BioShapes
+#   [old] GitHub: https://github.com/Adi131313/BioShapes
 #
 # 2. Bachelor Thesis: Darian Voda (2021-2022)
 
@@ -29,10 +28,10 @@
 examples.arrows()
 
 
-####################
-#### Bio-Shapes ####
+##################
+### Bio-Shapes ###
 
-examples.bioshapes()
+example.bioshapes()
 
 
 ### Liposomes

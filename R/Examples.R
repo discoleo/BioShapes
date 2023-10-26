@@ -94,7 +94,7 @@ test.lines.special = function(lty = c(1, 2), col = c("black", "blue", "green")) 
 
 ### Various BioShapes
 #' @export
-examples.bioshapes = function(col = list("#48B000", c("#FFFF80", "#9648C0"),
+example.bioshapes = function(col = list("#48B000", c("#FFFF80", "#9648C0"),
 		1, c("blue", "red"), c("#649664", "orange")),
 		lwd=2, y.txt = c(6, 0), axt=c(1,2)) {
 	if(length(lwd) == 1) lwd = rep(lwd, 5);

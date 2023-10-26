@@ -74,20 +74,32 @@ ring = function(n, R = c(5, 7), center = c(0,0),
 ###################
 
 #### Liposomes ####
+# n = number of circles in each of the liposome layers;
+# d = distance between the lipids of the bi-layer;
 #' @export
-liposomes = function(n, r, center=c(0, 0), phi=c(0, 0), d=0, ...){
+liposomes = function(n, r = 0.25, center=c(0, 0), phi=c(0, 0), d = 0, ...){
   C1 = circles.OnCircle(n=n[1], r=r, center=center, phi=phi[1])
   C2 = circles.OnCircle(n=n[2], r=r, center=center, phi=phi[2])
   R1 = attr(C1, "R")
   R2 = attr(C2, "R")
+	l = liposomes.scl(r, R1, R2, n=n, phi=phi, center=center, d=d);
+	# Liposome:
+	# TODO: move to native bioshape class;
+	obj = list(C1=C1, C2=C2, L=l);
+	class(obj) = c("liposome", "list");
+	return(obj);
+}
+# Lipid side-chains
+liposomes.scl = function(r, R1, R2, n, phi, center, d) {
   R1 = R1 - r
   R2 = R2 + r
-  d2 = (R1-R2-d)/2
+  # d2 = length of lipid side-chains;
+  d2 = (R1 - R2 - d) / 2;
   p1 = pointsCircle(n=n[1], r=R1, phi=phi[1], center=center)
   p2 = pointsCircle(n=n[2], r=R2, phi=phi[2], center=center)
   fn = function(id, p1, p2, d){
     p1 = c(p1$x[id], p1$y[id])
-    slope = slope(x=c(p1[1], p2[1]), y=c(p1[2], p2[2]))
+    slope = slope(x = c(p1[1], p2[1]), y = c(p1[2], p2[2]))
     if(p1[1] > center[1]){
       d = -d;
     }
@@ -101,10 +113,7 @@ liposomes = function(n, r, center=c(0, 0), phi=c(0, 0), d=0, ...){
   l2 = do.call(rbind, l2)
   l2$id = l2$id + nrow(l1)
   l = rbind(l1, l2);
-  # Liposome:
-  obj = list(C1=C1, C2=C2, l=l);
-  class(obj) = c("liposome", "list");
-  return(obj);
+  return(l);
 }
 
 
