@@ -76,21 +76,67 @@ ring = function(n, R = c(5, 7), center = c(0,0),
 #### Liposomes ####
 # n = number of circles in each of the liposome layers;
 # d = distance between the lipids of the bi-layer;
+# d.lsc = distance between the 2 lipid side-chains;
 #' @export
-liposomes = function(n, r = 0.25, center=c(0, 0), phi=c(0, 0), d = 0, ...){
-  C1 = circles.OnCircle(n=n[1], r=r, center=center, phi=phi[1])
-  C2 = circles.OnCircle(n=n[2], r=r, center=center, phi=phi[2])
-  R1 = attr(C1, "R")
-  R2 = attr(C2, "R")
-	l = liposomes.scl(r, R1, R2, n=n, phi=phi, center=center, d=d);
+liposomes = function(n, r = 0.25, center=c(0, 0), phi=c(0, 0),
+		d = 0.025, d.lsc = 0,
+		col = NULL, fill = NULL, ...) {
+	C1 = circles.OnCircle(n=n[1], r=r, center=center, phi=phi[1])
+	C2 = circles.OnCircle(n=n[2], r=r, center=center, phi=phi[2])
+	R1 = attr(C1, "R");
+	R2 = attr(C2, "R");
+	if(d.lsc == 0) {
+		l = liposomes.lsc1(r, R1, R2, n=n, phi=phi, center=center, d=d);
+	} else {
+		l = liposomes.lsc2(r, R1, R2, n=n, phi=phi, center=center, d=d, d.lsc=d.lsc);
+	}
 	# Liposome:
-	# TODO: move to native bioshape class;
+	# TODO: convert to native bioshape class;
 	obj = list(C1=C1, C2=C2, L=l);
 	class(obj) = c("liposome", "list");
 	return(obj);
 }
 # Lipid side-chains
-liposomes.scl = function(r, R1, R2, n, phi, center, d) {
+liposomes.lsc2 = function(r, R1, R2, n, phi, center, d = 0.025, d.lsc = 0.075) {
+	# d2 = length of lipid side-chains;
+	d2  = (R1 - R2 - d) / 2 - r;
+	dth = asin(d.lsc / (2 * r)); # half angle
+	ff = function(n, R, phi, dR, dphi) {
+		thC = seq(2, 2*n, by=2) * pi / n + phi;
+		thL = thC + dphi;
+		# Start Point
+		pS  = list(
+			x = R * cos(thC) + center[1],
+			y = R * sin(thC) + center[2]);
+		pS1 = list(
+			x = r * cos(thL + dth) + pS$x,
+			y = r * sin(thL + dth) + pS$y);
+		pS2 = list(
+			x = r * cos(thL - dth) + pS$x,
+			y = r * sin(thL - dth) + pS$y);
+		pS = list(x = c(pS1$x, pS2$x), y = c(pS1$y, pS2$y));
+		# End Point
+		RE  = R - dR;
+		pE  = list(
+			x = RE * cos(thC) + center[1],
+			y = RE * sin(thC) + center[2]);
+		pE1 = list(
+			x = r * cos(thL + dth) + pE$x,
+			y = r * sin(thL + dth) + pE$y);
+		pE2 = list(
+			x = r * cos(thL - dth) + pE$x,
+			y = r * sin(thL - dth) + pE$y);
+		pE = list(x = c(pE1$x, pE2$x), y = c(pE1$y, pE2$y));
+		data.frame(x = c(pS$x, pE$x), y = c(pS$y, pE$y),
+			id = rep(seq(2*n), 2));
+	}
+	# Side Chains:
+	L1 = ff(n[1], R1, phi[1], dR =  d2, dphi = pi);
+	L2 = ff(n[2], R2, phi[2], dR = -d2, dphi = 0);
+	L = list(L1 = L1, L2 = L2);
+	return(as.bioshape(L));
+}
+liposomes.lsc1 = function(r, R1, R2, n, phi, center, d = 0.125) {
   R1 = R1 - r
   R2 = R2 + r
   # d2 = length of lipid side-chains;

@@ -33,6 +33,8 @@ examples.arrows()
 
 example.bioshapes()
 
+example.bioshapes(n.lipo = c(32, 15), d.lsc = 0.075, lwd = c(1.2, 2,2,2,2))
+
 
 ### Liposomes
 
