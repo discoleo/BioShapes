@@ -108,25 +108,19 @@ liposomes.lsc2 = function(r, R1, R2, n, phi, center, d = 0.025, d.lsc = 0.075) {
 		pS  = list(
 			x = R * cos(thC) + center[1],
 			y = R * sin(thC) + center[2]);
-		pS1 = list(
-			x = r * cos(thL + dth) + pS$x,
-			y = r * sin(thL + dth) + pS$y);
-		pS2 = list(
-			x = r * cos(thL - dth) + pS$x,
-			y = r * sin(thL - dth) + pS$y);
-		pS = list(x = c(pS1$x, pS2$x), y = c(pS1$y, pS2$y));
+		rxp = r * cos(thL + dth); ryp = r * sin(thL + dth);
+		rxn = r * cos(thL - dth); ryn = r * sin(thL - dth);
+		pS1 = list(x = rxp + pS$x, y = ryp + pS$y);
+		pS2 = list(x = rxn + pS$x, y = ryn + pS$y);
+		pS  = list(x = c(pS1$x, pS2$x), y = c(pS1$y, pS2$y));
 		# End Point
 		RE  = R - dR;
 		pE  = list(
 			x = RE * cos(thC) + center[1],
 			y = RE * sin(thC) + center[2]);
-		pE1 = list(
-			x = r * cos(thL + dth) + pE$x,
-			y = r * sin(thL + dth) + pE$y);
-		pE2 = list(
-			x = r * cos(thL - dth) + pE$x,
-			y = r * sin(thL - dth) + pE$y);
-		pE = list(x = c(pE1$x, pE2$x), y = c(pE1$y, pE2$y));
+		pE1 = list(x = rxp + pE$x, y = ryp + pE$y);
+		pE2 = list(x = rxn + pE$x, y = ryn + pE$y);
+		pE  = list(x = c(pE1$x, pE2$x), y = c(pE1$y, pE2$y));
 		data.frame(x = c(pS$x, pE$x), y = c(pS$y, pE$y),
 			id = rep(seq(2*n), 2));
 	}
