@@ -1,20 +1,21 @@
-###################
-#
-# Bachelor Thesis
+#######################################
 #
 # Title: BioShapes
+# Maintainer: L. Mada
 #
-# Candidate: Adrian Cotoc
+# https://github.com/discoleo/BioShapes
+#
+# Continuation of:
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
+#   in collaboration with Syonic SRL
+#   [old] GitHub: https://github.com/Adi131313/BioShapes
 #
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
-# GitHub: https://github.com/Adi131313/BioShapes
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
 
 
 ### Functions to Generate Objects
@@ -130,7 +131,33 @@ liposomes.lsc2 = function(r, R1, R2, n, phi, center, d = 0.025, d.lsc = 0.075) {
 	L = list(L1 = L1, L2 = L2);
 	return(as.bioshape(L));
 }
-liposomes.lsc1 = function(r, R1, R2, n, phi, center, d = 0.125) {
+liposomes.lsc1 = function(r, R1, R2, n, phi, center, d = 0.025) {
+	# d2 = length of lipid side-chains;
+	d2  = (R1 - R2 - d) / 2 - r;
+	ff = function(n, R, phi, dR, dphi) {
+		thC = seq(2, 2*n, by=2) * pi / n + phi;
+		thL = thC + dphi;
+		csC = cos(thC); snC = sin(thC); # Big Circle
+		csL = cos(thL); snL = sin(thL); # Line
+		# Start Point
+		pS  = list(
+			x = r * csL + R * csC + center[1],
+			y = r * snL + R * snC + center[2]);
+		# End Point
+		pE  = list(
+			x = pS$x - dR * csC,
+			y = pS$y - dR * snC);
+		data.frame(x = c(pS$x, pE$x), y = c(pS$y, pE$y),
+			id = rep(seq(n), 2));
+	}
+	# Side Chains:
+	L1 = ff(n[1], R1, phi[1], dR =  d2, dphi = pi);
+	L2 = ff(n[2], R2, phi[2], dR = -d2, dphi = 0);
+	L = list(L1 = L1, L2 = L2);
+	return(as.bioshape(L));
+}
+# TODO: remove;
+liposomes.lsc1_old = function(r, R1, R2, n, phi, center, d = 0.125) {
   R1 = R1 - r
   R2 = R2 + r
   # d2 = length of lipid side-chains;

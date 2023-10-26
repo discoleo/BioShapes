@@ -94,7 +94,7 @@ test.lines.special = function(lty = c(1, 2), col = c("black", "blue", "green")) 
 
 ### Various BioShapes
 #' @export
-example.bioshapes = function(n.lipo = c(30, 17), d.lsc = 0,
+example.bioshapes = function(n.lipo = c(30, 17), d.lsc = 0, d.lipo = 0.1,
 		col = list("#48B000", c("#FFFF80", "#9648C0"), 1,
 			c("blue", "red"), c("#649664", "orange")),
 		lwd = 2, y.txt = c(6, 0), axt = c(1,2)) {
@@ -106,7 +106,7 @@ example.bioshapes = function(n.lipo = c(30, 17), d.lsc = 0,
 
 	### Ex 1: Liposome
 	lst = liposomes(n.lipo, r = 0.15, phi = c(0, pi/34), center = c(0.5, 8),
-		d = 0.1, d.lsc = d.lsc);
+		d = d.lipo, d.lsc = d.lsc);
 	lines(lst, lwd=lwd, col=col[[1]]);
 	text(0.5, y.txt[1], "Liposome");
 
