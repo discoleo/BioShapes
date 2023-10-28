@@ -57,8 +57,48 @@ arrowTail = function(x, y, d.lines, lwd=1, slope=NULL, scale = 1) {
   } else {
     arrTail = list(x=x, y=y);
   }
-  arrTail = list(arrTail, lwd=lwd);
+  arrTail = list(xy = arrTail, lwd=lwd);
   return(arrTail)
+}
+
+# Tail = simple lines;
+# xy  = data.frame with the Tail;
+# xyH = data.frame with the Head;
+intersect.arrow = function(xy, xyH) {
+	idT = unique(xy$id); print(xy)
+	if(length(idT) == 0) return(xy);
+	isList = TRUE;
+	if(inherits(xyH, "data.frame")) {
+		isList = FALSE;
+		idH = unique(xyH$id);
+	} else {
+		len = length(xyH$x);
+		idH = if(len > 0) seq(len) else numeric(0);
+	}
+	if(length(idH) == 0) return(xy);
+	print("Int")
+	xyT = lapply(idT, function(id) {
+		nR = which(xy$id == id);
+		x  = xy$x[nR]; y = xy$y[nR];
+		for(idZ in idH) {
+			if(isList) {
+				idZ = c(idZ, idZ + 1);
+				xHi = xyH$x[idZ]; yHi = xyH$y[idZ];
+			} else {
+				xHi = xyH$x[idZ]; yHi = xyH$y[idZ];
+			}
+			xyI = intersect.lines(x, y, xHi, yHi);
+			if(is.intersect.lines(xyI)) {
+				x[2] = xyI$x[1];
+				y[2] = xyI$y[1];
+				xy = data.frame(x = x, y = y, id = id);
+				return(xy);
+			}
+		}
+		return(data.frame(x = x, y = y, id = id));
+	});
+	xyT = do.call(rbind, xyT);
+	return(xyT);
 }
 
 ### Arrow Types
@@ -82,6 +122,9 @@ arrowSimple = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
 
   ### ArrowTail
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
+  if(any(d.lines != 0)) {
+	arrow$xy = intersect.arrow(arrow$xy, ahead[[1]]);
+  }
   ### Full Arrow
   lst = list(Arrow=arrow, Head=ahead, col=col);
   class(lst) = c("arrow", "list");

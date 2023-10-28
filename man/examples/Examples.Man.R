@@ -25,7 +25,9 @@
 ################
 #### Arrows ####
 
-examples.arrows()
+example.arrows()
+
+example.arrows(dx = c(0, 0.5))
 
 
 ##################
