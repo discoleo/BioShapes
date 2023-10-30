@@ -19,16 +19,17 @@
 ### Create new plot window:
 # Convenience function:
 #' @export
-plot.base = function(xlim=c(-2,10), ylim=c(-2,10), axt=c(1,2), asp=1, set.par=TRUE) {
+plot.base = function(xlim=c(-2,10), ylim=c(-2,10), axt=c(1,2), asp=1, set.par=TRUE,
+		cex.axis = 1, ...) {
   hasAxis = ! is.null(axt);
   if(set.par) {
     mar = 0.25 + if(hasAxis) c(2,2,0,0) else c(0,0,0,0);
     par.old = par(mar = mar);
   } else par.old = NA;
   plot.new()
-  plot.window(xlim=xlim, ylim=ylim, asp=asp)
+  plot.window(xlim=xlim, ylim=ylim, asp=asp, ...);
   if(hasAxis) {
-    lapply(axt, function(a) axis(a));
+    lapply(axt, function(a) axis(a, cex.axis = cex.axis));
   }
   invisible(par.old);
 }

@@ -65,7 +65,7 @@ arrowTail = function(x, y, d.lines, lwd=1, slope=NULL, scale = 1) {
 # xy  = data.frame with the Tail;
 # xyH = data.frame with the Head;
 intersect.arrow = function(xy, xyH) {
-	idT = unique(xy$id); print(xy)
+	idT = unique(xy$id);
 	if(length(idT) == 0) return(xy);
 	isList = TRUE;
 	if(inherits(xyH, "data.frame")) {
@@ -76,7 +76,6 @@ intersect.arrow = function(xy, xyH) {
 		idH = if(len > 0) seq(len) else numeric(0);
 	}
 	if(length(idH) == 0) return(xy);
-	print("Int")
 	xyT = lapply(idT, function(id) {
 		nR = which(xy$id == id);
 		x  = xy$x[nR]; y = xy$y[nR];
