@@ -322,6 +322,8 @@ measure = function(x, y, type=c("in", "out"), lty=1, lwd=1, col=1,
 arrowX = function(x, y, d=0.5, lwd=1, d.head=c(-d, d), d.lines=0,
                   h.lwd=lwd, col="red", scale=1, join=0) {
   slope = slope(x, y);
+  qd = which.quadrant(x, y);
+  d  = if(qd == 1 || qd == 4) d else - d;
   ### Head
   arrHead = arrowHeadX(x[2], y[2], slope=slope, d = - d, dV = d.head, scale=scale);
   ahead   = list(H = arrHead, lwd = h.lwd);
