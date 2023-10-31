@@ -1,22 +1,24 @@
-###################
-#
-# Bachelor Thesis
+#######################################
 #
 # Title: BioShapes
+# Maintainer: L. Mada
 #
-# Candidate: Adrian Cotoc
+# https://github.com/discoleo/BioShapes
+#
+# Continuation of:
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
-#
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
+#   in collaboration with Syonic SRL
+#   GitHub: https://github.com/Adi131313/BioShapes
 #
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
-# GitHub: https://github.com/Adi131313/BioShapes
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
 
-### Functions to Generate arrowHeadSimple
+
+### Functions to Generate Arrow-Heads
+
 
 #####################
 
@@ -53,11 +55,11 @@ arrowHeadDiamond = function(x, y, slope, d=-1, dV=c(d, -d), scale=1) {
 #' @export
 arrowHeadDouble = function(x, y, slope, d=-1, dH=d, dV=c(dH, -dH), scale=1) {
   # First Arrow:
-  arrHead = list(arrowHeadSimple(x, y, slope=slope, d = dH, dV=dV, scale=scale));
+  arrHead = list(H1 = arrowHeadSimple(x, y, slope=slope, d = dH, dV=dV, scale=scale));
   # Double Arrow:
   # - firstly shift point:
   p2 = shiftPoint(c(x, y), slope=slope, d=d, scale=scale);
-  arrHead2 = list(arrowHeadSimple(p2[1], p2[2], slope=slope, d = dH, dV=dV, scale=scale));
+  arrHead2 = list(H2 = arrowHeadSimple(p2[1], p2[2], slope=slope, d = dH, dV=dV, scale=scale));
   arrHead  = c(arrHead, arrHead2);
   return(arrHead);
 }
@@ -65,12 +67,12 @@ arrowHeadDouble = function(x, y, slope, d=-1, dH=d, dV=c(dH, -dH), scale=1) {
 ### Inverted ArrowHead: ---<
 # (x, y) = potential tip of the ArrowHead (when d <= 0);
 #' @export
-arrowHeadInverted = function(x, y, slope, d=-1, dV=c(-d, d), scale=1) {
+arrowHeadInverted = function(x, y, slope, d=-1, dV=c(-d, d), isTip = TRUE, scale=1) {
   pV = c(x, y);
   p  = if(d == 0) matrix(pV, nrow=1, ncol=2)
   else shiftPoint(pV, slope=slope, d=d, scale=scale);
   #
-  if(d <= 0) {
+  if(isTip) {
     pA = shiftLine(pV, slope=slope, d=dV, scale=scale);
     pV = p;
   } else {

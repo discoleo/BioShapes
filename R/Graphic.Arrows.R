@@ -73,7 +73,7 @@ intersect.arrow = function(xy, xyH) {
 		idH = unique(xyH$id);
 	} else {
 		len = length(xyH$x);
-		idH = if(len > 0) seq(len) else numeric(0);
+		idH = if(len > 0) seq(len - 1) else numeric(0);
 	}
 	if(length(idH) == 0) return(xy);
 	xyT = lapply(idT, function(id) {
@@ -84,7 +84,8 @@ intersect.arrow = function(xy, xyH) {
 				idZ = c(idZ, idZ + 1);
 				xHi = xyH$x[idZ]; yHi = xyH$y[idZ];
 			} else {
-				xHi = xyH$x[idZ]; yHi = xyH$y[idZ];
+				isZ = xyH$id == idZ;
+				xHi = xyH$x[isZ]; yHi = xyH$y[isZ];
 			}
 			xyI = intersect.lines(x, y, xHi, yHi);
 			if(is.intersect.lines(xyI)) {
@@ -116,7 +117,7 @@ arrowSimple = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
   sg = if(qd == 1 || qd == 4) 1 else -1;
   d  = sg * d;
   ### Head
-  ahead = list(arrowHeadSimple(x[2], y[2], slope=slope, d=d, dV = d.head, scale=scale),
+  ahead = list(H = arrowHeadSimple(x[2], y[2], slope=slope, d=d, dV = d.head, scale=scale),
                lwd = h.lwd);
 
   ### ArrowTail
@@ -138,6 +139,9 @@ arrowDouble = function(x, y, d=-0.5, lwd=1, d.head=-1, dV=c(-d.head, d.head), d.
                        h.lwd=lwd, col="red", scale=1, join=0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
+  qd = which.quadrant(x, y);
+  sg = if(qd == 1 || qd == 4) 1 else -1;
+  d  = sg * d; d.head = sg * d.head;
   ### Head
   arrHead = arrowHeadDouble(x[2], y[2], slope=slope, d=d, dH=d.head, dV=dV, scale=scale);
   arrHead$lwd = h.lwd;
@@ -184,20 +188,26 @@ arrowDoubleInverted = function(x, y, d=-0.25, lwd=1, dH=0.5, d.head=c(-dH, dH), 
 }
 
 ### Inverted Head: ---<
+# if d <= 0: Head is within arrow-boundary;
 #' @export
 arrowInverted = function(x, y, d=-1, lwd=1, d.head=c(-d,d),
                          d.lines=0, h.lwd=lwd, col="red", scale=1, join=0) {
   slope = slope(x, y);
+  qd = which.quadrant(x, y);
+  isOK = (qd == 1 || qd == 4);
+  ds = if(isOK) d else -d;
+  tp = (d <= 0); # within boundary;
   ### Head
-  arrHead = arrowHeadInverted(x[2], y[2], slope=slope, d=d, dV=d.head, scale=scale);
-  arrHead = list(arrHead, lwd=h.lwd);
+  arrHead = arrowHeadInverted(x[2], y[2], slope=slope, d=ds, dV=d.head,
+		isTip = tp, scale=scale);
+  arrHead = list(H = arrHead, lwd=h.lwd);
   ### Arrow Tail
-  if(d <= 0) {
+  if(tp) {
     p = arrHead[[1]];
     x[2] = p$x[[2]];
     y[2] = p$y[[2]];
   }
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -314,12 +324,18 @@ arrowX = function(x, y, d=0.5, lwd=1, d.head=c(-d, d), d.lines=0,
   slope = slope(x, y);
   ### Head
   arrHead = arrowHeadX(x[2], y[2], slope=slope, d = - d, dV = d.head, scale=scale);
-  ahead   = list(arrHead, lwd = h.lwd);
-  midpoint = attr(arrHead, "Mid")
+  ahead   = list(H = arrHead, lwd = h.lwd);
+  midHxy  = attr(arrHead, "Mid");
   ### ArrowTail
-  x[2] = midpoint[1]
-  y[2] = midpoint[2]
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  x[2] = midHxy[1];
+  y[2] = midHxy[2];
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
+  if(any(d.lines != 0)) {
+		isSimple = nrow(arrHead) == 4;
+		xyH = if(isSimple) arrHead
+			else list(x = arrHead$x[c(4,5,6)], y = arrHead$y[c(4,5,6)]);
+		arrow$xy = intersect.arrow(arrow$xy, xyH);
+  }
   ### Full Arrow
   lst = list(Arrow=arrow, Head=ahead);
   class(lst) = c("arrow", "list");
