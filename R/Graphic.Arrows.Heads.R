@@ -53,11 +53,11 @@ arrowHeadDiamond = function(x, y, slope, d=-1, dV=c(d, -d), scale=1) {
 #' @export
 arrowHeadDouble = function(x, y, slope, d=-1, dH=d, dV=c(dH, -dH), scale=1) {
   # First Arrow:
-  arrHead = list(arrowHeadSimple(x, y, slope=slope, d = dH, dV=dV, scale=scale));
+  arrHead = list(H1 = arrowHeadSimple(x, y, slope=slope, d = dH, dV=dV, scale=scale));
   # Double Arrow:
   # - firstly shift point:
   p2 = shiftPoint(c(x, y), slope=slope, d=d, scale=scale);
-  arrHead2 = list(arrowHeadSimple(p2[1], p2[2], slope=slope, d = dH, dV=dV, scale=scale));
+  arrHead2 = list(H2 = arrowHeadSimple(p2[1], p2[2], slope=slope, d = dH, dV=dV, scale=scale));
   arrHead  = c(arrHead, arrHead2);
   return(arrHead);
 }
@@ -65,12 +65,12 @@ arrowHeadDouble = function(x, y, slope, d=-1, dH=d, dV=c(dH, -dH), scale=1) {
 ### Inverted ArrowHead: ---<
 # (x, y) = potential tip of the ArrowHead (when d <= 0);
 #' @export
-arrowHeadInverted = function(x, y, slope, d=-1, dV=c(-d, d), scale=1) {
+arrowHeadInverted = function(x, y, slope, d=-1, dV=c(-d, d), isTip = TRUE, scale=1) {
   pV = c(x, y);
   p  = if(d == 0) matrix(pV, nrow=1, ncol=2)
   else shiftPoint(pV, slope=slope, d=d, scale=scale);
   #
-  if(d <= 0) {
+  if(isTip) {
     pA = shiftLine(pV, slope=slope, d=dV, scale=scale);
     pV = p;
   } else {
