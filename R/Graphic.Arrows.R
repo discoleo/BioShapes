@@ -166,6 +166,8 @@ arrowDoubleInverted = function(x, y, d=-0.25, lwd=1, dH=0.5, d.head=c(-dH, dH), 
                                h.lwd=lwd, col="red", scale=1, join=0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  d  = if(isRQ) d else - d;
   ### Head
   arrHead = arrowHeadDoubleInverted(x[2], y[2], slope=slope, d=d, dH=dH, dV=d.head, scale=scale);
   midpoint = attr(arrHead, "Mid")
@@ -178,7 +180,7 @@ arrowDoubleInverted = function(x, y, d=-0.25, lwd=1, dH=0.5, d.head=c(-dH, dH), 
   }
   x[2] = midpoint[1]
   y[2] = midpoint[2]
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -193,8 +195,7 @@ arrowDoubleInverted = function(x, y, d=-0.25, lwd=1, dH=0.5, d.head=c(-dH, dH), 
 arrowInverted = function(x, y, d=-1, lwd=1, d.head=c(-d,d),
                          d.lines=0, h.lwd=lwd, col="red", scale=1, join=0) {
   slope = slope(x, y);
-  qd = which.quadrant(x, y);
-  isOK = (qd == 1 || qd == 4);
+  isOK  = is.quadrant.right(x, y);
   ds = if(isOK) d else -d;
   tp = (d <= 0); # within boundary;
   ### Head
@@ -226,6 +227,8 @@ arrowN = function(x, y, n=1, d=-0.5, lwd=1, h.lwd=lwd, d.head=c(-d, d), d.lines=
                   col="red", scale=1, join=0) {
   if(join > n) stop("Unsupported value for join!");
   slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  d = if(isRQ) d else - d;
   ### Head
   arrHead = arrowHeadN(x[2], y[2], slope=slope, n=n, d=d, dV=d.head, scale=scale);
   arrHead$lwd = h.lwd;
@@ -235,7 +238,7 @@ arrowN = function(x, y, n=1, d=-0.5, lwd=1, h.lwd=lwd, d.head=c(-d, d), d.lines=
   }
   x[2] = arrHead[[join]]$x[2];
   y[2] = arrHead[[join]]$y[2];
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -250,9 +253,11 @@ arrowN = function(x, y, n=1, d=-0.5, lwd=1, h.lwd=lwd, d.head=c(-d, d), d.lines=
 arrowT = function(x, y, d=0.2, lwd=1, d.head=c(-d, d), d.lines=0, h.lwd=lwd,
                   col="red", scale=1, join=0, lty=1) {
   slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  d = if(isRQ) d else - d;
   ### Head
   if(is.list(d.head)) {
-    ahead = lapply(seq(length(d.head)), function(id) {
+    ahead = lapply(seq_along(d.head), function(id) {
       arrowHeadT(x[2], y[2], slope=slope, dV=d.head[[id]], scale=scale)
     });
     ahead$lwd = h.lwd;
@@ -261,7 +266,7 @@ arrowT = function(x, y, d=0.2, lwd=1, d.head=c(-d, d), d.lines=0, h.lwd=lwd,
                  lwd = h.lwd);
   }
   ### ArrowTail
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=ahead);
   class(lst) = c("arrow", "list");
@@ -275,11 +280,13 @@ arrowT = function(x, y, d=0.2, lwd=1, d.head=c(-d, d), d.lines=0, h.lwd=lwd,
 arrowMeasure = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), dT=d.head, d.lines=0,
                         h.lwd=lwd, col="red", scale=1, join=0) {
   slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  d = if(isRQ) d else - d;
   ### Head
   arrHead = arrowHeadMeasure(x[2], y[2], slope=slope, d=d, dV = d.head, dT=dT, scale=scale);
   arrHead$lwd = h.lwd;
   ### ArrowTail
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -322,8 +329,8 @@ measure = function(x, y, type=c("in", "out"), lty=1, lwd=1, col=1,
 arrowX = function(x, y, d=0.5, lwd=1, d.head=c(-d, d), d.lines=0,
                   h.lwd=lwd, col="red", scale=1, join=0) {
   slope = slope(x, y);
-  qd = which.quadrant(x, y);
-  d  = if(qd == 1 || qd == 4) d else - d;
+  isRQ  = is.quadrant.right(x, y);
+  d = if(isRQ) d else - d;
   ### Head
   arrHead = arrowHeadX(x[2], y[2], slope=slope, d = - d, dV = d.head, scale=scale);
   ahead   = list(H = arrHead, lwd = h.lwd);
@@ -353,6 +360,8 @@ arrowCircle = function(x, y, r=0.5, lwd=1, d.lines=0,
                        h.lwd=lwd, col="red", fill=NULL, scale=1, join=0) {
   if(join > 3) stop("Unsupported value for join!");
   slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  r = if(isRQ) r else - r;
   ### Head
   arrHead = arrowHeadCircle(x[2], y[2], slope=slope, r=r, scale=scale);
   mid = attr(arrHead, "start")
@@ -364,7 +373,7 @@ arrowCircle = function(x, y, r=0.5, lwd=1, d.lines=0,
     x[2] = mid[1];
     y[2] = mid[2];
   }
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -375,9 +384,12 @@ arrowCircle = function(x, y, r=0.5, lwd=1, d.lines=0,
 
 #### Arrow Diamond ####
 #' @export
-arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0, h.lwd=lwd, col="red", scale=1, join=0) {
+arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0,
+		h.lwd=lwd, col="red", scale=1, join=0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  d = if(isRQ) d else - d;
   ### Head
   ahead  = list(arrowHeadDiamond(x[2], y[2], slope=slope, d=d, dV=d.head, scale=scale), lwd = h.lwd);
   ### ArrowTail
@@ -385,7 +397,7 @@ arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0, h.lwd=lw
     x[2] = ahead[[1]]$x[2];
     y[2] = ahead[[1]]$y[2];
   }
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=ahead);
   class(lst) = c("arrow", "list");
@@ -402,19 +414,22 @@ arrowSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
                        h.lwd=lwd, col="red", fill=NULL, scale=1, join=0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  isLow = (d < 0);
+  d = if(isRQ) d else - d;
   ### Head
   arrHead = arrowHeadSquare(x[2], y[2], slope=slope, d=d, dV=d.head, scale=scale);
   if( ! is.null(fill)) {
     arrHead$fill = fill;
     class(arrHead) = c("polygon", class(arrHead));
   }
-  ahead   = list(arrHead, lwd = h.lwd);
+  ahead = list(H = arrHead, lwd = h.lwd);
   ### ArrowTail
-  if((join < 2 && d <= 0) || (join == 2 && d > 0)) {
+  if(join < 2 && isLow) {
     mid  = attr(arrHead, "Mid");
     x[2] = mid[1]; y[2] = mid[2];
   }
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=ahead);
   class(lst) = c("arrow", "list");
@@ -429,17 +444,20 @@ arrowSolidSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
                             h.lwd=lwd, col="red", fill=col, scale=1, join=0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  isLow = (d < 0);
+  d = if(isRQ) d else - d;
   ### Head
   arrHead = arrowHeadSquare(x[2], y[2], slope=slope, d=d, dV=d.head, scale=scale);
   arrHead$fill = fill;
   class(arrHead) = c("polygon", class(arrHead));
-  ahead = list(arrHead, lwd = h.lwd);
+  ahead = list(H = arrHead, lwd = h.lwd);
   ### ArrowTail
   if(join < 2) {
     mid  = attr(arrHead, "Mid");
     x[2] = mid[1]; y[2] = mid[2];
   }
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=ahead);
   class(lst) = c("arrow", "list");
@@ -455,19 +473,22 @@ arrowTriangle = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
                          h.lwd=lwd, col="red", fill = NULL, scale=1, join=0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  isLow = (d < 0);
+  d = if(isRQ) d else - d;
   ### Head
   arrHead = arrowHeadTriangle(x[2], y[2], slope=slope, d=d, dV = d.head, scale=scale);
   mid     = attr(arrHead, "Mid");
-  arrHead = list(arrHead, lwd=h.lwd);
+  arrHead = list(H = arrHead, lwd = h.lwd);
   if( ! is.null(fill)) {
 	arrHead[[1]]$fill = fill;
 	class(arrHead[[1]]) = c("polygon", "list");
   }
   ### ArrowTail
-  if(join == 0 || join == 1) {
+  if(join < 2 && isLow) {
     x[2] = mid[1]; y[2] = mid[2];
   }
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");

@@ -59,13 +59,11 @@ example.arrows = function(dx = c(0, 0), new.plot = TRUE, lwd = 2) {
   text(3, yt,
        "Inverted", cex = 0.75);
 
-  # Diamond ArrowHead
+  # Double Lined Inverted ArrowHead
   x = c(5, 5) + dx;
-  d.head = c(-0.5, 0.5);
-  d = -0.5;
-  arrowDiamond(x, y, d=d, d.head=d.head, lwd=lwd, join=0);
-  text(5, yt,
-       "Diamond", cex = 0.75);
+  arrowDoubleInverted(x, y, d=-0.3, lwd=lwd);
+  text(5, yt, adj = c(0.5, 0.75),
+       "Double-Lined\nInverted", cex = 0.70);
 
   # T Shape ArrowHead
   x = c(7, 7) + dx;
@@ -103,18 +101,20 @@ example.arrows = function(dx = c(0, 0), new.plot = TRUE, lwd = 2) {
   text(3.5, yt,
        "Rectangle Flag", cex = 0.70);
 
+  # Diamond ArrowHead
+  x = c(6, 6) + dx;
+  d.head = c(-0.5, 0.5);
+  d = -0.5;
+  arrowDiamond(x, y, d=d, d.head=d.head, lwd=lwd, join=0);
+  text(6, yt,
+       "Diamond", cex = 0.75);
+
   # Multiple-Lined ArrowHead
   n = 3; d = 0.5;
-  x = c(6, 6) + dx;
+  x = c(8, 8) + dx;
   arrowN(x, y, n=n, d=d, lwd=lwd);
-  text(6, yt,
+  text(8, yt,
        "Multiple-Lined", cex = 0.70);
-
-  # Double Lined Inverted ArrowHead
-  x = c(9, 9) + dx;
-  arrowDoubleInverted(x, y, d=-0.3, lwd=lwd);
-  text(9, yt, adj = c(0.5, 0.75),
-       "Double-Lined\nInverted", cex = 0.70);
 
 
   ### Row 3

@@ -92,6 +92,13 @@ which.quadrant.phi = function(phi) {
 	return(4);
 }
 
+#' @export
+is.quadrant.right = function(x, y) {
+	qd  = which.quadrant(x, y);
+	isR = (qd == 1 || qd == 4);
+	return(isR);
+}
+
 
 ### Center: 4 points
 # t = partition;
