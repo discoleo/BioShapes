@@ -23,7 +23,7 @@
 
 ### Arrows: Summary
 #' @export
-example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0, join = 0,
+example.arrows = function(dx = c(0, 0), lwd = 2, lty = 1, d.lines = 0, join = 0,
 		fill = c("red", "#FFA090", "#3296F2"), new.plot = TRUE) {
   if(length(join) == 1) join = rep(join, 3);
   ### Plot
@@ -39,7 +39,7 @@ example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0, join = 0,
   x = c(-1, -1) + dx;
   d = -0.5;
   d.head = c(-0.5,0.5)
-  a1 = arrowSimple(x, y, d=d, d.head=d.head, d.lines=d.lines, lwd=lwd);
+  a1 = arrowSimple(x, y, lwd=lwd, lty=lty, d=d, d.head=d.head, d.lines=d.lines);
   text(-1, yt,
        "Simple", cex = 0.75);
 
@@ -49,7 +49,7 @@ example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0, join = 0,
   x = c(1, 1) + dx;
   d = -0.3;
   d.head=-0.5
-  a2 = arrowDouble(x, y, lwd=lwd, d=d, d.head=d.head, d.lines=d.lines, join=join[[1]]);
+  a2 = arrowDouble(x, y, lwd=lwd, lty=lty, d=d, d.head=d.head, d.lines=d.lines, join=join[[1]]);
   text(1, yt,
        "Double", cex = 0.75);
 
@@ -57,25 +57,25 @@ example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0, join = 0,
   x = c(3, 3) + dx;
   d = -0.5;
   d.head=c(-0.5,0.5)
-  a3 = arrowInverted(x, y, d=d, d.head=d.head, d.lines=d.lines, lwd=lwd);
+  a3 = arrowInverted(x, y, lwd=lwd, lty=lty, d=d, d.head=d.head, d.lines=d.lines);
   text(3, yt,
        "Inverted", cex = 0.75);
 
   # Double Lined Inverted ArrowHead
   x = c(5, 5) + dx;
-  arrowDoubleInverted(x, y, lwd=lwd, d=-0.3, d.lines=d.lines, join=join[[2]]);
+  arrowDoubleInverted(x, y, lwd=lwd, lty=lty, d=-0.3, d.lines=d.lines, join=join[[2]]);
   text(5, yt, adj = c(0.5, 0.75),
        "Double-Lined\nInverted", cex = 0.70);
 
   # T Shape ArrowHead
   x = c(7, 7) + dx;
-  arrowT(x, y, d=-0.75, d.lines=d.lines, lwd=lwd);
+  arrowT(x, y, lwd=lwd, lty=lty, d=-0.75, d.lines=d.lines);
   text(7, yt,
        "T Shape", cex = 0.75);
 
   # Measurement ArrowHead
   x = c(9.5, 9.5) + dx;
-  arrowMeasure(x, y, d=-0.5, d.lines=d.lines, lwd=lwd);
+  arrowMeasure(x, y, lwd=lwd, lty=lty, d=-0.5, d.lines=d.lines);
   text(9.5, yt,
        "Measurement", cex = 0.70);
 
@@ -114,7 +114,7 @@ example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0, join = 0,
   # Multiple-Lined ArrowHead
   n = 3; d = 0.5;
   x = c(8, 8) + dx;
-  arrowN(x, y, n=n, d=d, d.lines=d.lines, lwd=lwd, join = join[[3]]);
+  arrowN(x, y, n=n, lwd=lwd, lty=lty, d=d, d.lines=d.lines, join = join[[3]]);
   text(8, yt,
        "Multiple-Lined", cex = 0.70);
 
