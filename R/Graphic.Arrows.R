@@ -64,7 +64,15 @@ arrowTail = function(x, y, d.lines, lwd=1, slope=NULL, scale = 1) {
 # Tail = simple lines;
 # xy  = data.frame with the Tail;
 # xyH = data.frame with the Head;
-intersect.arrow = function(xy, xyH) {
+# type:
+# - Real = true intersection;
+# - In   = xy will be intersected by extension of xyH;
+# - Out  = extension of xy will intersect xyH;
+intersect.arrow = function(xy, xyH, type = 1) {
+	if(is.character(type)) {
+		type = pmatch("Real", "In", "Out");
+		if(is.na(type)) stop("Invalid intersection type!");
+	}
 	idT = unique(xy$id);
 	if(length(idT) == 0) return(xy);
 	isList = TRUE;
@@ -76,6 +84,9 @@ intersect.arrow = function(xy, xyH) {
 		idH = if(len > 0) seq(len - 1) else numeric(0);
 	}
 	if(length(idH) == 0) return(xy);
+	isIntersect = if(type == 3) {
+		function(tt) return(tt >= 0 && tt <= 1);
+	} else function(tt) { return(FALSE); };
 	xyT = lapply(idT, function(id) {
 		nR = which(xy$id == id);
 		x  = xy$x[nR]; y = xy$y[nR];
@@ -88,7 +99,7 @@ intersect.arrow = function(xy, xyH) {
 				xHi = xyH$x[isZ]; yHi = xyH$y[isZ];
 			}
 			xyI = intersect.lines(x, y, xHi, yHi);
-			if(is.intersect.lines(xyI)) {
+			if(is.intersect.lines(xyI) || isIntersect(xyI$t2[1])) {
 				x[2] = xyI$x[1];
 				y[2] = xyI$y[1];
 				xy = data.frame(x = x, y = y, id = id);
@@ -117,16 +128,16 @@ arrowSimple = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
   sg = if(qd == 1 || qd == 4) 1 else -1;
   d  = sg * d;
   ### Head
-  ahead = list(H = arrowHeadSimple(x[2], y[2], slope=slope, d=d, dV = d.head, scale=scale),
+  arrHead = list(H = arrowHeadSimple(x[2], y[2], slope=slope, d=d, dV = d.head, scale=scale),
                lwd = h.lwd);
 
   ### ArrowTail
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   if(any(d.lines != 0)) {
-	arrow$xy = intersect.arrow(arrow$xy, ahead[[1]]);
+	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]]);
   }
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=ahead, col=col);
+  lst = list(Arrow=arrow, Head=arrHead, col=col);
   class(lst) = c("arrow", "list");
   # Plot lines:
   if(plot) lines(lst);
@@ -146,11 +157,16 @@ arrowDouble = function(x, y, d=-0.5, lwd=1, d.head=-1, dV=c(-d.head, d.head), d.
   arrHead = arrowHeadDouble(x[2], y[2], slope=slope, d=d, dH=d.head, dV=dV, scale=scale);
   arrHead$lwd = h.lwd;
   ### ArrowTail
-  if(join == 1) {
+  if(join <= 1) {
     x[2] = arrHead[[2]]$x[2];
     y[2] = arrHead[[2]]$y[2];
   }
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope);
+  if(any(d.lines != 0)) {
+		# id vs ("H1", "H2"):
+		id = if(join <= 1) 2 else 1;
+		arrow$xy = intersect.arrow(arrow$xy, arrHead[[id]]);
+  }
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -174,13 +190,18 @@ arrowDoubleInverted = function(x, y, d=-0.25, lwd=1, dH=0.5, d.head=c(-dH, dH), 
   arrHead$lwd = h.lwd;
   ### ArrowTail
   if(join <= 1) {
-    midpoint = midpoint[[2]];
-  } else {
     midpoint = midpoint[[1]];
+  } else {
+    midpoint = midpoint[[2]];
   }
   x[2] = midpoint[1]
   y[2] = midpoint[2]
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
+  if(any(d.lines != 0)) {
+		# type = 3; # type = "Out";
+		id = if(join <= 1) 1 else 2;
+		arrow$xy = intersect.arrow(arrow$xy, arrHead[[id]], type = 3);
+  }
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -209,6 +230,10 @@ arrowInverted = function(x, y, d=-1, lwd=1, d.head=c(-d,d),
     y[2] = p$y[[2]];
   }
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
+  if(any(d.lines != 0)) {
+    # type = 3; # type = "Out";
+	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]], type = 3);
+  }
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -239,6 +264,9 @@ arrowN = function(x, y, n=1, d=-0.5, lwd=1, h.lwd=lwd, d.head=c(-d, d), d.lines=
   x[2] = arrHead[[join]]$x[2];
   y[2] = arrHead[[join]]$y[2];
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
+  if(any(d.lines != 0)) {
+	arrow$xy = intersect.arrow(arrow$xy, arrHead[[join]]);
+  }
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -287,6 +315,9 @@ arrowMeasure = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), dT=d.head, d.lines=
   arrHead$lwd = h.lwd;
   ### ArrowTail
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
+  if(any(d.lines != 0)) {
+	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]]);
+  }
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
@@ -391,15 +422,21 @@ arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0,
   isRQ  = is.quadrant.right(x, y);
   d = if(isRQ) d else - d;
   ### Head
-  ahead  = list(arrowHeadDiamond(x[2], y[2], slope=slope, d=d, dV=d.head, scale=scale), lwd = h.lwd);
+  arrHead = list(
+		arrowHeadDiamond(x[2], y[2], slope=slope, d=d, dV=d.head, scale=scale),
+		lwd = h.lwd);
   ### ArrowTail
   if(join == 0 || join == 1) {
-    x[2] = ahead[[1]]$x[2];
-    y[2] = ahead[[1]]$y[2];
+    x[2] = arrHead[[1]]$x[2];
+    y[2] = arrHead[[1]]$y[2];
   }
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
+  if(any(d.lines != 0)) {
+    # type = 3; # type = "Out";
+	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]], type = 3);
+  }
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=ahead);
+  lst = list(Arrow = arrow, Head = arrHead);
   class(lst) = c("arrow", "list");
   # Plot lines:
   lines(lst, col=col);

@@ -110,12 +110,12 @@ arrowHeadDoubleInverted = function(x, y, slope, d=-1, dH=0.5, dV=c(-dH, dH), sca
   dH = if(d <= 0) - dH else dH;
   # Head: 2nd "<" of "--<<"
   pV = shiftPoint(c(x, y), slope=slope, d = dH, scale=scale);
-  arrHead  = list(arrowHeadSimple(pV[1], pV[2], slope=slope, d = - dH, dV=dV, scale=scale));
+  arrHead2 = list(arrowHeadSimple(pV[1], pV[2], slope=slope, d = - dH, dV=dV, scale=scale));
   midpoint = list(pV);
   # Head: 1st "<" of "<<"
   pV = shiftPoint(c(x, y), slope=slope, d = d + dH, scale=scale);
-  arrHead2 = list(arrowHeadSimple(pV[1], pV[2], slope=slope, d = - dH, dV=dV, scale=scale));
-  arrHead  = c(arrHead, arrHead2);
+  arrHead  = list(arrowHeadSimple(pV[1], pV[2], slope=slope, d = - dH, dV=dV, scale=scale));
+  arrHead  = c(H1 = arrHead, H2 = arrHead2);
   midpoint = c(M1 = list(pV), M2 = midpoint);
   attr(arrHead, "Mid") = midpoint;
   return(arrHead);

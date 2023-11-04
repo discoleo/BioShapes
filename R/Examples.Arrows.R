@@ -23,7 +23,8 @@
 
 ### Arrows: Summary
 #' @export
-example.arrows = function(dx = c(0, 0), new.plot = TRUE, lwd = 2) {
+example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0,
+		fill = c("red", "#FFA090"), new.plot = TRUE) {
   ### Plot
   if(new.plot) plot.base();
 
@@ -37,7 +38,7 @@ example.arrows = function(dx = c(0, 0), new.plot = TRUE, lwd = 2) {
   x = c(-1, -1) + dx;
   d = -0.5;
   d.head = c(-0.5,0.5)
-  a1 = arrowSimple(x, y, d=d, d.head=d.head, lwd=lwd);
+  a1 = arrowSimple(x, y, d=d, d.head=d.head, d.lines=d.lines, lwd=lwd);
   text(-1, yt,
        "Simple", cex = 0.75);
 
@@ -47,7 +48,7 @@ example.arrows = function(dx = c(0, 0), new.plot = TRUE, lwd = 2) {
   x = c(1, 1) + dx;
   d = -0.3;
   d.head=-0.5
-  a2 = arrowDouble(x, y, d=d, d.head=d.head, lwd=lwd, join = 1);
+  a2 = arrowDouble(x, y, d=d, d.head=d.head, d.lines=d.lines, lwd=lwd, join = 1);
   text(1, yt,
        "Double", cex = 0.75);
 
@@ -55,25 +56,25 @@ example.arrows = function(dx = c(0, 0), new.plot = TRUE, lwd = 2) {
   x = c(3, 3) + dx;
   d = -0.5;
   d.head=c(-0.5,0.5)
-  a3 = arrowInverted(x, y, d=d, d.head=d.head, lwd=lwd);
+  a3 = arrowInverted(x, y, d=d, d.head=d.head, d.lines=d.lines, lwd=lwd);
   text(3, yt,
        "Inverted", cex = 0.75);
 
   # Double Lined Inverted ArrowHead
   x = c(5, 5) + dx;
-  arrowDoubleInverted(x, y, d=-0.3, lwd=lwd);
+  arrowDoubleInverted(x, y, d=-0.3, d.lines=d.lines, lwd=lwd);
   text(5, yt, adj = c(0.5, 0.75),
        "Double-Lined\nInverted", cex = 0.70);
 
   # T Shape ArrowHead
   x = c(7, 7) + dx;
-  arrowT(x, y, d=-0.75, lwd=lwd);
+  arrowT(x, y, d=-0.75, d.lines=d.lines, lwd=lwd);
   text(7, yt,
        "T Shape", cex = 0.75);
 
   # Measurement ArrowHead
   x = c(9.5, 9.5) + dx;
-  arrowMeasure(x, y, d=-0.5, lwd=lwd);
+  arrowMeasure(x, y, d=-0.5, d.lines=d.lines, lwd=lwd);
   text(9.5, yt,
        "Measurement", cex = 0.70);
 
@@ -84,20 +85,20 @@ example.arrows = function(dx = c(0, 0), new.plot = TRUE, lwd = 2) {
 
   # X Shape ArrowHead
   x = c(-1, -1) + dx;
-  arrowX(x, y, d=0.5, lwd=lwd);
+  arrowX(x, y, d=0.5, d.lines=d.lines, lwd=lwd);
   text(-1, yt,
        "X Shape", cex = 0.70);
 
   # Square Shape ArrowHead
   x = c(1, 1) + dx;
-  arrowSquare(x, y, d=-0.5, lwd=lwd);
+  arrowSquare(x, y, d=-0.5, d.lines=d.lines, lwd=lwd);
   text(1, yt,
        "Square Shape", cex = 0.70);
 
   # Rectangular Flag: (2*d) x d
   # Note: use c(0, d) for real square;
   x = c(3, 3) + dx;
-  arrowSquare(x, y, d=-0.5, d.head=c(0, 2*d), lwd=lwd);
+  arrowSquare(x, y, d=-0.5, d.head=c(0, 2*d), d.lines=d.lines, lwd=lwd);
   text(3.5, yt,
        "Rectangle Flag", cex = 0.70);
 
@@ -105,14 +106,14 @@ example.arrows = function(dx = c(0, 0), new.plot = TRUE, lwd = 2) {
   x = c(6, 6) + dx;
   d.head = c(-0.5, 0.5);
   d = -0.5;
-  arrowDiamond(x, y, d=d, d.head=d.head, lwd=lwd, join=0);
+  arrowDiamond(x, y, d=d, d.head=d.head, d.lines=d.lines, lwd=lwd, join=0);
   text(6, yt,
        "Diamond", cex = 0.75);
 
   # Multiple-Lined ArrowHead
   n = 3; d = 0.5;
   x = c(8, 8) + dx;
-  arrowN(x, y, n=n, d=d, lwd=lwd);
+  arrowN(x, y, n=n, d=d, d.lines=d.lines, lwd=lwd);
   text(8, yt,
        "Multiple-Lined", cex = 0.70);
 
@@ -123,26 +124,27 @@ example.arrows = function(dx = c(0, 0), new.plot = TRUE, lwd = 2) {
 
   # Solid Rectangle ArrowHead
   x = c(-1, -1) + dx;
-  arrowSolidSquare(x, y, d=-0.5, lwd=lwd, col="darkred", fill="red");
+  arrowSolidSquare(x, y, d=-0.5, d.lines=d.lines, lwd=lwd,
+		col = "darkred", fill = fill[[1]]);
   text(-1, yt,
        "Solid Rectangle", cex = 0.70);
 
   # Triangle ArrowHead
   x = c(1, 1) + dx;
   d = -0.5;
-  a1 = arrowTriangle(x, y, d=d, lwd=lwd);
+  a1 = arrowTriangle(x, y, d=d, d.lines=d.lines, lwd=lwd);
   text(1, yt,
        "Triangle", cex = 0.70);
 
   # Solid Circle ArrowHead
   x = c(3, 3) + dx;
-  arrowCircle(x, y, r=0.5, lwd=lwd, fill="#FFB0A0");
+  arrowCircle(x, y, r=0.5, d.lines=d.lines, lwd=lwd, fill = fill[[2]]);
   text(3, yt,
        "Solid Circle", cex = 0.70);
 
   # Simple Circle ArrowHead
   x = c(5, 5) + dx;
-  arrowCircle(x, y, r=0.5, lwd=lwd);
+  arrowCircle(x, y, r=0.5, d.lines=d.lines, lwd=lwd);
   text(5, yt,
        "Simple Circle", cex = 0.70);
 }
