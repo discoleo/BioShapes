@@ -6,7 +6,7 @@
 # https://github.com/discoleo/BioShapes
 #
 # Continuation of:
-# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
+# 1. BSc Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
@@ -15,7 +15,7 @@
 #   in collaboration with Syonic SRL
 #   [old] GitHub: https://github.com/Adi131313/BioShapes
 #
-# 2. Bachelor Thesis: Darian Voda (2021-2022)
+# 2. BSc Thesis: Darian Voda (2021-2022)
 
 
 ### Functions to Generate Arrows
@@ -112,13 +112,19 @@ intersect.arrow = function(xy, xyH, type = 1) {
 	return(xyT);
 }
 
-### Arrow Types
+#######################
+### Specific Arrows ###
+
+### Parameters:
 # dH = horizontal length of ">";
 # dV = vertical height of ">";
-# d = distance between each of ">>";
+# d  = distance between each of ">>";
+#      also equivalent to dH in the Simple types;
+# d.lines = distance between multiple lines in the Tail;
+# join = where to join Head & Tail;
 
 
-#### Arrow Simple ####
+### Simple Head
 # - for consistency: join = 0;
 #' @export
 arrowSimple = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
@@ -144,7 +150,7 @@ arrowSimple = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
   invisible(lst);
 }
 
-#### Double Lined Arrow ####
+### Double Lined Head: --->>
 #' @export
 arrowDouble = function(x, y, d=-0.5, lwd=1, d.head=-1, dV=c(-d.head, d.head), d.lines=0,
                        h.lwd=lwd, col="red", scale=1, join=0) {
@@ -170,6 +176,42 @@ arrowDouble = function(x, y, d=-0.5, lwd=1, d.head=-1, dV=c(-d.head, d.head), d.
   ### Full Arrow
   lst = list(Arrow=arrow, Head=arrHead);
   class(lst) = c("arrow", "list");
+  # Plot lines:
+  lines(lst, col=col);
+  invisible(lst);
+}
+
+
+### Inverted Head: ---<
+
+### Simple Inverted Head
+# if d <= 0: Head is within arrow-boundary;
+#' @export
+arrowInverted = function(x, y, d=-1, lwd=1, d.head=c(-d,d),
+                         d.lines=0, h.lwd=lwd, col="red", scale=1, join=0) {
+  slope = slope(x, y);
+  isOK  = is.quadrant.right(x, y);
+  ds = if(isOK) d else -d;
+  tp = (d <= 0); # within boundary;
+  ### Head
+  arrHead = arrowHeadInverted(x[2], y[2], slope=slope, d=ds, dV=d.head,
+		isTip = tp, scale=scale);
+  arrHead = list(H = arrHead, lwd=h.lwd);
+  ### Arrow Tail
+  if(tp) {
+    p = arrHead[[1]];
+    x[2] = p$x[[2]];
+    y[2] = p$y[[2]];
+  }
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
+  if(any(d.lines != 0)) {
+    # type = 3; # type = "Out";
+	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]], type = 3);
+  }
+  ### Full Arrow
+  lst = list(Arrow=arrow, Head=arrHead);
+  class(lst) = c("arrow", "list");
+
   # Plot lines:
   lines(lst, col=col);
   invisible(lst);
@@ -210,39 +252,8 @@ arrowDoubleInverted = function(x, y, d=-0.25, lwd=1, dH=0.5, d.head=c(-dH, dH), 
   invisible(lst);
 }
 
-### Inverted Head: ---<
-# if d <= 0: Head is within arrow-boundary;
-#' @export
-arrowInverted = function(x, y, d=-1, lwd=1, d.head=c(-d,d),
-                         d.lines=0, h.lwd=lwd, col="red", scale=1, join=0) {
-  slope = slope(x, y);
-  isOK  = is.quadrant.right(x, y);
-  ds = if(isOK) d else -d;
-  tp = (d <= 0); # within boundary;
-  ### Head
-  arrHead = arrowHeadInverted(x[2], y[2], slope=slope, d=ds, dV=d.head,
-		isTip = tp, scale=scale);
-  arrHead = list(H = arrHead, lwd=h.lwd);
-  ### Arrow Tail
-  if(tp) {
-    p = arrHead[[1]];
-    x[2] = p$x[[2]];
-    y[2] = p$y[[2]];
-  }
-  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
-  if(any(d.lines != 0)) {
-    # type = 3; # type = "Out";
-	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]], type = 3);
-  }
-  ### Full Arrow
-  lst = list(Arrow=arrow, Head=arrHead);
-  class(lst) = c("arrow", "list");
 
-  # Plot lines:
-  lines(lst, col=col);
-  invisible(lst);
-}
-
+### Multiple Lined Head: -->>>
 # n = number of sub-components;
 # d = distance between each "> >";
 # dH = horizontal shift (shiftPoint)
@@ -276,7 +287,7 @@ arrowN = function(x, y, n=1, d=-0.5, lwd=1, h.lwd=lwd, d.head=c(-d, d), d.lines=
 }
 
 
-#### Arrow T ####
+### Arrow w T-Head: ---|
 #' @export
 arrowT = function(x, y, d=0.2, lwd=1, d.head=c(-d, d), d.lines=0, h.lwd=lwd,
                   col="red", scale=1, join=0, lty=1) {
@@ -303,7 +314,9 @@ arrowT = function(x, y, d=0.2, lwd=1, d.head=c(-d, d), d.lines=0, h.lwd=lwd,
   invisible(lst);
 }
 
-#### Arrow for Measurements ####
+### Measurements
+
+### Arrow for Measurements
 #' @export
 arrowMeasure = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), dT=d.head, d.lines=0,
                         h.lwd=lwd, col="red", scale=1, join=0) {
@@ -326,6 +339,9 @@ arrowMeasure = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), dT=d.head, d.lines=
   invisible(lst);
 }
 
+### Measure: |<--->|
+# - Double Headed Arrow;
+#' @export
 measure = function(x, y, type=c("in", "out"), lty=1, lwd=1, col=1,
                    d=c(-1,1), dH=0.5, d.head=c(-dH, dH), d.lines=0,
                    lwd.head=lwd, scale=1, plot = TRUE) {
@@ -354,7 +370,10 @@ measure = function(x, y, type=c("in", "out"), lty=1, lwd=1, col=1,
   invisible(lst)
 }
 
-#### Arrow X ####
+
+### Other Head Types
+
+### Arrow X: ---X
 # - for consistency: join = 0;
 #' @export
 arrowX = function(x, y, d=0.5, lwd=1, d.head=c(-d, d), d.lines=0,
@@ -385,7 +404,7 @@ arrowX = function(x, y, d=0.5, lwd=1, d.head=c(-d, d), d.lines=0,
 }
 
 
-#### Arrow Circle
+### Arrow Circle: ---O
 #' @export
 arrowCircle = function(x, y, r=0.5, lwd=1, d.lines=0,
                        h.lwd=lwd, col="red", fill=NULL, scale=1, join=0) {
@@ -413,7 +432,7 @@ arrowCircle = function(x, y, r=0.5, lwd=1, d.lines=0,
   invisible(lst);
 }
 
-#### Arrow Diamond ####
+### Arrow Diamond: ---<>
 #' @export
 arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0,
 		h.lwd=lwd, col="red", scale=1, join=0) {
@@ -444,7 +463,7 @@ arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0,
 }
 
 
-#### Arrow Square ####
+### Arrow Square: ---[]
 # default: fill = NULL;
 #' @export
 arrowSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
@@ -475,7 +494,7 @@ arrowSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
   invisible(lst);
 }
 
-#### Arrow Solid Square
+### Arrow Solid Square
 #' @export
 arrowSolidSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
                             h.lwd=lwd, col="red", fill=col, scale=1, join=0) {
@@ -504,7 +523,7 @@ arrowSolidSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
 }
 
 
-#### Arrow Triangle ####
+### Arrow Triangle: ---|>
 #' @export
 arrowTriangle = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
                          h.lwd=lwd, col="red", fill = NULL, scale=1, join=0) {
@@ -533,6 +552,8 @@ arrowTriangle = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
   lines(lst, col=col);
   invisible(lst);
 }
+
+#################
 
 ### Arrow: Tail = Square Wave
 #' @export
