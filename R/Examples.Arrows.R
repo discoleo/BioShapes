@@ -6,7 +6,7 @@
 # https://github.com/discoleo/BioShapes
 #
 # Continuation of:
-# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
+# 1. BSc Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
@@ -15,7 +15,7 @@
 #   in collaboration with Syonic SRL
 #   [old] GitHub: https://github.com/Adi131313/BioShapes
 #
-# 2. Bachelor Thesis: Darian Voda (2021-2022)
+# 2. BSc Thesis: Darian Voda (2021-2022)
 
 
 ### Examples: Arrows & Labels
@@ -23,8 +23,9 @@
 
 ### Arrows: Summary
 #' @export
-example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0,
-		fill = c("red", "#FFA090"), new.plot = TRUE) {
+example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0, join = 0,
+		fill = c("red", "#FFA090", "#3296F2"), new.plot = TRUE) {
+  if(length(join) == 1) join = rep(join, 3);
   ### Plot
   if(new.plot) plot.base();
 
@@ -48,7 +49,7 @@ example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0,
   x = c(1, 1) + dx;
   d = -0.3;
   d.head=-0.5
-  a2 = arrowDouble(x, y, d=d, d.head=d.head, d.lines=d.lines, lwd=lwd, join = 1);
+  a2 = arrowDouble(x, y, lwd=lwd, d=d, d.head=d.head, d.lines=d.lines, join=join[[1]]);
   text(1, yt,
        "Double", cex = 0.75);
 
@@ -62,7 +63,7 @@ example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0,
 
   # Double Lined Inverted ArrowHead
   x = c(5, 5) + dx;
-  arrowDoubleInverted(x, y, d=-0.3, d.lines=d.lines, lwd=lwd);
+  arrowDoubleInverted(x, y, lwd=lwd, d=-0.3, d.lines=d.lines, join=join[[2]]);
   text(5, yt, adj = c(0.5, 0.75),
        "Double-Lined\nInverted", cex = 0.70);
 
@@ -113,39 +114,48 @@ example.arrows = function(dx = c(0, 0), lwd = 2, d.lines = 0,
   # Multiple-Lined ArrowHead
   n = 3; d = 0.5;
   x = c(8, 8) + dx;
-  arrowN(x, y, n=n, d=d, d.lines=d.lines, lwd=lwd);
+  arrowN(x, y, n=n, d=d, d.lines=d.lines, lwd=lwd, join = join[[3]]);
   text(8, yt,
        "Multiple-Lined", cex = 0.70);
 
 
   ### Row 3
   y = c(-1, 1); yt = -1.3;
+  x = c(-1, -1) + dx;
   abline(h = y[2], col="green")
 
-  # Solid Rectangle ArrowHead
-  x = c(-1, -1) + dx;
+  # Rectangle ArrowHead: Solid
   arrowSolidSquare(x, y, d=-0.5, d.lines=d.lines, lwd=lwd,
 		col = "darkred", fill = fill[[1]]);
-  text(-1, yt,
-       "Solid Rectangle", cex = 0.70);
+  text(x[1], yt, adj = c(0.5, 0.75),
+       "Solid\nRectangle", cex = 0.75);
+
+  # Diamond ArrowHead: Solid
+  x = x + 2;
+  d.head = c(-0.5, 0.5);
+  d = -0.5;
+  arrowDiamond(x, y, d=d, d.head=d.head, d.lines=d.lines,
+		lwd=lwd, fill=fill[[3]], join=0);
+  text(x[1], yt, adj = c(0.5, 0.75),
+       "Solid\nDiamond", cex = 0.75);
 
   # Triangle ArrowHead
-  x = c(1, 1) + dx;
+  x = x + 2;
   d = -0.5;
   a1 = arrowTriangle(x, y, d=d, d.lines=d.lines, lwd=lwd);
-  text(1, yt,
+  text(x[1], yt,
        "Triangle", cex = 0.70);
 
   # Solid Circle ArrowHead
-  x = c(3, 3) + dx;
+  x = x + 2;
   arrowCircle(x, y, r=0.5, d.lines=d.lines, lwd=lwd, fill = fill[[2]]);
-  text(3, yt,
+  text(x[1], yt,
        "Solid Circle", cex = 0.70);
 
   # Simple Circle ArrowHead
-  x = c(5, 5) + dx;
+  x = x + 2;
   arrowCircle(x, y, r=0.5, d.lines=d.lines, lwd=lwd);
-  text(5, yt,
+  text(x[1], yt,
        "Simple Circle", cex = 0.70);
 }
 

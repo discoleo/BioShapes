@@ -435,14 +435,14 @@ arrowCircle = function(x, y, r=0.5, lwd=1, d.lines=0,
 ### Arrow Diamond: ---<>
 #' @export
 arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0,
-		h.lwd=lwd, col="red", scale=1, join=0) {
+		h.lwd=lwd, col="red", fill=NULL, scale=1, join=0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
   isRQ  = is.quadrant.right(x, y);
   d = if(isRQ) d else - d;
   ### Head
   arrHead = list(
-		arrowHeadDiamond(x[2], y[2], slope=slope, d=d, dV=d.head, scale=scale),
+		H = arrowHeadDiamond(x[2], y[2], slope=slope, d=d, dV=d.head, scale=scale),
 		lwd = h.lwd);
   ### ArrowTail
   if(join == 0 || join == 1) {
@@ -455,6 +455,14 @@ arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0,
 	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]], type = 3);
   }
   ### Full Arrow
+  if( ! is.null(fill)) {
+		xy   = arrHead$H;
+		xy$x = xy$x[ - 5];
+		xy$y = xy$y[ - 5];
+		xy$fill = fill;
+		class(xy) = c("polygon", "list");
+		arrHead$H = xy;
+  }
   lst = list(Arrow = arrow, Head = arrHead);
   class(lst) = c("arrow", "list");
   # Plot lines:

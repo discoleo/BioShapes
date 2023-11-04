@@ -6,7 +6,7 @@
 # https://github.com/discoleo/BioShapes
 #
 # Continuation of:
-# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
+# 1. BSc Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
@@ -15,7 +15,7 @@
 #   in collaboration with Syonic SRL
 #   [old] GitHub: https://github.com/Adi131313/BioShapes
 #
-# 2. Bachelor Thesis: Darian Voda (2021-2022)
+# 2. BSc Thesis: Darian Voda (2021-2022)
 
 
 
@@ -28,6 +28,8 @@
 example.arrows()
 
 example.arrows(dx = c(0, 0.5))
+
+example.arrows(d.lines = c(0.1, -0.1), join=c(1,1,2))
 
 
 ##################
