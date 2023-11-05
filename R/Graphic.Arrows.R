@@ -144,10 +144,10 @@ arrowSimple = function(x, y, lwd = 1, lty = 1, col = "red", plot = TRUE,
 	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]]);
   }
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=arrHead, col=col);
+  lst = list(Arrow=arrow, Head=arrHead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  if(plot) lines(lst, lty=lty);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
@@ -176,10 +176,10 @@ arrowDouble = function(x, y, lwd = 1, lty = 1, col = "red", plot = TRUE,
 		arrow$xy = intersect.arrow(arrow$xy, arrHead[[id]]);
   }
   ### Full Arrow
-  lst = list(Arrow = arrow, Head = arrHead, col=col);
+  lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  if(plot) lines(lst, lty=lty);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
@@ -211,11 +211,11 @@ arrowInverted = function(x, y, lwd = 1, lty = 1, col = "red", plot = TRUE,
 	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]], type = 3);
   }
   ### Full Arrow
-  lst = list(Arrow = arrow, Head = arrHead, col=col);
+  lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
 
   # Plot lines:
-  if(plot) lines(lst, lty=lty);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
@@ -248,10 +248,10 @@ arrowDoubleInverted = function(x, y, lwd = 1, lty = 1, col = "red", plot = TRUE,
 		arrow$xy = intersect.arrow(arrow$xy, arrHead[[id]], type = 3);
   }
   ### Full Arrow
-  lst = list(Arrow = arrow, Head = arrHead, col=col);
+  lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  if(plot) lines(lst, lty=lty);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
@@ -283,10 +283,10 @@ arrowN = function(x, y, n = 3, lwd = 1, lty = 1, col = "red", plot = TRUE,
 	arrow$xy = intersect.arrow(arrow$xy, arrHead[[join]]);
   }
   ### Full Arrow
-  lst = list(Arrow = arrow, Head = arrHead, col=col);
+  lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  if(plot) lines(lst, lty=lty);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
@@ -312,10 +312,10 @@ arrowT = function(x, y, lwd = 1, lty = 1, col = "red", plot = TRUE,
   ### ArrowTail
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
-  lst = list(Arrow = arrow, Head = ahead, col=col);
+  lst = list(Arrow = arrow, Head = ahead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  if(plot) lines(lst, lty=lty);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
@@ -338,19 +338,19 @@ arrowMeasure = function(x, y, lwd = 1, lty = 1, col = "red", plot = TRUE,
 	arrow$xy = intersect.arrow(arrow$xy, arrHead[[1]]);
   }
   ### Full Arrow
-  lst = list(Arrow = arrow, Head = arrHead, col=col);
+  lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  if(plot) lines(lst, lty=lty);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
 ### Measure: |<--->|
 # - Double Headed Arrow;
 #' @export
-measure = function(x, y, type=c("in", "out"), lty=1, lwd=1, col=1,
+measure = function(x, y, type = c("in", "out"), lwd = 1, lty = 1, col = 1, plot = TRUE,
                    d=c(-1,1), dH=0.5, d.head=c(-dH, dH), d.lines=0,
-                   lwd.head=lwd, scale=1, plot = TRUE) {
+                   lwd.head = lwd, scale = 1) {
   type  = match.arg(type);
   slope = slope(x, y);
   # Head
@@ -368,11 +368,9 @@ measure = function(x, y, type=c("in", "out"), lty=1, lwd=1, col=1,
   arrTail = arrowTail(x, y, slope=slope, d.lines=d.lines, lwd=lwd);
   # arrTail$lty = lty; # TODO
   # Full Arrow
-  lst = list(Tail=arrTail, Head=hh);
+  lst = list(Tail = arrTail, Head = hh, col=col, lty=lty);
   class(lst) = c("arrow", "list");
-  if(plot) {
-    lines.arrow(lst, col=col, lty=lty);
-  }
+  if(plot) lines(lst);
   invisible(lst)
 }
 
@@ -382,8 +380,9 @@ measure = function(x, y, type=c("in", "out"), lty=1, lwd=1, col=1,
 ### Arrow X: ---X
 # - for consistency: join = 0;
 #' @export
-arrowX = function(x, y, d=0.5, lwd=1, d.head=c(-d, d), d.lines=0,
-                  h.lwd=lwd, col="red", scale=1, join=0) {
+arrowX = function(x, y, lwd = 1, lty = 1, col = "red", plot = TRUE,
+			d = 0.5, d.head = c(-d, d), d.lines = 0,
+			h.lwd = lwd, scale = 1, join = 0) {
   slope = slope(x, y);
   isRQ  = is.quadrant.right(x, y);
   d = if(isRQ) d else - d;
@@ -402,18 +401,19 @@ arrowX = function(x, y, d=0.5, lwd=1, d.head=c(-d, d), d.lines=0,
 		arrow$xy = intersect.arrow(arrow$xy, xyH);
   }
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=ahead);
+  lst = list(Arrow=arrow, Head=ahead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  lines(lst, col=col);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
 
 ### Arrow Circle: ---O
 #' @export
-arrowCircle = function(x, y, r=0.5, lwd=1, d.lines=0,
-                       h.lwd=lwd, col="red", fill=NULL, scale=1, join=0) {
+arrowCircle = function(x, y, lwd = 1, lty = 1, col = "red", fill = NULL, plot = TRUE,
+			r = 0.5, d.lines = 0,
+			h.lwd = lwd, scale = 1, join = 0) {
   if(join > 3) stop("Unsupported value for join!");
   slope = slope(x, y);
   isRQ  = is.quadrant.right(x, y);
@@ -431,17 +431,18 @@ arrowCircle = function(x, y, r=0.5, lwd=1, d.lines=0,
   }
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=arrHead);
+  lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  lines(lst, col=col);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
 ### Arrow Diamond: ---<>
 #' @export
-arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0,
-		h.lwd=lwd, col="red", fill=NULL, scale=1, join=0) {
+arrowDiamond = function(x, y, lwd = 1, lty = 1, col = "red", fill = NULL, plot = TRUE,
+			d = 0.2, d.head = c(-1, 1), d.lines = 0,
+			h.lwd = lwd, scale = 1, join = 0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
   isRQ  = is.quadrant.right(x, y);
@@ -469,10 +470,10 @@ arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0,
 		class(xy) = c("polygon", "list");
 		arrHead$H = xy;
   }
-  lst = list(Arrow = arrow, Head = arrHead);
+  lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  lines(lst, col=col);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
@@ -480,8 +481,9 @@ arrowDiamond = function(x, y, d=0.2, lwd=1, d.head=c(-1, 1), d.lines=0,
 ### Arrow Square: ---[]
 # default: fill = NULL;
 #' @export
-arrowSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
-                       h.lwd=lwd, col="red", fill=NULL, scale=1, join=0) {
+arrowSquare = function(x, y, lwd = 1, lty = 1, col = "red", fill = NULL, plot = TRUE,
+			d = -0.5, d.head = c(d, -d)/2, d.lines = 0,
+			h.lwd = lwd, scale = 1, join = 0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
   isRQ  = is.quadrant.right(x, y);
@@ -501,17 +503,18 @@ arrowSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
   }
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=ahead);
+  lst = list(Arrow = arrow, Head = ahead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  lines(lst, col=col);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
 ### Arrow Solid Square
 #' @export
-arrowSolidSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
-                            h.lwd=lwd, col="red", fill=col, scale=1, join=0) {
+arrowSolidSquare = function(x, y, lwd = 1, lty = 1, col = "red", fill = col, plot = TRUE,
+			d = -0.5, d.head = c(d, -d)/2, d.lines = 0,
+			h.lwd = lwd, scale = 1, join = 0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
   isRQ  = is.quadrant.right(x, y);
@@ -529,18 +532,19 @@ arrowSolidSquare = function(x, y, d=-0.5, lwd=1, d.head=c(d, -d)/2, d.lines=0,
   }
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=ahead);
+  lst = list(Arrow = arrow, Head = ahead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  lines(lst, col=col);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
 
 ### Arrow Triangle: ---|>
 #' @export
-arrowTriangle = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
-                         h.lwd=lwd, col="red", fill = NULL, scale=1, join=0) {
+arrowTriangle = function(x, y, lwd = 1, lty = 1, col = "red", fill = NULL, plot = TRUE,
+			d = -0.5, d.head = c(-d,d), d.lines = 0,
+			h.lwd = lwd, scale = 1, join = 0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
   isRQ  = is.quadrant.right(x, y);
@@ -560,19 +564,21 @@ arrowTriangle = function(x, y, d=-0.5, lwd=1, d.head=c(-d,d), d.lines=0,
   }
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=arrHead);
+  lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  lines(lst, col=col);
+  if(plot) lines(lst);
   invisible(lst);
 }
 
 #################
 
 ### Arrow: Tail = Square Wave
+# TODO: extract function for Square-wave;
 #' @export
-arrowSquareWave = function(x, y, n, d=-0.5, dV=c(-1,1), d.head=c(-d,d),
-                           col=1, lwd=1, h.lwd=lwd, scale=1, join=0) {
+arrowSquareWave = function(x, y, n, lwd = 1, lty = 1, col = 1, plot = TRUE,
+			d = -0.5, dV = c(-d,d), d.head = c(-d,d),
+			h.lwd = lwd, scale = 1, join = 0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
   ### Head
@@ -610,10 +616,10 @@ arrowSquareWave = function(x, y, n, d=-0.5, dV=c(-1,1), d.head=c(-d,d),
   y = join.lines(y, l1$y, l2$y);
   arrow = list(list(x=x, y=y), lwd=lwd);
   ### Full Arrow
-  lst = list(Arrow=arrow, Head=ahead);
+  lst = list(Arrow = arrow, Head = ahead, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   # Plot lines:
-  lines(lst, col=col);
+  if(plot) lines(lst);
   invisible(lst);
 }
 

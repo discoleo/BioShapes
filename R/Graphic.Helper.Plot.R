@@ -176,16 +176,18 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 
 ### list(Tail=list(...), Head=list(...))
 #' @export
-lines.arrow = function(x, lwd = NULL, col = NULL, lty = 1, ...) {
+lines.arrow = function(x, lwd = NULL, col = NULL, lty = NULL, ...) {
 	if(is.null(col)) {
-		col = x$col;
-		if(is.null(col)) col = 1;
+		if(is.null(col <- x$col)) col = 1;
+	}
+	if(is.null(lty)) {
+		if(is.null(lty <- x$lty)) lty = 1;
 	}
 	### ArrowTail
-	arrow = x[[1]];
+	arrow = x$Arrow;
 	lines.object.base(arrow, lwd=lwd, col=col, lty=lty, ...)
 	### ArrowHead
-	ahead = x[[2]];
+	ahead = x$Head;
 	lines.object.base(ahead, lwd=lwd, col=col, ...);
 	#
 	invisible();
