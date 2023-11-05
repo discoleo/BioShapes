@@ -24,8 +24,11 @@
 ### Arrows: Summary
 #' @export
 example.arrows = function(dx = c(0, 0), lwd = 2, lty = 1, d.lines = 0, join = 0,
-		fill = c("red", "#FFA090", "#3296F2"), new.plot = TRUE) {
+		fill = c("red", "#FFA090", "#3296F2", "#E648D0"),
+		new.plot = TRUE) {
   if(length(join) == 1) join = rep(join, 3);
+  cex = 0.75; cexSmall = 0.70;
+  
   ### Plot
   if(new.plot) plot.base();
 
@@ -41,7 +44,7 @@ example.arrows = function(dx = c(0, 0), lwd = 2, lty = 1, d.lines = 0, join = 0,
   d.head = c(-0.5,0.5)
   a1 = arrowSimple(x, y, lwd=lwd, lty=lty, d=d, d.head=d.head, d.lines=d.lines);
   text(-1, yt,
-       "Simple", cex = 0.75);
+       "Simple", cex=cex);
 
   # Double ArrowHead
   # Note: use join = 1 to keep the lines non-joined;
@@ -51,7 +54,7 @@ example.arrows = function(dx = c(0, 0), lwd = 2, lty = 1, d.lines = 0, join = 0,
   d.head=-0.5
   a2 = arrowDouble(x, y, lwd=lwd, lty=lty, d=d, d.head=d.head, d.lines=d.lines, join=join[[1]]);
   text(1, yt,
-       "Double", cex = 0.75);
+       "Double", cex=cex);
 
   # Inverted ArrowHead
   x = c(3, 3) + dx;
@@ -59,25 +62,25 @@ example.arrows = function(dx = c(0, 0), lwd = 2, lty = 1, d.lines = 0, join = 0,
   d.head=c(-0.5,0.5)
   a3 = arrowInverted(x, y, lwd=lwd, lty=lty, d=d, d.head=d.head, d.lines=d.lines);
   text(3, yt,
-       "Inverted", cex = 0.75);
+       "Inverted", cex=cex);
 
   # Double Lined Inverted ArrowHead
   x = c(5, 5) + dx;
   arrowDoubleInverted(x, y, lwd=lwd, lty=lty, d=-0.3, d.lines=d.lines, join=join[[2]]);
   text(5, yt, adj = c(0.5, 0.75),
-       "Double-Lined\nInverted", cex = 0.70);
+       "Double-Lined\nInverted", cex = cexSmall);
 
   # T Shape ArrowHead
   x = c(7, 7) + dx;
   arrowT(x, y, lwd=lwd, lty=lty, d=-0.75, d.lines=d.lines);
   text(7, yt,
-       "T Shape", cex = 0.75);
+       "T Shape", cex=cex);
 
   # Measurement ArrowHead
   x = c(9.5, 9.5) + dx;
   arrowMeasure(x, y, lwd=lwd, lty=lty, d=-0.5, d.lines=d.lines);
   text(9.5, yt,
-       "Measurement", cex = 0.70);
+       "Measurement", cex = cexSmall);
 
 
   ### Row 2
@@ -88,20 +91,20 @@ example.arrows = function(dx = c(0, 0), lwd = 2, lty = 1, d.lines = 0, join = 0,
   x = c(-1, -1) + dx;
   arrowX(x, y, lwd=lwd, lty=lty, d=0.5, d.lines=d.lines);
   text(-1, yt,
-       "X Shape", cex = 0.70);
+       "X Shape", cex=cex);
 
   # Square Shape ArrowHead
   x = c(1, 1) + dx;
   arrowSquare(x, y, lwd=lwd, lty=lty, d=-0.5, d.lines=d.lines);
   text(1, yt,
-       "Square Shape", cex = 0.70);
+       "Square Shape", cex = cexSmall);
 
   # Rectangular Flag: (2*d) x d
   # Note: use c(0, d) for real square;
   x = c(3, 3) + dx;
   arrowSquare(x, y, lwd=lwd, lty=lty, d=-0.5, d.head=c(0, 2*d), d.lines=d.lines);
-  text(3.5, yt,
-       "Rectangle Flag", cex = 0.70);
+  text(3.5, yt, adj = c(0.5, 0.75),
+       "Rectangular\nFlag", cex = cexSmall);
 
   # Diamond ArrowHead
   x = c(6, 6) + dx;
@@ -109,14 +112,14 @@ example.arrows = function(dx = c(0, 0), lwd = 2, lty = 1, d.lines = 0, join = 0,
   d = -0.5;
   arrowDiamond(x, y, lwd=lwd, lty=lty, d=d, d.head=d.head, d.lines=d.lines, join=0);
   text(6, yt,
-       "Diamond", cex = 0.75);
+       "Diamond", cex=cex);
 
   # Multiple-Lined ArrowHead
   n = 3; d = 0.5;
   x = c(8, 8) + dx;
   arrowN(x, y, n=n, lwd=lwd, lty=lty, d=d, d.lines=d.lines, join = join[[3]]);
   text(8, yt,
-       "Multiple-Lined", cex = 0.70);
+       "Multiple-Lined", cex = cexSmall);
 
 
   ### Row 3
@@ -128,35 +131,41 @@ example.arrows = function(dx = c(0, 0), lwd = 2, lty = 1, d.lines = 0, join = 0,
   arrowSolidSquare(x, y, lwd=lwd, lty=lty, d=-0.5, d.lines=d.lines,
 		col = "darkred", fill = fill[[1]]);
   text(x[1], yt, adj = c(0.5, 0.75),
-       "Solid\nRectangle", cex = 0.75);
+       "Solid\nRectangle", cex=cex);
 
   # Diamond ArrowHead: Solid
   x = x + 2;
   d.head = c(-0.5, 0.5);
   d = -0.5;
   arrowDiamond(x, y, lwd=lwd, lty=lty, d=d, d.head=d.head, d.lines=d.lines,
-		fill=fill[[3]], join=0);
+		fill=fill[[2]], join=0);
   text(x[1], yt, adj = c(0.5, 0.75),
-       "Solid\nDiamond", cex = 0.75);
+       "Solid\nDiamond", cex=cex);
 
   # Triangle ArrowHead
   x = x + 2;
   d = -0.5;
   a1 = arrowTriangle(x, y, lwd=lwd, lty=lty, d=d, d.lines=d.lines);
   text(x[1], yt,
-       "Triangle", cex = 0.75);
+       "Triangle", cex=cex);
 
   # Solid Circle ArrowHead
   x = x + 2;
-  arrowCircle(x, y, lwd=lwd, lty=lty, r=0.5, d.lines=d.lines, fill = fill[[2]]);
-  text(x[1], yt,
-       "Solid Circle", cex = 0.70);
+  arrowCircle(x, y, lwd=lwd, lty=lty, r=0.5, d.lines=d.lines, fill = fill[[3]]);
+  text(x[1], yt, adj = c(0.5, 0.75),
+       "Solid\nCircle", cex=cex);
 
   # Simple Circle ArrowHead
   x = x + 2;
   arrowCircle(x, y, lwd=lwd, lty=lty, r=0.5, d.lines=d.lines);
-  text(x[1], yt,
-       "Simple Circle", cex = 0.70);
+  text(x[1], yt, adj = c(0.5, 0.75),
+       "Simple\nCircle", cex=cex);
+
+  # Half Circle ArrowHead
+  x = x + 2;
+  arrowHalfCircle(x, y, lwd=lwd, lty=lty, r=0.5, d.lines=d.lines, fill = fill[[4]]);
+  text(x[1], yt, adj = c(0.5, 0.75),
+       "Half\nCircle", cex=cex);
 }
 
 

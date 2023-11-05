@@ -362,7 +362,7 @@ arrowCircle = function(x, y, lwd = 1, lty = 1, col = "red", fill = NULL, plot = 
   r = if(isRQ) r else - r;
   ### Head
   arrHead = arrowHeadCircle(x[2], y[2], slope=slope, r=r, scale=scale);
-  mid = attr(arrHead, "start")
+  mid = attr(arrHead, "join");
   arrHead$lwd = h.lwd;
   arrHead[[1]]$fill = fill;
   ### ArrowTail
@@ -374,8 +374,41 @@ arrowCircle = function(x, y, lwd = 1, lty = 1, col = "red", fill = NULL, plot = 
   arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
   ### Full Arrow
   lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
-  class(lst) = c("arrow", "list");
+  lst = as.arrow(lst);
   # Plot lines:
+  if(plot) lines(lst);
+  invisible(lst);
+}
+
+
+### Arrow Half-Circle: ---)
+#' @export
+arrowHalfCircle = function(x, y, lwd = 1, lty = 1, col = "red", fill = NULL, plot = TRUE,
+			r = 0.5, d.lines = 0, closedArc = TRUE,
+			h.lwd = lwd, scale = 1, join = 0) {
+  if(join > 2) stop("Unsupported value for join!");
+  slope = slope(x, y);
+  isRQ  = is.quadrant.right(x, y);
+  r = if(isRQ) r else - r;
+  ### Head
+  arrHead = arrowHeadHalfCircle(x[2], y[2], slope=slope, isRQ=isRQ,
+		r=r, closedArc=closedArc, scale=scale);
+  mid = attr(arrHead, "join");
+  arrHead$lwd = h.lwd;
+  arrHead[[1]]$fill = fill;
+  ### ArrowTail
+  isMid = (join == 1) || (join == 0 && closedArc);
+  if(isMid) {
+    x[2] = mid[1];
+    y[2] = mid[2];
+  }
+  arrow = arrowTail(x, y, d.lines=d.lines, lwd=lwd, slope=slope, scale=scale);
+  ### Full Arrow
+  lst = list(Arrow = arrow, Head = arrHead, col=col, lty=lty);
+  lst = as.arrow(lst);
+  # Plot lines:
+  # Note:
+  # - order in lines.arrow: fill paints over the Tail!
   if(plot) lines(lst);
   invisible(lst);
 }

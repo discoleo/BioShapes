@@ -196,8 +196,37 @@ arrowHeadCircle = function(x, y, slope, r=0.5, scale=1) {
   lst = list(r=r, center=center);
   attr(lst, "class") = c("circle", class(lst));
   lst = list(lst);
-  attr(lst, "start") = list(startP, center);
+  attr(lst, "join") = list(startP, center);
   return(lst)
+}
+
+# Half-Circle ArrowHead ---)
+#' @export
+arrowHeadHalfCircle = function(x, y, slope, isRQ = TRUE, r = 0.5, phi = NULL,
+			closedArc = TRUE, scale = 1) {
+	center = shiftPoint(c(x, y), slope = slope, d = -r, scale=scale);
+	dim(center) = NULL;
+	r = abs(r);
+	if(is.null(phi)) {
+		pi2 = pi/2;
+		phi = c(-pi2, pi2);
+	} else if(length(phi) == 1) {
+		phi = c(-phi, phi);
+	}
+	th  = atan(slope);
+	if( ! isRQ) th = th + pi;
+	phi = phi + th;
+	lst = list(r=r, center=center, phi=phi);
+	class(lst) = c("circle.arc", class(lst));
+	lst = list(lst);
+	if(closedArc) {
+		xy  = list(
+			x = r*cos(phi) + center[1],
+			y = r*sin(phi) + center[2]);
+		lst = c(lst, list(xy));
+	}
+	attr(lst, "join") = center;
+	return(lst);
 }
 
 # Triangle ArrowHead: ---|>
