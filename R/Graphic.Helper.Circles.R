@@ -38,14 +38,17 @@ as.circle = function(x) {
 # r = radius;
 # phi = rotation (counter-clockwise);
 #' @export
-pointsCircle = function(n, r, center = c(0,0), phi=0) {
-	pp = points.circle(n=n, r=r, center=center, phi=phi);
+pointsCircle = function(n, r, center = c(0,0), phi = 0, clock = FALSE) {
+	pp = points.circle(n=n, r=r, center=center, phi=phi, clock=clock);
 	return(pp);
 }
 #' @export
-points.circle = function(n, r, center = c(0,0), phi=0) {
+points.circle = function(n, r, center = c(0,0), phi = 0, clock = FALSE) {
   x = r * cos(seq(0, n-1) * 2*pi/n + phi) + center[1];
   y = r * sin(seq(0, n-1) * 2*pi/n + phi) + center[2];
+  if(clock) {
+	x = rev(x); y = rev(y);
+  }
   lst = list(x=x, y=y);
   attr(lst, "R") = r;
   attr(lst, "center") = center;

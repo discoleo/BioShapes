@@ -16,8 +16,8 @@ cholesterol = function(origin = c(0,0), dPi = 0.125) {
 	lstOH = list(OHb = lstOH, OHl = txtOH);
 	class(lstOH) = c("bioshape", "list");
 	lst$OH = lstOH;
-	# TODO: 17-side chain;
-	return(lst);
+	# TODO: C17-side chain;
+	invisible(lst);
 }
 #' @export
 cholesterol.bb = function(origin = c(0,0)) {
@@ -85,4 +85,42 @@ test.proj.newman = function(phi.add = c(0,0), ligand = "F,H,H|OH,\\CH[3],H") {
 	# Row 2:
 	lines(proj.newman(ligand, center = c(1,1), phi = c(0.5, 0.8) + phi.add))
 	lines(proj.newman(ligand, center = c(6,1) + phi.add))
+}
+
+
+###########################
+
+### Schiffer–Edmundson Helical Wheel Diagrams
+# Barroso, C, et al. (2020)
+# The Diverse Piscidin Repertoire of the European Sea Bass (Dicentrarchus labrax):
+# Molecular Characterization and Antimicrobial Activities.
+# https://doi.org/10.3390/ijms21134613
+#
+#' @export
+example.helix.piscidin = function(r = 2, fill = "yellow",
+		dy = NULL, cex.title = 1.5) {
+	par.old = par(mfrow = c(1,2));
+	center = c(4,4);
+	lim = c(0, 8);
+	if(length(r) == 1) r = c(r,r);
+	
+	# Piscidin 1
+	# FFHHIFRGIVHVGKTIHRLVTG
+	x = strsplit("FFHHIFRGIVHVGKTIHRLVTG", "")[[1]];
+	plot.base(xlim = lim, ylim = lim, axt = NULL);
+	lines(helix.wheel(x, r = r[1], center=center, fill=fill));
+	tmp.dy = if(is.null(dy)) 2*r[1] else dy[[1]];
+	text(center[1], center[2] + tmp.dy, labels = "Piscidin 1", cex = cex.title);
+
+	# Piscidin 2
+	# MKCATLFFVLSMVVLMAEPGEG FLGRFFRRTQAILRGARQGWRAHKAVSRYRDRYIPETDNNQEQP YNQR
+	x = "FLGRFFRRTQAILRGARQGWRAHKAVSRYRDRYIPETDNNQEQP"
+	x = strsplit(x, "")[[1]];
+	plot.base(xlim = lim, ylim = lim, axt = NULL);
+	lines(helix.wheel(x, r = r[2], center=center, fill=fill));
+	tmp.dy = if(is.null(dy)) 2*r[2] + 1 else dy[[2]];
+	text(center[1], center[2] + tmp.dy, labels = "Piscidin 2", cex = cex.title);
+	
+	par(par.old);
+	invisible();
 }

@@ -143,4 +143,13 @@ example.complexDuct(n = 8)
 
 example.virus()
 
-#####################
+#################
+
+#################
+### Chemistry ###
+
+
+### Helical Wheel Diagrams (Schiffer–Edmundson)
+# Piscidines
+example.helix.piscidin()
+
