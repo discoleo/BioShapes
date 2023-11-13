@@ -146,6 +146,8 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 			if( ! is.null(col)) lst$col = col;
 			do.call("text", lst);
 		}
+	} else if(inherits(lst, "arrow")) {
+		lines.arrow(lst, col=col);
 	} else {
 		# warning("Only lines");
 		if(is.null(lwd)) lwd = 1;
@@ -165,7 +167,17 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 		} else {
 			lst$lwd = lwd; lst$col = col;
 			lst = merge.first.list(lst, list(...));
-			do.call("lines", lst);
+			if(length(lst$col) == 1) {
+				do.call("lines", lst);
+			} else {
+				len = length(lst$x);
+				lapply(seq(len - 1), function(id) {
+					id = c(id, id + 1);
+					lst$x = lst$x[id]; lst$y = lst$y[id];
+					lst$col = lst$col[id];
+					do.call("lines", lst);
+				});
+			}
 			# lines(lst$x, lst$y, lwd=lwd, col=col, ...);
 		}
     }

@@ -27,9 +27,10 @@ seq.helix.numeric = function(n, by = 11, helix.length = 18) {
 }
 
 #' @export
+# arrow: Helix 18 --> Helix 1 (start);
 helix.wheel = function(x, r = 2, center = c(0,0), phi = 0,
-		col = 1, fill = "yellow", col.line = "#969696",
-		clock = TRUE, by = 11, helix.length = 18) {
+		col = 1, fill = "yellow", col.lines = "#969696", col.arrow = "red",
+		lwd.arrow = 2, d.arrow = - r / 8, clock = TRUE, by = 11, helix.length = 18) {
 	id  = seq.helix.numeric(length(x), by=by, helix.length=helix.length);
 	len = length(id);
 	# Layers: full turns
@@ -60,13 +61,20 @@ helix.wheel = function(x, r = 2, center = c(0,0), phi = 0,
 		return(lst);
 	});
 	# Lines
-	if( ! is.null(col.line)) {
+	if( ! is.null(col.lines)) {
 		# Simple Line: same entry/exit;
 		id  = seq.helix.numeric(helix.length, by=by, helix.length=helix.length);
 		tmp = points.circle(helix.length, r = Rn[1] - r1, center=center, phi=phi, clock=clock);
 		id  = order(id);
-		tmp = list(x = tmp$x[id], y = tmp$y[id], col = col.line);
+		tmp = list(x = tmp$x[id], y = tmp$y[id], col = col.lines);
 		lst$L = tmp;
+		if( ! is.null(col.arrow)) {
+			arrV = d.arrow / 2; d.head = c(arrV, - arrV);
+			idSE = c(helix.length, 1);
+			arr  = arrowSimple(tmp$x[idSE], tmp$y[idSE], d = d.arrow, d.head = d.head,
+				lwd = lwd.arrow, col = col.arrow, plot = FALSE);
+			lst$A = arr;
+		}
 	}
 	return(as.bioshape(lst));
 }

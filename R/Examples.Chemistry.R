@@ -98,7 +98,8 @@ test.proj.newman = function(phi.add = c(0,0), ligand = "F,H,H|OH,\\CH[3],H") {
 #
 #' @export
 example.helix.piscidin = function(r = 2, fill = "yellow",
-		dy = NULL, cex.title = 1.5) {
+		col.lines = "#969696", col.arrow = "red",
+		lwd.arrow = 2, dy = NULL, cex.title = 1.5) {
 	par.old = par(mfrow = c(1,2));
 	center = c(4,4);
 	lim = c(0, 8);
@@ -108,7 +109,8 @@ example.helix.piscidin = function(r = 2, fill = "yellow",
 	# FFHHIFRGIVHVGKTIHRLVTG
 	x = strsplit("FFHHIFRGIVHVGKTIHRLVTG", "")[[1]];
 	plot.base(xlim = lim, ylim = lim, axt = NULL);
-	lines(helix.wheel(x, r = r[1], center=center, fill=fill));
+	lines(helix.wheel(x, r = r[1], center=center,
+		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow));
 	tmp.dy = if(is.null(dy)) 2*r[1] else dy[[1]];
 	text(center[1], center[2] + tmp.dy, labels = "Piscidin 1", cex = cex.title);
 
@@ -117,7 +119,8 @@ example.helix.piscidin = function(r = 2, fill = "yellow",
 	x = "FLGRFFRRTQAILRGARQGWRAHKAVSRYRDRYIPETDNNQEQP"
 	x = strsplit(x, "")[[1]];
 	plot.base(xlim = lim, ylim = lim, axt = NULL);
-	lines(helix.wheel(x, r = r[2], center=center, fill=fill));
+	lines(helix.wheel(x, r = r[2], center=center,
+		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow));
 	tmp.dy = if(is.null(dy)) 2*r[2] + 1 else dy[[2]];
 	text(center[1], center[2] + tmp.dy, labels = "Piscidin 2", cex = cex.title);
 	

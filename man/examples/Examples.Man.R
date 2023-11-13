@@ -153,3 +153,8 @@ example.virus()
 # Piscidines
 example.helix.piscidin()
 
+example.helix.piscidin(col.arrow = "#646464")
+
+# - easier to follow the primary structure;
+example.helix.piscidin(col.lines = rep(rainbow(5, s = 0.9, v = 0.75), each=4))
+
