@@ -397,6 +397,7 @@ intersect.lines = function(x, y, xB, yB) {
 				x = xA1*t1c + (1-t1c)*xA2;
 				y = yA1*t1c + (1-t1c)*yA2;
 			}
+			# TODO: proper t2;
 			return(list(x=x, y=y, t1=t1, t2=Inf, n=2));
 		} else {
 			return(list(x=NA, y=NA, t1=Inf, t2=Inf, n=0));
@@ -408,8 +409,14 @@ intersect.lines = function(x, y, xB, yB) {
 	#
 	div = dyB;
 	t2  = yA2 - yB2 + dyA*t1;
-	# TODO: div == 0
-	t2  = t2 / div;
+	# TODO: check thoroughly div == 0
+	if(div == 0) {
+		sAi = dxA / dyA;
+		t2 = (yA1 - yB1) * sAi;
+		t2 = t2 / dxB;
+	} else {
+		t2 = t2 / div;
+	}
 	#
 	x = xA1*t1 + (1-t1)*xA2;
 	y = yA1*t1 + (1-t1)*yA2;

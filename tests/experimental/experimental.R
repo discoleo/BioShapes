@@ -6,7 +6,7 @@
 # https://github.com/discoleo/BioShapes
 #
 # Continuation of:
-# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
+# 1. BSc Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
@@ -15,7 +15,7 @@
 #   in collaboration with Syonic SRL
 #   GitHub: https://github.com/Adi131313/BioShapes
 #
-# 2. Bachelor Thesis: Darian Voda (2021-2022)
+# 2. BSc Thesis: Darian Voda (2021-2022)
 
 
 
@@ -23,6 +23,19 @@
 # TODO: Centers for muscles
 # TODO: Genome for examples.virus
 # TODO: description for Virus
+
+
+######################
+
+### Basic Functions
+
+# Lines: Intersection
+test.lines.simple(cbind(c(0,0,0,0), c(1,5,1,4)))
+test.lines.simple(cbind(c(0,0,0,4), c(6,8,7,7)), add = TRUE)
+test.lines.simple(cbind(c(1,1,1,7), c(1,5,1,4)), add = TRUE)
+test.lines.simple(cbind(c(3,8,3,8), c(1,8,1,4)), add = TRUE)
+test.lines.simple(cbind(c(2,2,2.5,4), c(2,6,4,6)), add = TRUE)
+test.lines.simple(cbind(c(5,8,8,8), c(1,1,1,3)), add = TRUE)
 
 
 ######################
@@ -206,7 +219,7 @@ plot.neuron(c(0,-4), phi = 0, type=type)
 par(par.old);
 
 
-### TODO 1: Dendrite as tree
+### TODO: Dendrite as tree
 
 ######################
 

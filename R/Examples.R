@@ -29,15 +29,20 @@ test = function(...) {
 
 ### Line Intersections
 
+# x, y   = 1st line;
+# xB, yB = 2nd line;
+# OR x = matrix encoding both lines;
 #' @export
 test.lines.simple = function(x = c(1, 5), y = c(1, 9), xB = c(2,7), yB = c(7, 3),
-		lty = c(1, 2), col = c("black", "blue", "green"), ylim = c(0, 12)) {
+		lty = c(1, 2), col = c("black", "blue", "green", "red"),
+		ylim = c(0, 12), add = FALSE) {
 	if(inherits(x, "matrix")) {
 		y = x[,2];
 		xB = x[c(3,4)]; xA = x[c(1,2)];
 		yB = y[c(3,4)]; yA = y[c(1,2)];
 	} else { xA = x; yA = y; }
-	plot.base(ylim=ylim);
+	#
+	if( ! add) plot.base(ylim=ylim);
 	lines(xA, yA, col = col[1], lty = lty[[1]]);
 	lines(xB, yB, col = col[2], lty = lty[[2]]);
 	p = intersect.lines(xA, yA, xB, yB);
@@ -45,7 +50,12 @@ test.lines.simple = function(x = c(1, 5), y = c(1, 9), xB = c(2,7), yB = c(7, 3)
 	if(any(is.na(p$x))) {
 		text(sum(xA, xB)/4, sum(yA, yB)/4, "NO", col = "red");
 	}
-	points(p$x, p$y, col = col[3]);
+	# Point intersects outside one of the segments
+	isInt = is.intersect.lines(p);
+	idCol = if(isInt) 3 else 4;
+	points(p$x, p$y, col = col[idCol]);
+	#
+	invisible(p);
 }
 # Helper:
 test.lines.list = function(xy, lty = c(1, 2), col = c("black", "blue", "green")) {
