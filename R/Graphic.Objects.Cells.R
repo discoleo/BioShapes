@@ -6,17 +6,16 @@
 # https://github.com/discoleo/BioShapes
 #
 # Continuation of:
-# 1. Bachelor Thesis (2022-2023)
-# Candidate: Adrian Cotoc
+# 1. BSc Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
 #   in collaboration with Syonic SRL
-# GitHub: https://github.com/Adi131313/BioShapes
+#   [old] GitHub: https://github.com/Adi131313/BioShapes
 #
-# 2. Bachelor Thesis: Darian Voda (2021-2022)
+# 2. BSc Thesis: Darian Voda (2021-2022)
 
 
 #### Cell-like Objects ####
@@ -142,7 +141,68 @@ epithelium.brush = function(x, y, n=5, h = ~ 2, r.nc = ~ 1/5, t.nc = c(1/2, 7/20
 }
 
 
-### Muscle tissue ###
+### Epithelium: Mono-Layer
+# - cells are randomly deformed;
+#' @export
+epithelium.rMonoLayer = function(x, y, n = 10, h = 1,
+		dx.sc = c(0.125, 0.08), dy.sc = c(0.125, 0.08)) {
+	lst = polygons.rLinear(x=x, y=y, n=n, h=h, dx.sc=dx.sc, dy.sc=dy.sc);
+	return(lst);
+}
+
+### Polygons:
+# - linearly arranged & randomly deformed;
+#' @export
+polygons.rLinear = function(x, y, n, h = 1,
+		dx.sc = c(0.125, 0.08), dy.sc = c(0.125, 0.08)) {
+	L = dist.xy(x, y);
+	x0 = seq(0, L, length.out = n+1);
+	dx0 = L / n; dx = dx0 * dx.sc[1]; dxm = dx0 * dx.sc[2];
+	# Bottom:
+	xB = runif(n - 1, -dx, dx);
+	xB = c(0, xB, 0);
+	xB = x0 + xB;
+	# Top:
+	xM = runif(2, -dxm, dxm);
+	xT = runif(n - 1, -dx, dx);
+	xT = c(xM[1], xT, xM[2]);
+	xT = x0 + xT;
+	# yT:
+	dy = abs(h) * dy.sc[1]; dym = abs(h) * dy.sc[2];
+	y0 = rep(h, n + 1);
+	yT = y0 + runif(n + 1, -dy, dy);
+	idL = n + 1;
+	xm = (xT[-1] + xT[- idL]) / 2;
+	xm = xm + runif(n, -dxm, dxm);
+	ym = (yT[-1] + yT[- idL]) / 2;
+	ym = ym + runif(n, -dym, dym);
+	# Rotation:
+	phi = atan2(y[2] - y[1], x[2] - x[1]);
+	cs = cos(phi); sn = sin(phi);
+	mR = matrix(c(cs, sn, -sn, cs), nrow = 2);
+	#
+	yB  = rep(0, n + 1);
+	xy0 = c(x[1], y[1]);
+	xyB = mR %*% rbind(xB, yB) + xy0;
+	xyT = mR %*% rbind(xT, yT) + xy0;
+	xyM = mR %*% rbind(xm, ym) + xy0;
+	xyB[1,1] = x[1]; xyB[1, n+1] = x[2];
+	#
+	lst = lapply(seq(n), function(id) {
+		id1 = id + 1; id2 = c(id, id1);
+		x = c(xyB[1, id2], xyT[1, id1], xyM[1, id], xyT[1, id]);
+		y = c(xyB[2, id2], xyT[2, id1], xyM[2, id], xyT[2, id]);
+		lst = list(x=x, y=y);
+		class(lst) = c("polygon", "list");
+		return(lst);
+	})
+	return(as.bioshape(lst));
+}
+
+
+#################
+
+### Muscle tissue
 #' @export
 muscle = function(scale.x = 1.5, scale.R = c(1.5, 1.5),
                   x = c(-2, 2), y = c(1, 1), dy = 0.4, dx = 2, n = 6, fill = "red"){
@@ -163,6 +223,12 @@ muscle = function(scale.x = 1.5, scale.R = c(1.5, 1.5),
   lst = as.bioshape(lst)
   return (invisible(lst))
 }
+
+
+###################
+### Blood Cells ###
+
+# TODO
 
 ### Red blood cells
 #' @export
