@@ -137,7 +137,7 @@ epithelium.brush = function(x, y, n=5, h = ~ 2, r.nc = ~ 1/5, t.nc = c(1/2, 7/20
 		lst.args$p1 = p1; lst.args$w = p2;
 		do.call(cell.BrushBorder, lst.args);
 	})
-	return(as.bioshape(ep));
+	invisible(as.bioshape(ep));
 }
 
 
@@ -147,7 +147,7 @@ epithelium.brush = function(x, y, n=5, h = ~ 2, r.nc = ~ 1/5, t.nc = c(1/2, 7/20
 epithelium.rMonoLayer = function(x, y, n = 10, h = 1,
 		dx.sc = c(0.125, 0.08), dy.sc = c(0.125, 0.08)) {
 	lst = polygons.rLinear(x=x, y=y, n=n, h=h, dx.sc=dx.sc, dy.sc=dy.sc);
-	return(lst);
+	invisible(lst);
 }
 
 ### Polygons:
