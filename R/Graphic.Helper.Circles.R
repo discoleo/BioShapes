@@ -27,6 +27,14 @@ as.circle = function(x) {
 	}
 	return(x);
 }
+# Ellipse Arc
+#' @export
+as.ellipse = function(x) {
+	if( ! inherits(x, "ellipse")) {
+		class(x) = c("ellipse", class(x));
+	}
+	return(x);
+}
 
 
 #####################
@@ -343,6 +351,24 @@ circle.hashEmboss = function(n, center = c(0, 0), r = 1, phi = 0, scale = 1,
 #########################
 
 ### Ellipse
+
+### Constructor
+#' @export
+ellipse = function(x, y, r, theta = 0, phi = c(0, 2*pi), lwd = NULL, col = NULL, fill = NULL) {
+	xy = xy.coords(x, y);
+	len = length(xy$x);
+	if(len == 1) {
+		center = c(xy$x, xy$y);
+	} else {
+		center = cbind(xy$x, xy$y);
+	}
+	lst = list(center=center, r=r, theta=theta, phi=phi);
+	if( ! is.null(fill)) lst$fill = fill;
+	if( ! is.null( col)) lst$col  = col;
+	if( ! is.null( lwd)) lst$lwd  = lwd;
+	lst = list(as.ellipse(lst));
+	return(as.bioshape(lst));
+}
 
 # - returns solution closest to "y.guess";
 #' @export
