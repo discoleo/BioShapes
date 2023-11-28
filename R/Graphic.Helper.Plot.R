@@ -65,6 +65,13 @@ plot.ellipse = function(r, center, phi = c(0, pi), theta = 0, lwd = 1,
 
 ### Plot:
 
+### Bio-Shapes
+#' @export
+lines.bioshape = function(x, lwd=NULL, col=NULL, ...) {
+  lines.object.base(x, lwd=lwd, col=col, ...)
+  invisible();
+}
+
 # Note: represents usually an error;
 #' @export
 lines.list = function(x, y, lwd=NULL, ...) {
@@ -217,13 +224,6 @@ lines.chemistry = function(x, lwd=NULL, col=1, ...) {
   invisible();
 }
 
-### Bio-Shapes
-#' @export
-lines.bioshape = function(x, lwd=NULL, col=NULL, ...) {
-  lines.object.base(x, lwd=lwd, col=col, ...)
-  invisible();
-}
-
 ### Liposome
 #' @export
 lines.liposome = function(x, col="#48B000", col.line=1, lwd=1, lipid.border=FALSE) {
@@ -260,6 +260,13 @@ lines.circles = function(x, R, fill="#B0B032", col=NULL, col.line="green", line=
     center = attr(xy, "center");
     shape::plotcircle(r=R, mid=center, lcol=col.line, col=NULL);
   }
+}
+
+### Ellipse
+#' @export
+lines.ellipse = function(x, lwd = NULL, col = NULL, ...) {
+  lines.object.base(list(x), lwd=lwd, col=col, ...)
+  invisible();
 }
 
 

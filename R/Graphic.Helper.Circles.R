@@ -352,7 +352,7 @@ circle.hashEmboss = function(n, center = c(0, 0), r = 1, phi = 0, scale = 1,
 
 ### Ellipse
 
-### Constructor
+### Constructor: Trivial
 #' @export
 ellipse = function(x, y, r, theta = 0, phi = c(0, 2*pi), lwd = NULL, col = NULL, fill = NULL) {
 	xy = xy.coords(x, y);
@@ -366,8 +366,8 @@ ellipse = function(x, y, r, theta = 0, phi = c(0, 2*pi), lwd = NULL, col = NULL,
 	if( ! is.null(fill)) lst$fill = fill;
 	if( ! is.null( col)) lst$col  = col;
 	if( ! is.null( lwd)) lst$lwd  = lwd;
-	lst = list(as.ellipse(lst));
-	return(as.bioshape(lst));
+	lst = as.ellipse(lst);
+	return(lst);
 }
 
 # - returns solution closest to "y.guess";
