@@ -98,6 +98,16 @@ test.circle.p2s()
 test.circle.p2s(slope = -2, add=T)
 
 
+#################
+
+### Arcs / Curves
+
+R = c(2, 1.5); # R = c(1.5, 2);
+x = c(1, 6); y = c(3, 6);
+test.curve.c2pi(x, y, r = R)
+
+
+#####################
 #####################
 
 ### Uniform Points

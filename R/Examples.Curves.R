@@ -145,3 +145,24 @@ test.helix.directions = function() {
 	xy = helix(p1, p2); lines(xy);
 	points(c(p1[1], p2[1]), c(p1[2], p2[2]), col="red")
 }
+
+
+##################
+##################
+
+### Connected-Arcs
+
+#' @export
+test.curve.c2pi = function(x = c(1, 6), y = c(3, 6), r = c(2, 1.5),
+		col = c("black", "blue")) {
+	cc = solve.curve.c2pi(x, y, r);
+	plot.base()
+	if(is.na(cc$C1[[1]])) return(cc); # NO solution;
+	lines(as.circle(list(center = cc$C1, r = r[1], col = col[[1]])))
+	lines(as.circle(list(center = cc$C2, r = r[2], col = col[[1]])))
+	points(x, y, col = "red")
+	#
+	cc = solve.curve.c2pi(x, y, r, rev = TRUE);
+	lines(as.circle(list(center = cc$C1, r = r[1], col = col[[2]])))
+	lines(as.circle(list(center = cc$C2, r = r[2], col = col[[2]])))
+}

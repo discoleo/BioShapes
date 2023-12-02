@@ -234,8 +234,16 @@ lines.liposome = function(x, col="#48B000", col.line=1, lwd=1, lipid.border=FALS
 	invisible();
 }
 
+### Circle
+#' @export
+lines.circle = function(x, lwd = NULL, col = NULL, ...) {
+  lines.object.base(list(x), lwd=lwd, col=col, ...)
+  invisible();
+}
+
 
 ### Circles
+# - collection/chain of circles;
 # fill = fill colour;
 # col  = colour of circle borders;
 # col.line = colour of extra circle of radius R;

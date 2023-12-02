@@ -319,3 +319,55 @@ genome = function(r, center = c(0,0), phi.dna = pi/4,
     return(as.bioshape(lst));
   }
 }
+
+##################
+##################
+
+### Connected Arcs
+
+### 2 Arcs: pi + computed;
+# x, y = starting & ending points;
+# r = c(r1, r2);
+# Description:
+# - 2 tangent circles passing through 2 points;
+# - one of which forms an arc of pi-radians;
+#' @export
+solve.curve.c2pi = function(x, y, r, rev = FALSE, verbose = TRUE, tol = 1E-8) {
+	L  = dist.xy(x, y);
+	L2 = L / 2;
+	rs = r[1] + r[2];
+	dL = rs - L2;
+	if(abs(dL) < tol) {
+		t1 = r[1] / L; t1r = 1 - t1;
+		c1 = c(t1r*x[1] + t1*x[2], t1r*y[1] + t1*y[2]);
+		t2 = 1 - r[2] / L; t2r = 1 - t2;
+		c2 = c(t2r*x[1] + t2*x[2], t2r*y[1] + t2*y[2]);
+		return(list(C1 = c1, C2 = c2));
+	} else if(dL < 0) {
+		if(verbose) warning("No solution!");
+		return(list(C1 = NA, C2 = NA));
+	} else if(max(r) > L2) stop("Not yet implemented!");
+	#
+	if(rev) r = r[c(2,1)];
+	cx2 = 2*r[1] + r[2];
+	dx = (L^2 - 4*r[1]^2) / (2*cx2);
+	dy = sqrt(dx * (2*r[2] - dx)); xr = 2*r[1] + dx;
+	cs = xr / L;
+	sn = dy / L; if(rev) { cs = -cs; }
+	c1 = c(cs*r[1], - sn*r[1]);
+	c2 = c(cs*cx2, - sn*cx2);
+	if(rev) {
+		tmp = c1; c1 = c2; c2 = tmp;
+		c1[1] = c1[1] + L;
+		c2[1] = c2[1] + L;
+		# r = r[c(2,1)]; # revert back; but not needed;
+	}
+	#
+	cs = (x[2] - x[1]) / L;
+	sn = (y[2] - y[1]) / L;
+	c1 = c(cs*c1[1] - sn*c1[2] + x[1], sn*c1[1] + cs*c1[2] + y[1]);
+	c2 = c(cs*c2[1] - sn*c2[2] + x[1], sn*c2[1] + cs*c2[2] + y[1]);
+	lst = list(C1 = c1, C2 = c2);
+	return(lst);
+}
+
