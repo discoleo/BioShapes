@@ -346,7 +346,21 @@ solve.curve.c2pi = function(x, y, r, rev = FALSE, verbose = TRUE, tol = 1E-8) {
 	} else if(dL < 0) {
 		if(verbose) warning("No solution!");
 		return(list(C1 = NA, C2 = NA));
-	} else if(max(r) > L2) stop("Not yet implemented!");
+	} else if(rev) {
+		if(r[2] > L2) stop("Not yet implemented!");
+		# TODO
+	} else if(r[1] > L2) {
+		cc1 = solve.circle.p2r(x, y, r = r[1]);
+		cpx = c(cc1[1], x[2]);
+		cpy = c(cc1[2], y[2]);
+		cc2 = c(x[2], y[2]);
+		# TODO: check code for all quadrants;
+		qd = is.quadrant.right(cpx, cpy);
+		d  = if(qd) r[2] else - r[2];
+		cc2 = shift.point(cc2, x = cpx, y = cpy, d=d);
+		lst = list(C1 = cc1, C2 = cc2);
+		return(lst);
+	}
 	#
 	if(rev) r = r[c(2,1)];
 	cx2 = 2*r[1] + r[2];

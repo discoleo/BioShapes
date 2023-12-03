@@ -105,8 +105,32 @@ circle.p2s = function(p1, p2, slope) {
 	yc = y1 - sinv*(xc - x1);
 	r  = dist.xy(c(x1,xc), c(y1,yc));
 	lst = list(r=r, center = c(xc, yc));
-	class(lst) = c("circle", "list");
+	lst = as.circle(lst);
 	return(lst);
+}
+
+### Circle: 2 Points & R
+#' @export
+solve.circle.p2r = function(x, y, r, qd.up = TRUE) {
+	L2 = dist.xy(x, y, as.sqrt = FALSE);
+	L2 = L2 / 4;
+	r2 = r*r;
+	if(r2 < L2) return(NA);
+	d = sqrt(r2 - L2);
+	if(qd.up) d = - d;
+	mid.x = (x[1] + x[2]) / 2;
+	mid.y = (y[1] + y[2]) / 2;
+	slope = slope(x, y);
+	cc = c(mid.x, mid.y);
+	cc = shift.ortho(cc, d=d, slope=slope);
+	cc = c(x = cc$x, y = cc$y);
+	return(cc);
+}
+#' @export
+circle.p2r = function(x, y, r, qd.up = TRUE) {
+	cc  = solve.circle.p2r(x, y, r=r, qd.up=qd.up);
+	lst = list(r=r, center = cc);
+	return(as.circle(lst));
 }
 
 
