@@ -22,8 +22,19 @@
 
 #' @export
 as.circle = function(x) {
+	UseMethod("as.circle");
+}
+#' @export
+as.circle.default = function(x) {
 	if( ! inherits(x, "circle")) {
 		class(x) = c("circle", class(x));
+	}
+	return(x);
+}
+#' @export
+as.circle.arc = function(x) {
+	if( ! inherits(x, "circle.arc")) {
+		class(x) = c("circle.arc", class(x));
 	}
 	return(x);
 }

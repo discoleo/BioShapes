@@ -2,6 +2,8 @@
 
 S3method(arc,circle)
 S3method(arc,ellipse)
+S3method(as.circle,arc)
+S3method(as.circle,default)
 S3method(circle,ArcByDiam)
 S3method(circle,ArcByDiam.xy)
 S3method(circle,ArcByDist)

@@ -21,8 +21,13 @@
 #### Helper Functions ####
 #### Demo / Examples  ####
 
+#' #export
 test = function(...) {
 	UseMethod("test");
+}
+#' #export
+test.lines = function(...) {
+	UseMethod("test.lines");
 }
 
 ######################
@@ -58,6 +63,7 @@ test.lines.simple = function(x = c(1, 5), y = c(1, 9), xB = c(2,7), yB = c(7, 3)
 	invisible(p);
 }
 # Helper:
+#' #export
 test.lines.list = function(xy, lty = c(1, 2), col = c("black", "blue", "green")) {
 	plotf = function(xA, xB, yA, yB) {
 		plot.base(ylim = c(0, 12))

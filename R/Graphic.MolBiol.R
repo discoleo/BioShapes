@@ -14,6 +14,26 @@
 
 ### Molecular Biology
 
+### Golgi
+
+# 1 Tubule:
+#' export
+golgi.p1 = function(r = 1, d = 0.25, xy = c(0,0), phi = 0, theta = pi/3) {
+	r = c(r, r + d);
+	phi = phi + c(0, theta);
+	C1.x = r*cos(phi[1]) + xy[1];
+	C1.y = r*sin(phi[1]) + xy[2];
+	C2.x = r*cos(phi[2]) + xy[1];
+	C2.y = r*sin(phi[2]) + xy[2];
+	top = c(FALSE, TRUE); # TODO: proper;
+	cap1 = circle.ArcByDiam(C1.x, C1.y, top = top[1]);
+	cap2 = circle.ArcByDiam(C2.x, C2.y, top = top[2]);
+	lst = list(C1 = as.circle.arc(list(r = r[1], center = xy, phi = phi)));
+	lst$C2 = as.circle.arc(list(r = r[2], center = xy, phi = phi));
+	lst$Cap1 = cap1;
+	lst$cap2 = cap2;
+	invisible(as.bioshape(lst));
+}
 
 ### Ig-like Domains
 # t = positions of Ig-domains;
