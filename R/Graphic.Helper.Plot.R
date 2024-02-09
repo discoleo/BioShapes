@@ -124,6 +124,7 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 			})
 		} else {
 			lst$col = col; lst$fill = fill;
+			lst$lwd = lwd; # TODO: check effects;
 			do.call("plot.ellipse", lst);
 			# plot.ellipse(r = lst$r, center = lst$center, phi = lst$phi, th = lst$th,
 			#	lwd=lwd, col=col, fill=fill, scale = lst$scale, ...);

@@ -390,7 +390,10 @@ circle.hashEmboss = function(n, center = c(0, 0), r = 1, phi = 0, scale = 1,
 ### Constructor: Trivial
 #' @export
 ellipse = function(x, y, r, theta = 0, phi = c(0, 2*pi), lwd = NULL, col = NULL, fill = NULL) {
-	xy = xy.coords(x, y);
+	if(missing(y)) {
+		if(! inherits(x, "matrix")) x = matrix(x, ncol = 2);
+		xy = xy.coords(x);
+	} else xy = xy.coords(x, y);
 	len = length(xy$x);
 	if(len == 1) {
 		center = c(xy$x, xy$y);
