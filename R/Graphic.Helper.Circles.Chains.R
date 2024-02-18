@@ -21,9 +21,11 @@
 
 # - Tangent circles forming a large circle;
 
+#' @export
 circles = function(n, r, center = c(0,0), phi = 0, ...) {
 	UseMethod("circles");
 }
+#' @export
 circles.math = function(n, r, ...) {
 	UseMethod("circles.math");
 }
