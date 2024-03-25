@@ -71,6 +71,56 @@ test.polycycle = function(n = c(14, 17, 11, 19), ngon = 7,
 	invisible();
 }
 
+##################
+
+### Vitamin A
+# TODO: misses the double bonds;
+#' @export
+vitamin.A = function(x = 0, y = 0, r = 1, phi0 = 0, adj = NULL, rev = FALSE) {
+	th = c(5/4, -1,1,1,1,
+		-1+1/4,3,-1/2,3, 2 + 1/4,1,3, # END Cyclo 6;
+		1,1,-1, 2,3,2,-1, 1,-1,2,3,2,-1, 1,-1);
+	xy = molecule.phi(2*pi/3 * th, xy = c(x, y), r=r, phi0=phi0);
+	# Proper Structure:
+	idMe = list(c(7,6), c(9,6), c(1,2), c(17,16), c(23,22), c(27,26));
+	Me = lapply(idMe, function(id) {
+		list(x = xy[[1]][[1]]$x[id],
+			y = xy[[1]][[1]]$y[id]);
+	});
+	# BackBone:
+	idBB = c(6:2, 11, 14:16, 19:22, 25:26);
+	BB = list(
+		x = xy[[1]][[1]]$x[idBB],
+		y = xy[[1]][[1]]$y[idBB]);
+	xy = as.bioshape(list(list(BB=BB), SC = as.bioshape(Me)));
+	xy$SC$Cyclo = list(
+		x = xy[[1]]$BB$x[c(1,6)],
+		y = xy[[1]]$BB$y[c(1,6)]);
+	txt = if(rev) "HO" else "OH";
+	OH = list(x = xy$SC[[6]]$x[1], y = xy$SC[[6]]$y[1], labels = txt);
+	if( ! is.null(adj)) OH$adj = adj;
+	class(OH) = c("text", class(OH));
+	xy$SC$OH = OH;
+	return(xy);
+}
+
+#' @export
+test.vitamin.A = function() {
+	layout(matrix(c(1,2,1,3), 2));
+	par.old = par(mar = c(5, 4, 1, 2) + 0.1);
+	#
+	xy = vitamin.A();
+	plot.molecule(xy, xlim = c(-3, 9), main = NULL);
+	#
+	xy = vitamin.A(phi0 = pi * 1/5, adj = c(0, 0.5));
+	plot.molecule(xy, xlim = c(-4, 8), cex = 0.9);
+	xy = vitamin.A(phi0 = pi * 6/5, adj = c(1, 0.5), rev = TRUE);
+	plot.molecule(xy, xlim = c(-8, 4), cex = 0.9);
+	#
+	par(par.old);
+	invisible();
+}
+
 
 ###########################
 

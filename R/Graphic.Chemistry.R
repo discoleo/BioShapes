@@ -262,6 +262,7 @@ expand.angle = function(x) {
 	th = x;
 	pi2 = 2*pi;
 	as2pi = function(x) x - pi2 * round(x / pi2);
+	th[1] = as2pi(th[1]);
 	for(i in seq(2, n)) {
 		sg = if(th[i-1] <= pi) 1 else -1;
 		th[i] = as2pi(sg*(th[i-1] - pi) + th[i]);
