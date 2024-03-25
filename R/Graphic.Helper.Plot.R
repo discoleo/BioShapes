@@ -219,6 +219,26 @@ lines.multiArrow = function(x, lwd=NULL, col = NULL, lty = 1, ...) {
 }
 
 ### Chemistry
+
+#' @export
+plot.molecule = function(x, y = NULL,
+		col.ends = "red", col.id = "blue") {
+	if(inherits(x, "bioshape")) {
+		xy = x[[1]][[1]];
+		x = xy$x;
+		y = xy$y;
+	}
+	plot(x, y, type = "l", asp = 1);
+	if( ! is.null(col.ends)) {
+		id = c(1, length(x));
+		points(x[id], y[id], col = col.ends);
+	}
+	if( ! is.null(col.id)) {
+		text(jitter(x), jitter(y),
+			labels = seq(length(x)), col = col.id);
+	}
+}
+
 #' @export
 lines.chemistry = function(x, lwd=NULL, col=1, ...) {
   lines.object.base(x, lwd=lwd, col=col, ...)

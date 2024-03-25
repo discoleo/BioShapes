@@ -219,6 +219,57 @@ which.quadrant.polycycle = function(x) {
 }
 
 ##################
+
+#' @export
+molecule.phi = function(phi, xy = c(0,0), r = 1, phi0 = 0, th = NULL) {
+	xy = molecule.coords(phi=phi, xy=xy, r=r, phi0=phi0,
+		th=th, verbose = FALSE);
+	xy = list(list(x = xy[,1], y = xy[,2]));
+	class(xy) = c("lines.list", class(xy));
+	return(as.bioshape(list(Mol = xy)));
+}
+#' @export
+molecule.coords = function(phi, xy = c(0,0), r = 1, phi0 = 0,
+		th = NULL, verbose = FALSE) {
+	if(is.null(th)) {
+		phi[1] = phi[1] + phi0;
+		th = expand.angle(phi);
+	}
+	# TODO: phi0 != 0 && missing(phi);
+	# xy:
+	n = length(th);
+	x = rep(0, n); x[1] = xy[1];
+	y = rep(0, n); y[1] = xy[2];
+	for(i in seq(2, n)) {
+		thi = th[i-1];
+		x[i] = cos(thi)*r + x[i-1];
+		y[i] = sin(thi)*r + y[i-1];
+	}
+	x[abs(x) < 1E-8] = 0;
+	y[abs(y) < 1E-8] = 0;
+	xy = data.frame(x=x, y=y);
+	if(verbose) {
+		# in Degrees:
+		# pd = round(phi * 180 / pi, 2);
+		xy$th = th;
+	}
+	return(xy);
+}
+
+#' @export
+expand.angle = function(x) {
+	n = length(x);
+	th = x;
+	pi2 = 2*pi;
+	as2pi = function(x) x - pi2 * round(x / pi2);
+	for(i in seq(2, n)) {
+		sg = if(th[i-1] <= pi) 1 else -1;
+		th[i] = as2pi(sg*(th[i-1] - pi) + th[i]);
+	}
+	return(th);
+}
+
+##################
 ### Transforms ###
 
 ### Pi-Bonds
