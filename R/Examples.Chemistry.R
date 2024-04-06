@@ -76,27 +76,28 @@ test.polycycle = function(n = c(14, 17, 11, 19), ngon = 7,
 ### Vitamin A
 # TODO: misses the double bonds;
 #' @export
-vitamin.A = function(x = 0, y = 0, r = 1, phi0 = 0, adj = NULL, rev = FALSE) {
+vitamin.A = function(x = 0, y = 0, r = 1, phi0 = 0, adj = NULL, rev.OH = FALSE) {
+	# TODO: parse without overlaps;
 	th = c(5/4, -1,1,1,1,
 		-1+1/4,3,-1/2,3, 2 + 1/4,1,3, # END Cyclo 6;
 		1,1,-1, 2,3,2,-1, 1,-1,2,3,2,-1, 1,-1);
-	xy = molecule.phi(2*pi/3 * th, xy = c(x, y), r=r, phi0=phi0);
+	xy = molecule.coords(2*pi/3 * th, xy = c(x, y), r=r, phi0=phi0);
 	# Proper Structure:
 	idMe = list(c(7,6), c(9,6), c(1,2), c(17,16), c(23,22), c(27,26));
 	Me = lapply(idMe, function(id) {
-		list(x = xy[[1]][[1]]$x[id],
-			y = xy[[1]][[1]]$y[id]);
+		list(x = xy[id, 1],
+			y = xy[id, 2]);
 	});
 	# BackBone:
 	idBB = c(6:2, 11, 14:16, 19:22, 25:26);
 	BB = list(
-		x = xy[[1]][[1]]$x[idBB],
-		y = xy[[1]][[1]]$y[idBB]);
+		x = xy[idBB, 1],
+		y = xy[idBB, 2]);
 	xy = as.bioshape(list(list(BB=BB), SC = as.bioshape(Me)));
 	xy$SC$Cyclo = list(
 		x = xy[[1]]$BB$x[c(1,6)],
 		y = xy[[1]]$BB$y[c(1,6)]);
-	txt = if(rev) "HO" else "OH";
+	txt = if(rev.OH) "HO" else "OH";
 	OH = list(x = xy$SC[[6]]$x[1], y = xy$SC[[6]]$y[1], labels = txt);
 	if( ! is.null(adj)) OH$adj = adj;
 	class(OH) = c("text", class(OH));
