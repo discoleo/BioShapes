@@ -26,7 +26,7 @@ as.molecule.data.frame = function(xy) {
 molecule.phi = function(phi, xy = c(0,0), r = 1, phi0 = 0, th = NULL) {
 	xy = molecule.coords(phi=phi, xy=xy, r=r, phi0=phi0,
 		th=th, verbose = FALSE);
-	return(as.molecule.matrix(xy));
+	return(as.molecule(xy));
 }
 #' @export
 molecule.coords = function(phi, xy = c(0,0), r = 1, phi0 = 0,
