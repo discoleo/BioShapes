@@ -34,6 +34,13 @@ as.bioshape = function(x) {
   invisible(x);
 }
 
+#' @export
+adjust.range = function(x, adj) {
+	adj.x = if(length(adj) == 1) c(-adj, adj) else adj;
+	lim.x = range(x) + adj.x;
+	return(lim.x);
+}
+
 
 ################
 ### Geometry ###

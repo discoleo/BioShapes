@@ -222,14 +222,26 @@ lines.multiArrow = function(x, lwd=NULL, col = NULL, lty = 1, ...) {
 
 #' @export
 plot.molecule = function(x, y = NULL, lwd = 1,
-		col = 1, col.ends = "red", col.id = "blue", ...) {
+		col = 1, col.ends = "red", col.id = "blue",
+		adj.lim = NULL, ...) {
 	if(inherits(x, "bioshape")) {
 		xy1 = x[[1]][[1]];
 		xy2 = if(length(x) == 1) NULL else x[-1];
 		x = xy1$x;
 		y = xy1$y;
 	}
-	plot(x, y, type = "l", asp = 1, lwd=lwd, col=col, ...);
+	# Plot:
+	if(! is.null(adj.lim)) {
+		if(inherits(adj.lim, "numeric")) {
+			adj.lim = list(x = adj.lim[1], y = adj.lim[2]);
+		}
+		lim.x = adjust.range(x, adj.lim$x);
+		lim.y = adjust.range(y, adj.lim$y);
+		plot(x, y, type = "l", asp = 1, lwd=lwd, col=col,
+			xlim = lim.x, ylim = lim.y, ...);
+	} else {
+		plot(x, y, type = "l", asp = 1, lwd=lwd, col=col, ...);
+	}
 	if( ! is.null(xy2)) lines.object.base(xy2, lwd=lwd, col=col);
 	if( ! is.null(col.ends)) {
 		id = c(1, length(x));

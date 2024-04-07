@@ -8,15 +8,25 @@
 
 ### Draw 2D molecules
 
-# Basic algorithm
+#' @export
+as.molecule = function(xy, ...) {
+	UseMethod("as.molecule");
+}
+#' @export
+as.molecule.data.frame = function(xy) {
+	xy = list(list(x = xy$x, y = xy$y));
+	class(xy) = c("lines.list", class(xy));
+	return(as.bioshape(list(Mol = xy)));
+}
+
+
+# Basic Algorithm
 
 #' @export
 molecule.phi = function(phi, xy = c(0,0), r = 1, phi0 = 0, th = NULL) {
 	xy = molecule.coords(phi=phi, xy=xy, r=r, phi0=phi0,
 		th=th, verbose = FALSE);
-	xy = list(list(x = xy[,1], y = xy[,2]));
-	class(xy) = c("lines.list", class(xy));
-	return(as.bioshape(list(Mol = xy)));
+	return(as.molecule.matrix(xy));
 }
 #' @export
 molecule.coords = function(phi, xy = c(0,0), r = 1, phi0 = 0,
@@ -44,6 +54,25 @@ molecule.coords = function(phi, xy = c(0,0), r = 1, phi0 = 0,
 		xy$th = th;
 	}
 	return(xy);
+}
+
+# Side Chain / Branch
+#' @export
+branch.phi.xy = function(xy, phi, id, r = 1, verbose = FALSE) {
+	id1 = id - 1;
+	dx  = xy[id, 1] - xy[id1, 1];
+	dy  = xy[id, 2] - xy[id1, 2];
+	isZ = abs(dy) < 1E-8;
+	th0 = if(isZ) { if(dx >= 0) 0 else - pi }
+		else atan2(dy, dx);
+	if(verbose) print(th0 * 180 / pi);
+	# TODO: debug
+	# th0 = if(th0 < 0) (th0 + pi) else - (th0 + pi);
+	th0 = (th0 + pi/3);
+	phi = c(th0, phi);
+	xy0 = unlist(xy[id, ]);
+	xy  = molecule.coords(phi=phi, r=r, xy = xy0, verbose=verbose);
+	return(xy)
 }
 
 #' @export
