@@ -160,8 +160,9 @@ example.helix.piscidin = function(r = 2, fill = "yellow",
 	# FFHHIFRGIVHVGKTIHRLVTG
 	x = strsplit("FFHHIFRGIVHVGKTIHRLVTG", "")[[1]];
 	plot.base(xlim = lim, ylim = lim, axt = NULL);
-	lines(helix.wheel(x, r = r[1], center=center,
-		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow));
+	hh = helix.wheel(x, r = r[1], center=center,
+		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow);
+	lines(hh);
 	tmp.dy = if(is.null(dy)) 2*r[1] else dy[[1]];
 	text(center[1], center[2] + tmp.dy, labels = "Piscidin 1", cex = cex.title);
 

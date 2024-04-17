@@ -107,6 +107,36 @@ is.quadrant.right = function(x, y) {
 }
 
 
+### Center
+
+#' @export
+center.xy = function(x, y) {
+	cx = mean(x);
+	cy = mean(y);
+	return(c(cx, cy));
+}
+#' @export
+center.xy.list = function(xy, subset = NULL) {
+	if( ! is.null(subset)) xy = xy[subset];
+	len = length(xy);
+	if(len == 0) return(numeric(0));
+	# Center
+	cx = 0; cy = 0;
+	for(id in seq_along(xy)) {
+		pp = xy[[id]];
+		cx = cx + pp[[1]];
+		cy = cy + pp[[2]];
+	}
+	cx = cx / len;
+	cy = cy / len;
+	return(c(cx, cy));
+}
+#' @export
+center.xy.dot = function(...) {
+	lst = list(...);
+	return(center.xy.list(lst));
+}
+
 ### Center: 4 points
 # t = partition;
 #' @export
