@@ -148,13 +148,31 @@ test.proj.newman = function(phi.add = c(0,0), ligand = "F,H,H|OH,\\CH[3],H") {
 # https://doi.org/10.3390/ijms21134613
 #
 #' @export
-example.helix.piscidin = function(r = 2, fill = "yellow",
-		col.lines = "#969696", col.arrow = "red", as.position = FALSE,
+example.helix.piscidin = function(r = 2, as.position = FALSE, add.labels = TRUE,
+		fill = "yellow", col.lines = "#969696", col.arrow = "red",
+		col.labels = c("#D06420", "blue", "red"),
 		lwd.arrow = 2, dy = NULL, cex.title = 1.5) {
 	par.old = par(mfrow = c(1,2));
 	center = c(4,4);
 	lim = c(0, 8);
 	if(length(r) == 1) r = c(r,r);
+	
+	lines.ellipseDomain = function(id, data, labels = NULL,
+			phi = c(0, pi), r.scale = 3.25, col = 1, lwd = 2) {
+		xy = data$C$center[id, ];
+		cx = mean(xy[, 1]);
+		cy = mean(xy[, 2]);
+		rr = data$C$r[[1]];
+		th = atan2(diff(xy[,2]), diff(xy[,1]));
+		d  = dist.xy(xy[,1], xy[,2]) / 2;
+		lines(ellipse(cx, cy, r = c(d + rr, rr*r.scale),
+			theta = th, phi=phi, col=col, lwd=lwd));
+		if( ! is.null(labels)) {
+			thpi = th / pi;
+			sg = if(thpi <= -3/4) - 1.25 else 1.25; # print(th / pi * 180);
+			text(cx, cy + 1.25 * sg*rr*r.scale, labels=labels, col=col);
+		}
+	}
 	
 	# Piscidin 1
 	# FFHHIFRGIVHVGKTIHRLVTG
@@ -164,6 +182,11 @@ example.helix.piscidin = function(r = 2, fill = "yellow",
 	h1 = helix.wheel(x, r = r[1], center=center,
 		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow);
 	lines(h1);
+	if(add.labels) {
+		lines.ellipseDomain(c(1,2), data = h1$HL2, labels = "Hydrophobic", col = col.labels[[1]]);
+		lines.ellipseDomain(c(11,16), data = h1$HL1, labels = "Cationic", col = col.labels[[2]]);
+	}
+	# Title:
 	tmp.dy = if(is.null(dy)) 2*r[1] else dy[[1]];
 	text(center[1], center[2] + tmp.dy, labels = "Piscidin 1", cex = cex.title);
 
