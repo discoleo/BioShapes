@@ -60,6 +60,8 @@ helix.wheel = function(x, r = 2, center = c(0,0), phi = 0,
 		lst = as.bioshape(lst);
 		return(lst);
 	});
+	# Helix-Wheel Layers:
+	names(lst) = paste0("HL", seq(nLayers));
 	# Lines
 	if( ! is.null(col.lines)) {
 		# Simple Line: same entry/exit;

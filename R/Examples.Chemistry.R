@@ -161,9 +161,9 @@ example.helix.piscidin = function(r = 2, fill = "yellow",
 	x = strsplit("FFHHIFRGIVHVGKTIHRLVTG", "")[[1]];
 	if(as.position) x = seq(length(x));
 	plot.base(xlim = lim, ylim = lim, axt = NULL);
-	hh = helix.wheel(x, r = r[1], center=center,
+	h1 = helix.wheel(x, r = r[1], center=center,
 		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow);
-	lines(hh);
+	lines(h1);
 	tmp.dy = if(is.null(dy)) 2*r[1] else dy[[1]];
 	text(center[1], center[2] + tmp.dy, labels = "Piscidin 1", cex = cex.title);
 
@@ -173,11 +173,12 @@ example.helix.piscidin = function(r = 2, fill = "yellow",
 	x = strsplit(x, "")[[1]];
 	if(as.position) x = seq(length(x));
 	plot.base(xlim = lim, ylim = lim, axt = NULL);
-	lines(helix.wheel(x, r = r[2], center=center,
-		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow));
+	h2 = helix.wheel(x, r = r[2], center=center,
+		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow);
+	lines(h2);
 	tmp.dy = if(is.null(dy)) 2*r[2] + 1 else dy[[2]];
 	text(center[1], center[2] + tmp.dy, labels = "Piscidin 2", cex = cex.title);
 	
 	par(par.old);
-	invisible();
+	invisible(list(H1 = h1, H2 = h2));
 }
