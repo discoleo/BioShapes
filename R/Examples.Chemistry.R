@@ -149,7 +149,7 @@ test.proj.newman = function(phi.add = c(0,0), ligand = "F,H,H|OH,\\CH[3],H") {
 #
 #' @export
 example.helix.piscidin = function(r = 2, fill = "yellow",
-		col.lines = "#969696", col.arrow = "red",
+		col.lines = "#969696", col.arrow = "red", as.position = FALSE,
 		lwd.arrow = 2, dy = NULL, cex.title = 1.5) {
 	par.old = par(mfrow = c(1,2));
 	center = c(4,4);
@@ -159,6 +159,7 @@ example.helix.piscidin = function(r = 2, fill = "yellow",
 	# Piscidin 1
 	# FFHHIFRGIVHVGKTIHRLVTG
 	x = strsplit("FFHHIFRGIVHVGKTIHRLVTG", "")[[1]];
+	if(as.position) x = seq(length(x));
 	plot.base(xlim = lim, ylim = lim, axt = NULL);
 	hh = helix.wheel(x, r = r[1], center=center,
 		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow);
@@ -170,6 +171,7 @@ example.helix.piscidin = function(r = 2, fill = "yellow",
 	# MKCATLFFVLSMVVLMAEPGEG FLGRFFRRTQAILRGARQGWRAHKAVSRYRDRYIPETDNNQEQP YNQR
 	x = "FLGRFFRRTQAILRGARQGWRAHKAVSRYRDRYIPETDNNQEQP"
 	x = strsplit(x, "")[[1]];
+	if(as.position) x = seq(length(x));
 	plot.base(xlim = lim, ylim = lim, axt = NULL);
 	lines(helix.wheel(x, r = r[2], center=center,
 		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow));
