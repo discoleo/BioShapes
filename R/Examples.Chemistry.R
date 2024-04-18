@@ -151,7 +151,7 @@ test.proj.newman = function(phi.add = c(0,0), ligand = "F,H,H|OH,\\CH[3],H") {
 example.helix.piscidin = function(r = 2, as.position = FALSE, add.labels = TRUE,
 		fill = "yellow", col.lines = "#969696", col.arrow = "red",
 		col.labels = c("#D06420", "blue", "red"),
-		lwd.arrow = 2, dy = NULL, cex.title = 1.5) {
+		lwd.arrow = 2, dy = NULL, cex = NULL, cex.title = 1.5) {
 	par.old = par(mfrow = c(1,2));
 	center = c(4,4);
 	lim = c(0, 8);
@@ -170,7 +170,8 @@ example.helix.piscidin = function(r = 2, as.position = FALSE, add.labels = TRUE,
 		if( ! is.null(labels)) {
 			thpi = th / pi;
 			sg = if(thpi <= -3/4) - 1.25 else 1.25; # print(th / pi * 180);
-			text(cx, cy + 1.25 * sg*rr*r.scale, labels=labels, col=col);
+			if(is.null(cex)) cex = 1;
+			text(cx, cy + 1.25 * sg*rr*r.scale, labels=labels, col=col, cex=cex);
 		}
 	}
 	
@@ -178,9 +179,10 @@ example.helix.piscidin = function(r = 2, as.position = FALSE, add.labels = TRUE,
 	# FFHHIFRGIVHVGKTIHRLVTG
 	x = strsplit("FFHHIFRGIVHVGKTIHRLVTG", "")[[1]];
 	if(as.position) x = seq(length(x));
-	plot.base(xlim = lim, ylim = lim, axt = NULL);
-	h1 = helix.wheel(x, r = r[1], center=center,
+	h1 = helix.wheel(x, r = r[1], center=center, cex=cex,
 		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow);
+	# Plot:
+	plot.base(xlim = lim, ylim = lim, axt = NULL);
 	lines(h1);
 	if(add.labels) {
 		lines.ellipseDomain(c(1,2), data = h1$HL2, labels = "Hydrophobic", col = col.labels[[1]]);
@@ -195,10 +197,16 @@ example.helix.piscidin = function(r = 2, as.position = FALSE, add.labels = TRUE,
 	x = "FLGRFFRRTQAILRGARQGWRAHKAVSRYRDRYIPETDNNQEQP"
 	x = strsplit(x, "")[[1]];
 	if(as.position) x = seq(length(x));
-	plot.base(xlim = lim, ylim = lim, axt = NULL);
-	h2 = helix.wheel(x, r = r[2], center=center,
+	h2 = helix.wheel(x, r = r[2], center=center, cex=cex,
 		fill=fill, col.lines=col.lines, lwd.arrow=lwd.arrow, col.arrow=col.arrow);
+	# Plot:
+	rr = h2$HL3$C$r[[1]];
+	xlim = range(h2$HL3$C$center[, 1]) + c(-rr, rr);
+	if(xlim[1] > lim[1]) xlim[1] = lim[1];
+	if(xlim[2] < lim[2]) xlim[2] = lim[2];
+	plot.base(xlim = xlim, ylim = lim, axt = NULL);
 	lines(h2);
+	# Title:
 	tmp.dy = if(is.null(dy)) 2*r[2] + 1 else dy[[2]];
 	text(center[1], center[2] + tmp.dy, labels = "Piscidin 2", cex = cex.title);
 	

@@ -30,7 +30,8 @@ seq.helix.numeric = function(n, by = 11, helix.length = 18) {
 # arrow: Helix 18 --> Helix 1 (start);
 helix.wheel = function(x, r = 2, center = c(0,0), phi = 0,
 		col = 1, fill = "yellow", col.lines = "#969696", col.arrow = "red",
-		lwd.arrow = 2, d.arrow = - r / 8, clock = TRUE, by = 11, helix.length = 18) {
+		lwd.arrow = 2, d.arrow = - r / 8, cex = NULL,
+		clock = TRUE, by = 11, helix.length = 18) {
 	id  = seq.helix.numeric(length(x), by=by, helix.length=helix.length);
 	len = length(id);
 	# Layers: full turns
@@ -52,6 +53,7 @@ helix.wheel = function(x, r = 2, center = c(0,0), phi = 0,
 		}
 		# Text
 		lbl = list(x = xyC$x, y = xyC$y, labels = lbl, col=col);
+		if( ! is.null(cex)) lbl$cex = cex;
 		class(lbl) = c("text", "list");
 		# Circles
 		xyC = list(center = cbind(xyC$x, xyC$y), r = r1, col = NA, fill=fill);
