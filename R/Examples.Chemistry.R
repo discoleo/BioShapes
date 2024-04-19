@@ -157,22 +157,11 @@ example.helix.piscidin = function(r = 2, as.position = FALSE, add.labels = TRUE,
 	lim = c(0, 8);
 	if(length(r) == 1) r = c(r,r);
 	
-	lines.ellipseDomain = function(id, data, labels = NULL,
-			phi = c(0, pi), r.scale = 3.25, col = 1, lwd = 2) {
-		xy = data$C$center[id, ];
-		cx = mean(xy[, 1]);
-		cy = mean(xy[, 2]);
-		rr = data$C$r[[1]];
-		th = atan2(diff(xy[,2]), diff(xy[,1]));
-		d  = dist.xy(xy[,1], xy[,2]) / 2;
-		lines(ellipse(cx, cy, r = c(d + rr, rr*r.scale),
-			theta = th, phi=phi, col=col, lwd=lwd));
-		if( ! is.null(labels)) {
-			thpi = th / pi;
-			sg = if(thpi <= -3/4) - 1.25 else 1.25; # print(th / pi * 180);
-			if(is.null(cex)) cex = 1;
-			text(cx, cy + 1.25 * sg*rr*r.scale, labels=labels, col=col, cex=cex);
-		}
+	lines.ellipseDomain = function(...) {
+		prm = list(...);
+		lst = do.call(ellipse.HelixWheel, prm);
+		lines(lst$E);
+		if( ! is.null(lst$Lbl)) do.call(text, lst$Lbl);
 	}
 	
 	# Piscidin 1

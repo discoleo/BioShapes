@@ -408,6 +408,35 @@ ellipse = function(x, y, r, theta = 0, phi = c(0, 2*pi), lwd = NULL, col = NULL,
 	return(lst);
 }
 
+### Ellipse on Helix Wheel
+# - Helix Wheel: in Graphic.Chemistry.Helix.R;
+#' @export
+ellipse.HelixWheel = function(id, data, labels = NULL,
+			phi = c(0, pi), col = 1, lwd = 2,
+			r.scale = 3.25, dy.scale = 1, cex = NULL) {
+	xy = data$C$center[id, ];
+	cx = mean(xy[, 1]);
+	cy = mean(xy[, 2]);
+	rr = data$C$r[[1]];
+	iL = nrow(xy);
+	th = atan2(xy[iL,2] - xy[1,2], xy[iL,1] - xy[1,1]);
+	d  = dist.xy(xy[,1], xy[,2]) / 2;
+	ee = ellipse(cx, cy, r = c(d + rr, rr*r.scale),
+			theta = th, phi=phi, col=col, lwd=lwd);
+	lst = list(E = ee);
+	# Label:
+	if( ! is.null(labels)) {
+		thpi = th / pi;
+		sg = if(thpi <= -3/4) - dy.scale else dy.scale;
+		# print(th / pi * 180);
+		txt = list(x = cx, y = cy + 1.5625 * sg*rr*r.scale,
+			labels=labels, col=col);
+		if( ! is.null(cex)) txt$cex = cex;
+		lst$Lbl = txt;
+	}
+	return(lst);
+}
+
 # - returns solution closest to "y.guess";
 #' @export
 solve.ellipse.closest = function(x, y.guess = NULL, r, phi = 0, center = c(0,0), tol = 1E-10) {

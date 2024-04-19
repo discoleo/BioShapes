@@ -9,6 +9,8 @@
 ### Biochemistry: Helix Structures
 
 
+# Note:
+# - Next circle = (id + by) %% helix.length;
 #' @export
 seq.helix.numeric = function(n, by = 11, helix.length = 18) {
 	r0 = n %% helix.length;
