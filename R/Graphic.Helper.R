@@ -183,6 +183,22 @@ proj.line = function(p, x, y) {
 	return(lst);
 }
 
+#' @export
+proj.line3d = function(p, x, y, z) {
+	dx = x[2] - x[1]; dx0 = p[1] - x[1];
+	dy = y[2] - y[1]; dy0 = p[2] - y[1]; # p[2] = yP;
+	dz = z[2] - z[1]; dz0 = p[3] - z[1];
+	tt = (dx*dx0 + dy*dy0 + dz*dz0);
+	tt = tt / (dx^2 + dy^2 + dz^2);
+	t1 = 1 - tt;
+	px = t1*x[1] + tt*x[2];
+	py = t1*y[1] + tt*y[2];
+	pz = t1*z[1] + tt*z[2];
+	d  = sqrt(sum((p - c(px, py, pz))^2));
+	lst = list(t = tt, d = d, x = px, y = py, z = pz);
+	return(lst);
+}
+
 
 ### Reflect Point across line
 # p = c(x, y) # the point to reflect;
