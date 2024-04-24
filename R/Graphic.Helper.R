@@ -52,6 +52,12 @@ dist.xy = function(x, y, as.sqrt = TRUE) {
   if(as.sqrt) xy = sqrt(xy);
   return(xy);
 }
+#' @export
+dist.p2 = function(p1, p2) {
+  xy = (p1[1] - p2[1])^2 + (p1[2] - p2[2])^2;
+  xy = sqrt(xy);
+  return(xy);
+}
 
 
 ### Slope
@@ -153,6 +159,30 @@ center.p4 = function(p1, p2, p3, p4, t = c(1/2, 1/2)) {
 
 
 ### Basic Operations
+
+### Projections
+
+### Proj: Point on a Line
+#' @export
+proj.line = function(p, x, y) {
+	dx = x[2] - x[1]; dx0 = p[1] - x[1];
+	dy = y[2] - y[1]; dy0 = p[2] - y[1]; # p[2] = yP;
+	# Special Case: (but not critical)
+	if(dx == 0) {
+		tt  = dy0 / dy;
+		lst = list(t = tt, d = abs(dx0), x = x[1], y = p[2]);
+		return(lst);
+	}
+	tt = (dx*dx0 + dy*dy0);
+	tt = tt / (dx^2 + dy^2);
+	t1 = 1 - tt;
+	px = t1*x[1] + tt*x[2];
+	py = t1*y[1] + tt*y[2];
+	d  = dist.p2(p, c(px, py));
+	lst = list(t = tt, d = d, x = px, y = py);
+	return(lst);
+}
+
 
 ### Reflect Point across line
 # p = c(x, y) # the point to reflect;
