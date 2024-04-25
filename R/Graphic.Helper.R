@@ -199,6 +199,24 @@ proj.line3d = function(p, x, y, z) {
 	return(lst);
 }
 
+### Proj: Point on plane
+# (x,y,z) = 3 points on the plane;
+#' @export
+proj.plane3d = function(p, x, y = NULL, z) {
+	if( ! is.null(y)) {
+		x = cbind(x, y, z);
+	}
+	cd = cbind(x[2,] - x[1,], x[3,] - x[2,]);
+	cf = x %*% cd;
+	cf = rbind(c(1,1,1), t(cf));
+	rr = t(cd) %*% p;
+	rr = c(1, rr);
+	xd = solve(cf, rr);
+	pp = xd %*% x;
+	return(list(p = pp, coef = xd));
+}
+# TODO: check thoroughly!
+
 
 ### Reflect Point across line
 # p = c(x, y) # the point to reflect;
