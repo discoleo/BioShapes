@@ -30,6 +30,13 @@ test.lines = function(...) {
 	UseMethod("test.lines");
 }
 
+#' @export
+package.test = function(x, quiet = TRUE) {
+	# isPkg = nchar(find.package(x, quiet=quiet)) > 0;
+	isPkg = require(x, quietly=quiet, character.only = TRUE);
+	return(isPkg);
+}
+
 ######################
 
 ### Line Intersections
@@ -104,6 +111,30 @@ test.lines.special = function(lty = c(1, 2), col = c("black", "blue", "green")) 
 	
 	par(par.old);
 	invisible();
+}
+
+### 3D Projections
+#' @export
+test.proj.line3d = function(p = c(7,8,5), xyz = NULL,
+		plot = TRUE, verbose = TRUE, t.ext = 4, tol = 1E-8) {
+	if(is.null(xyz)) xyz = matrix(c(1,3,3,5,6,2), nrow=2);
+	d = proj.line3d(p, xyz);
+	pp  = c(d$x, d$y, d$z);
+	err = sum((p - pp)^2, (xyz[1,] - pp)^2, - (xyz[1,] - p)^2);
+	if(abs(err) > tol) {
+		cat("Error: NOT perpendicular!");
+	} else if(verbose) {
+		cat("OK: Computed line is perpendicular!\n");
+	}
+	if(plot && package.test("rgl")) {
+		tt = t.ext;
+		xyz = matrix(c(tt, 1 - tt, 1 - tt, tt), nrow=2) %*% xyz;
+		rgl::lines3d(xyz);
+		pp = rbind(p, pp);
+		rgl::lines3d(pp, col = "blue");
+		rgl::points3d(pp, col = "red");
+	}
+	invisible(d);
 }
 
 #####################
