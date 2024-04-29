@@ -165,6 +165,9 @@ center.p4 = function(p1, p2, p3, p4, t = c(1/2, 1/2)) {
 ### Proj: Point on a Line
 #' @export
 proj.line = function(p, x, y) {
+	if(missing(y)) {
+		y = x[,2]; x = x[,1];
+	}
 	dx = x[2] - x[1]; dx0 = p[1] - x[1];
 	dy = y[2] - y[1]; dy0 = p[2] - y[1]; # p[2] = yP;
 	# Special Case: (but not critical)
@@ -185,6 +188,9 @@ proj.line = function(p, x, y) {
 
 #' @export
 proj.line3d = function(p, x, y, z) {
+	if(missing(y)) {
+		y = x[,2]; z = x[,3]; x = x[,1];
+	}
 	dx = x[2] - x[1]; dx0 = p[1] - x[1];
 	dy = y[2] - y[1]; dy0 = p[2] - y[1]; # p[2] = yP;
 	dz = z[2] - z[1]; dz0 = p[3] - z[1];
@@ -194,6 +200,7 @@ proj.line3d = function(p, x, y, z) {
 	px = t1*x[1] + tt*x[2];
 	py = t1*y[1] + tt*y[2];
 	pz = t1*z[1] + tt*z[2];
+	# TODO: compute d or not?
 	d  = sqrt(sum((p - c(px, py, pz))^2));
 	lst = list(t = tt, d = d, x = px, y = py, z = pz);
 	return(lst);
@@ -400,42 +407,6 @@ shift.point.default = function(p, x, y, d = 1, slope = NULL, scale = 1) {
 }
 
 
-### Split Line
-#' @export
-split.line = function(x, y, n) {
-  if(n == 1) {
-    lst = list(x=x, y=y);
-    return(lst);
-  }
-  if(n <= 0) stop("Wrong number of fragments!");
-  # Split
-  t  = seq(n - 1) / n;
-  rt = rev(t);
-  xs = x[1]*rt + x[2]*t;
-  ys = y[1]*rt + y[2]*t;
-  xs = c(x[1], xs, x[2]);
-  ys = c(y[1], ys, y[2]);
-  lst = list(x=xs, y=ys);
-  return(lst);
-}
-
-### Split into alternate & separate lines
-#' @export
-split.AltLines.matrix = function(xy) {
-	len = nrow(xy);
-	xyS = xy[seq(1, len, by=2), , drop=FALSE];
-	xyE = xy[seq(2, len, by=2), , drop=FALSE];
-	xyS = as.data.frame(xyS);
-	xyE = as.data.frame(xyE);
-	len = nrow(xyS);
-	xyS$id = seq(len);
-	xyE$id = seq(len);
-	xy = rbind(xyS, xyE);
-	names(xy) = c("x", "y", "id");
-	return(xy);
-}
-
-
 # p1 = Translate to p1;
 #' @export
 rotate = function(x, y, slope, p1=c(0,0)) {
@@ -451,6 +422,7 @@ rotate = function(x, y, slope, p1=c(0,0)) {
   dx = (x - slope*y) * sdiv; # + p1[1];
   dy = (slope*x + y) * sdiv; # + p1[2];
   lst = list(x = p1[1] + dx, y = p1[2] + dy);
+  return(lst);
 }
 
 

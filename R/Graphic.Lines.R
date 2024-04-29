@@ -2,8 +2,52 @@
 
 ### Lines & Connectors
 
+### Split Line
+# n = number of fragments;
+#' @export
+split.line = function(x, y, n) {
+  if(n == 1) {
+    lst = list(x=x, y=y);
+    return(lst);
+  }
+  if(n <= 0) stop("Wrong number of fragments!");
+  # Split
+  t  = seq(n - 1) / n;
+  rt = rev(t);
+  xs = x[1]*rt + x[2]*t;
+  ys = y[1]*rt + y[2]*t;
+  xs = c(x[1], xs, x[2]);
+  ys = c(y[1], ys, y[2]);
+  lst = list(x=xs, y=ys);
+  return(lst);
+}
+
+
+### Split into alternate & separate lines
+# xy  = Matrix with columns (x, y);
+# Out = 1-2| |3-4|...;
+#' @export
+split.AltLines.matrix = function(xy) {
+	len = nrow(xy);
+	# TODO: if(len %% 2 == 1) ?
+	xyS = xy[seq(1, len, by=2), , drop=FALSE];
+	xyE = xy[seq(2, len, by=2), , drop=FALSE];
+	xyS = as.data.frame(xyS);
+	xyE = as.data.frame(xyE);
+	len = nrow(xyS);
+	xyS$id = seq(len);
+	xyE$id = seq(len);
+	xy = rbind(xyS, xyE);
+	names(xy) = c("x", "y", "id");
+	return(xy);
+}
+
+###################
 
 ### Line with Stair
+#            _
+# Example: _|
+#
 #' @export
 as.lines.stairs = function(x, y, slope, t = 0.5) {
 	d = dist.xy(x, y);
