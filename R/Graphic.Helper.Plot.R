@@ -44,6 +44,18 @@ plot.circle = function(r, center=c(0,0), col=1, fill=NULL, N=128, ...) {
   invisible();
 }
 
+# Note: mainly for testing the hashed lines;
+#' @export
+plot.circle.hash = function(n, phi = pi/3, r = 1, center = c(4,4),
+		col.line = "green", scale = 1, ...) {
+	tmp = circle.hash(n, phi=phi, r=r, center=center, scale=scale, ...)
+	plot.base(asp = 1/scale);
+	lines(tmp);
+	if( ! is.null(col.line)) {
+		abline(v = center[1] + c(-r,r), col = col.line);
+	}
+}
+
 #' @export
 plot.circle.arc = function(r, center, phi, col=1, fill=NULL, ...) {
   shape::plotcircle(r, mid=center, from=phi[1], to=phi[2], lcol=col, col=fill, ...);

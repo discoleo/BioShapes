@@ -119,38 +119,6 @@ test.circle.uniform.text(c(100,100), phi=c(0, - pi))
 test.tumor.mass2()
 
 
-#####################
-#####################
-
-### Hashed Circle
-
-test.circle.hash = function(n, phi, r = 1, scale = 1, center = c(4,4), ...) {
-	tmp = circle.hash(n, phi=phi, r=r, center=center, scale=scale, ...)
-	plot.base(asp = 1/scale)
-	lines(tmp)
-	abline(v = center[1] + c(-r,r), col = "green")
-}
-
-
-###
-par.old = par(mfrow = c(2,2))
-
-### Base:
-test.circle.hash(11, phi = pi/5, r = 2, center = c(4,4), lty = 2, col = "red")
-
-### Scale
-n = 13; r = 2; scale = 2;
-test.circle.hash(n, phi = pi/3, r=r, scale=scale)
-#
-test.circle.hash(n, phi = pi/2 + 0.2, r=r, scale=scale)
-#
-phi = pi - 0.2
-test.circle.hash(n, phi = phi, r=r, scale=scale)
-lines(circle.hash(11, phi = phi + pi/2, r=r, scale=scale, center = c(4,4), col = "red"))
-
-par(par.old)
-
-
 ################
 
 ################

@@ -23,24 +23,61 @@
 # - Arcs: e.g. Lenses;
 
 
-################
+###############
 
 ###############
 ### Circles ###
 
+### Hashed Circles
+# lty = line type for the hashed-lines: circle 1 vs circles 2:4;
+#' @export
+test.circle.hash = function(phi = c(pi/5, pi/3, pi/2 + 0.2, pi - 0.2),
+		n = list(11, 13, 13, c(13, 11)), r = 2,
+		lty = c(2, 1), scale = c(1,2)) {
+	par.old = par(mfrow = c(2,2));
+	
+	### Base:
+	plot.circle.hash(n[[1]], phi = phi[1], r=r, scale = scale[1],
+		lty = lty[1], col = "red");
+	
+	### Scale
+	scale = scale[2]; lty = lty[2];
+	plot.circle.hash(n[[2]], phi = phi[2], r=r, scale=scale, lty=lty);
+	#
+	plot.circle.hash(n[[3]], phi = phi[3], r=r, scale=scale, lty=lty);
+	#
+	phi = phi[4]; n = n[[4]];
+	len = length(n);
+	plot.circle.hash(n[1], phi = phi, r=r, scale=scale, lty=lty);
+	if(len > 1) {
+		for(id in seq(2, len)) {
+			phi_i = phi + pi / id;
+			lines(circle.hash(n[id], phi = phi_i, center = c(4,4),
+				r=r, scale=scale, lty=lty, col = "red"));
+	}}
+	
+	par(par.old)
+}
+
 ### Plot Objects formed from circles;
 # - convenience function;
+# - xy  = chain of circles;
 # - pin = hack to set par(pin) = mean(...);
 #   Note: asp = 1 is the better approach (and is set automatically);
 #' @export
 test.FilledCircle = function(xy, r=NULL, R=NULL, lim=NULL, line=TRUE,
                             col="#B0B032", col.line="green", add=FALSE, pin = FALSE, ...) {
-  if(is.null(r)) {
-    r = attr(xy, "r");
-    if(is.null(r)) stop("Missing r!");
-  } else {
-    attr(xy, "r") = r;
-  }
+	if(missing(xy)) {
+		# Basic object:
+		cat("Note: Generating object with chained circles!\n");
+		xy = circles.OnCircle(11, r = 5);
+	}
+	if(is.null(r)) {
+		r = attr(xy, "r");
+		if(is.null(r)) stop("Missing r!");
+	} else {
+		attr(xy, "r") = r;
+	}
   ### New Plot
   if( ! add) {
     x = xy$x; y = xy$y;
