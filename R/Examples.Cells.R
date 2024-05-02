@@ -200,7 +200,7 @@ example.Epithelium.BB = function(x = c(0,8), y = c(1,1), n = 8, dy = 6, h = ~2,
 #####################
 #####################
 
-### Tumor
+### Tumour
 
 #' @export
 test.tumor.mass2 = function(
@@ -217,3 +217,24 @@ test.tumor.mass2 = function(
 	par(par.old)
 }
 
+
+#####################
+
+### Phages
+
+# id.faces = number the faces (only for phage 1);
+#' @export
+test.phage = function(phi = c(0, pi/5, -pi/3, pi/2, -pi/2),
+		r = 1, col = NULL, id.faces = TRUE) {
+	fill = rep("#A0A06464", 10);
+	fill[c(7,8)] = "#64320064";
+	ph0 = phage.base(0, 7, phi = phi[1], r=r, col=col, id.faces=id.faces);
+	# Plot:
+	plot.base(axt = NULL);
+	lines(ph0);
+	lines(phage.base(2.5, 4, phi = phi[2], fill=fill, r=r));
+	lines(phage.base(4, 1, phi = phi[3], fill=fill, r=r));
+	#
+	lines(phage.base(4.5, 7, phi = phi[4], fill=fill, r=r));
+	lines(phage.base(7.25, 7, phi = phi[5], fill=fill, r=r));
+}

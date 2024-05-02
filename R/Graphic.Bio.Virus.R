@@ -1,7 +1,8 @@
 
 
 #' @export
-phage.base = function(x, y = NULL, r = 1, phi = 0) {
+phage.base = function(x, y = NULL, r = 1, phi = 0,
+		col = NULL, fill = NULL, id.faces = FALSE) {
 	center = xy.coords(x, y);
 	center = c(center$x, center$y);
 	phi = phi + pi/6 + pi;
@@ -40,6 +41,31 @@ phage.base = function(x, y = NULL, r = 1, phi = 0) {
 		as.t3(1, c(1,3)), as.t3(3, c(1,2)), as.t3(5, c(3,2)),
 		as.t3(NULL, c(1,2,3))
 		);
+	if(! is.null(fill)) {
+		len = length(fill);
+		if(len > 1) {
+			for(id in seq(len)) lst[[id]]$fill = fill[[id]];
+		} else lst$fill = fill;
+	}
+	if(! is.null(col)) {
+		len = length(col);
+		if(len > 1) {
+			for(id in seq(len)) lst[[id]]$col = col[[id]];
+		} else lst$col = col;
+	}
+	# Number faces
+	if(id.faces) {
+		len = 10;
+		cc = lapply(seq(len), function(id) {
+			p = lst[[id]];
+			center.xy(p$x, p$y);
+			});
+		cc = do.call(rbind, cc);
+		lstID = list(x = cc[,1], y = cc[,2],
+			labels = seq(len));
+		class(lstID) = c("text", "list");
+		lst$Count = lstID;
+	}
 	return(as.bioshape(lst));
 }
 
