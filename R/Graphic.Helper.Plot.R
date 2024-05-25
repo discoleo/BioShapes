@@ -76,9 +76,10 @@ plot.ellipse = function(r, center, phi = c(0, pi), theta = 0, lwd = 1,
 }
 
 #' @export
-plot.circle.oid2 = function(r, center = c(0,0), col=1, fill=NULL, ..., N=129) {
-	id = seq(0, 2*pi, length.out = N);
-	cs = cos(id); sn = sin(id);
+plot.circle.oid2 = function(r, center = c(0,0), phi = c(0, 2*pi), dphi = 0,
+		col=1, fill=NULL, ..., N=129) {
+	id = seq(phi[1], phi[2], length.out = N);
+	cs = cos(id); sn = sin(id + dphi);
 	x = r * sqrt(abs(cs)) * sign(cs) + center[1];
 	y = r * sqrt(abs(sn)) * sign(sn) + center[2];
 	if( ! is.null(fill)) {
@@ -88,9 +89,10 @@ plot.circle.oid2 = function(r, center = c(0,0), col=1, fill=NULL, ..., N=129) {
 	}
 }
 #' @export
-plot.circle.oid = function(r, center = c(0,0), pow = 2, col=1, fill=NULL, ..., N=129) {
-	id = seq(0, 2*pi, length.out = N);
-	cs = cos(id); sn = sin(id);
+plot.circle.oid = function(r, center = c(0,0), pow = 2, phi = c(0, 2*pi), dphi = 0,
+		col=1, fill=NULL, ..., N=129) {
+	id = seq(phi[1], phi[2], length.out = N);
+	cs = cos(id); sn = sin(id + dphi);
 	x = r * abs(cs)^pow * sign(cs) + center[1];
 	y = r * abs(sn)^pow * sign(sn) + center[2];
 	if( ! is.null(fill)) {
