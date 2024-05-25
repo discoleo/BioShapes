@@ -75,6 +75,32 @@ plot.ellipse = function(r, center, phi = c(0, pi), theta = 0, lwd = 1,
 	lines(xy, lwd=lwd, col=col, ...);
 }
 
+#' @export
+plot.circle.oid2 = function(r, center = c(0,0), col=1, fill=NULL, ..., N=129) {
+	id = seq(0, 2*pi, length.out = N);
+	cs = cos(id); sn = sin(id);
+	x = r * sqrt(abs(cs)) * sign(cs) + center[1];
+	y = r * sqrt(abs(sn)) * sign(sn) + center[2];
+	if( ! is.null(fill)) {
+		polygon(x, y, col=fill, border = col, ...);
+	} else {
+		lines(x, y, col=col, ...);
+	}
+}
+#' @export
+plot.circle.oid = function(r, center = c(0,0), pow = 2, col=1, fill=NULL, ..., N=129) {
+	id = seq(0, 2*pi, length.out = N);
+	cs = cos(id); sn = sin(id);
+	x = r * abs(cs)^pow * sign(cs) + center[1];
+	y = r * abs(sn)^pow * sign(sn) + center[2];
+	if( ! is.null(fill)) {
+		polygon(x, y, col=fill, border = col, ...);
+	} else {
+		lines(x, y, col=col, ...);
+	}
+}
+
+
 ### Plot:
 
 ### Bio-Shapes
