@@ -87,6 +87,7 @@ plot.circle.oid2 = function(r, center = c(0,0), phi = c(0, 2*pi), dphi = 0,
 	} else {
 		lines(x, y, col=col, ...);
 	}
+	invisible(list(x=x, y=y));
 }
 #' @export
 plot.circle.oid = function(r, center = c(0,0), pow = 2, phi = c(0, 2*pi), dphi = 0,
@@ -100,6 +101,24 @@ plot.circle.oid = function(r, center = c(0,0), pow = 2, phi = c(0, 2*pi), dphi =
 	} else {
 		lines(x, y, col=col, ...);
 	}
+	invisible(list(x=x, y=y));
+}
+#' @export
+plot.circle.bitrig = function(r, center = c(0,0), pow = 2, phi = c(0, 2*pi), dphi = 0,
+		type = c("cos", "sin"),
+		col=1, fill=NULL, ..., N=129) {
+	type = match.arg(type);
+	id = seq(phi[1], phi[2], length.out = N);
+	cs = cos(id); sn = sin(id);
+	if(type == "sin") cs = sn;
+	x = r * abs(cs)^pow * sign(cs) + center[1];
+	y = r * sin(pi/2 * sn + dphi) + center[2];
+	if( ! is.null(fill)) {
+		polygon(x, y, col=fill, border = col, ...);
+	} else {
+		lines(x, y, col=col, ...);
+	}
+	invisible(list(x=x, y=y));
 }
 
 
