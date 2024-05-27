@@ -60,6 +60,33 @@ example.curves = function(R = 5, nr = 20, axt = c(1, 2)) {
   invisible();
 }
 
+#' @export
+examples.circloids = function(n = c(3, 5), r = c(5,3,3,2), col = "red") {
+	if(length(col) == 1) col = c(col, col);
+	if(length(n) == 2) n = c(n, n);
+	par.old = par(mfrow = c(1,2), mar = c(1,0.5,1.5, 0.5));
+	#
+	plot.base(axt = NULL);
+	for(i in seq(n[1])) {
+		plot.circle.oid(r[1], c(4,4), rot.phi = i*pi/n[1], col = i);
+	}
+	for(i in seq(n[2])) {
+		plot.circle.oid(r[2], c(4,4), rot.phi = i*pi/n[2], col = col[[1]]);
+	}
+	
+	plot.base(axt = NULL)
+	for(i in seq(n[3])) {
+		plot.circle.oid2(r[3], c(4,4), rot.phi = i*pi/n[3], col = i);
+	}
+	for(i in seq(n[4])) {
+		plot.circle.oid2(r[4], c(4,4), rot.phi = i*pi/n[4], col = col[[2]]);
+	}
+	#
+	title("Circloids", cex=3, line = -2, outer = TRUE);
+	par(par.old);
+	invisible();
+}
+
 #########################
 
 #########################

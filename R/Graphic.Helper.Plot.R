@@ -75,13 +75,23 @@ plot.ellipse = function(r, center, phi = c(0, pi), theta = 0, lwd = 1,
 	lines(xy, lwd=lwd, col=col, ...);
 }
 
+# rot.phi = anti-clockwise rotation;
 #' @export
-plot.circle.oid2 = function(r, center = c(0,0), phi = c(0, 2*pi), dphi = 0,
-		col=1, fill=NULL, ..., N=129) {
+plot.circle.oid2 = function(r, center = c(0,0), phi = c(0, 2*pi),
+		rot.phi = 0, col=1, fill=NULL, ..., N=129, dphi = 0) {
 	id = seq(phi[1], phi[2], length.out = N);
 	cs = cos(id); sn = sin(id + dphi);
-	x = r * sqrt(abs(cs)) * sign(cs) + center[1];
-	y = r * sqrt(abs(sn)) * sign(sn) + center[2];
+	x = r * sqrt(abs(cs)) * sign(cs);
+	y = r * sqrt(abs(sn)) * sign(sn);
+	if(rot.phi != 0) {
+		csr = cos(rot.phi); snr = sin(rot.phi);
+		x1 = x*csr + y*snr + center[1];
+		y1 = y*csr - x*snr + center[2];
+		x = x1; y = y1;
+	} else {
+		x = x + center[1];
+		y = y + center[2];
+	}
 	if( ! is.null(fill)) {
 		polygon(x, y, col=fill, border = col, ...);
 	} else {
@@ -89,13 +99,23 @@ plot.circle.oid2 = function(r, center = c(0,0), phi = c(0, 2*pi), dphi = 0,
 	}
 	invisible(list(x=x, y=y));
 }
+# rot.phi = anti-clockwise rotation;
 #' @export
-plot.circle.oid = function(r, center = c(0,0), pow = 2, phi = c(0, 2*pi), dphi = 0,
-		col=1, fill=NULL, ..., N=129) {
+plot.circle.oid = function(r, center = c(0,0), pow = 2.5, phi = c(0, 2*pi),
+		rot.phi = 0, col=1, fill=NULL, ..., N=129, dphi = 0) {
 	id = seq(phi[1], phi[2], length.out = N);
 	cs = cos(id); sn = sin(id + dphi);
-	x = r * abs(cs)^pow * sign(cs) + center[1];
-	y = r * abs(sn)^pow * sign(sn) + center[2];
+	x = r * abs(cs)^pow * sign(cs);
+	y = r * abs(sn)^pow * sign(sn);
+	if(rot.phi != 0) {
+		csr = cos(rot.phi); snr = sin(rot.phi);
+		x1 = x*csr + y*snr + center[1];
+		y1 = y*csr - x*snr + center[2];
+		x = x1; y = y1;
+	} else {
+		x = x + center[1];
+		y = y + center[2];
+	}
 	if( ! is.null(fill)) {
 		polygon(x, y, col=fill, border = col, ...);
 	} else {
