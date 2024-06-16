@@ -371,7 +371,7 @@ virus2 = function(R = 2, center = c(0,0), n.spike = 10, off.spike = c(0, 1, 1.5)
 ### Convex Lens
 #' @export
 lens = function(x, y, R = NULL, scale = c(1,1),
-                lwd=1, col=1, fill = NULL) {
+                lwd = 1, lty = NULL, col = NULL, fill = NULL) {
   d2 = (x[2] - x[1])^2 + (y[2] - y[1])^2;
   d  = sqrt(d2);
   ### Lens Radius
@@ -403,11 +403,12 @@ lens = function(x, y, R = NULL, scale = c(1,1),
   alpha = asin(d/(2*R));
   phi1 = atan2((mid.y - c1$y), (mid.x - c1$x));
   phi2 = atan2((mid.y - c2$y), (mid.x - c2$x));
+  isRev = abs(phi1 - phi2) > 1; # = pi;
   clock = - c(-1,1);
   phi1 = phi1 + clock*alpha[1];
   phi2 = phi2 + clock*alpha[2];
   phi1 = rev(phi1);
-  phi2 = rev(phi2);
+  if(isRev) phi2 = rev(phi2);
 
   # TODO: handle data.frame?
   c1 = unlist(c1[1, c(1, 2)]);
@@ -416,17 +417,19 @@ lens = function(x, y, R = NULL, scale = c(1,1),
   lst2 = list(r = R[2], center = c2, phi = phi2);
   class(lst1) = c("circle.arc", "list");
   class(lst2) = c("circle.arc", "list");
-  # TODO: col and fill
-
-  lst = list(lst1, lst2);
-  class(lst) = c("bioshape", "list");
-  return(lst);
+  # Polycircle:
+  lst = list(C1 = lst1, C2 = lst2);
+  lst$col = col; lst$fill = fill;
+  lst$lwd = lwd; lst$lty = lty;
+  class(lst) = c("polycircle", "list");
+  lst = list(Lens = lst);
+  return(as.bioshape(lst));
 }
 
 # x, y = endpoints of Axis (group of lens);
 #' @export
 lens.group = function(x, y, h, pos=NULL, R=NULL, l.scale=1,
-                      lwd=1, col=1, fill=NULL, lty=1) {
+                      lwd=1, col=NULL, fill=NULL, lty=NULL) {
   len = length(h);
   if(is.null(pos)) {
     if(len > 2) stop("Specify the position of all the lenses!");
@@ -437,23 +440,32 @@ lens.group = function(x, y, h, pos=NULL, R=NULL, l.scale=1,
   xL = (1 - pos)*x[1] + pos*x[2];
   yL = (1 - pos)*y[1] + pos*y[2];
   #
+  if(is.null(col)) { col = rep(NULL, len); }
+  else if(length(col) == 1) { col = rep(col, len); }
+  if(is.null(fill)) { fill = rep(NULL, len); }
+  else if(length(fill) == 1) { fill = rep(fill, len); }
+  if(is.null(lty)) { lty = rep(lty, len); }
+  else if(length(lty) == 1) { lty = rep(lty, len); }
+  isScale = length(l.scale) > 1;
+  isLwd = length(lwd) > 1;
   isR = ! is.null(R);
   lst = lapply(seq(len), function(id) {
     d  = h[id]; d = c(-d, d);
     xy = shiftLine(xL[id], yL[id], slope=slope, d=d);
     R  = if(isR) R[id] else NULL;
-    scR = if(length(l.scale) == 1) l.scale else l.scale[id];
-    lwd = if(length(lwd) == 1) lwd else lwd[id];
-    col = if(length(col) == 1) col else col[id];
-    lst = lens(xy$x, xy$y, R=R, scale=scR, lwd=lwd, col=col);
+    scR = if(isScale) l.scale[id] else l.scale;
+    lwd = if(isLwd) lwd[id] else lwd;
+    lst = lens(xy$x, xy$y, R=R, scale=scR, lwd=lwd, lty = lty[id],
+			col = col[id], fill = fill[id]);
     lty = if(length(lty) == 1) lty else lty[id];
-    lst[[1]]$lty = lty;
-    lst[[2]]$lty = lty;
-    if( ! is.null(fill)) {
-      fill = if(length(fill) == 1) fill else fill[id];
-      lst[[1]]$fill = fill;
-      lst[[2]]$fill = fill;
-    }
+	# TODO:
+    # lst[[1]]$lty = lty;
+    # lst[[2]]$lty = lty;
+    # if( ! is.null(fill)) {
+    #  fill = if(length(fill) == 1) fill else fill[id];
+    #  lst[[1]]$fill = fill;
+    #  lst[[2]]$fill = fill;
+    # }
     return(lst);
   });
   lst = do.call(c, lst);

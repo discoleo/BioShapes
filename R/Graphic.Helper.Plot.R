@@ -142,7 +142,7 @@ plot.circle.bitrig = function(r, center = c(0,0), pow = 2, phi = c(0, 2*pi), dph
 }
 
 #' @export
-plot.polycircle = function(x, col = 1, fill = NULL, ..., N = 129) {
+plot.polycircle = function(x, col = 1, fill = NULL, ..., N = 65) {
 	xy = as.points.polycircle(x, N=N);
 	if(is.null(fill)) {
 		polygon(xy, col = NULL, border = col, ...);
@@ -192,6 +192,15 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 		#
 		if(inherits(lst, "bioshape")) {
 			lapply(lst, basef, lwd = lwd, col = col, ...);
+			return();
+		}
+		#
+		if(inherits(lst, "polycircle")) {
+			# fill: is NOT inherited;
+			fill = lst$fill; lst$fill = NULL;
+			lty = lst$lty; lst$lty = NULL;
+			if(is.null(lty)) lty = 1;
+			plot.polycircle(lst, col=col, fill=fill, lwd=lwd, lty=lty);
 			return();
 		}
 		if(inherits(lst, "circle")) {

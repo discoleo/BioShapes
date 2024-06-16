@@ -475,32 +475,34 @@ example.ArcsByDist = function(d = c(0.5, 1, 1.5, 2), dL = 0.5,
 
 ### Convex Lenses
 #' @export
-example.lens = function(pos = c(0, 1/2, 1), fill = "#6480D0"){
-
+example.lens = function(pos = c(0, 1/2, 1),
+		fill = c("#6480D0", "#5490D0", "#54A0C0")) {
   par.old = par(mfrow = c(2,2));
+  
+  ### Example 1:
   R = 5;
-  lens = lens(R = R, x = c(1, 2), y = c(0, 4))
+  lens = lens(R = R, x = c(1, 2), y = c(0, 4), lty = 2)
   plot.base()
   lines(lens)
 
-  ### Example 1:
+  ### Example 2:
   R = 5;
   plot.base()
   lens = lens(R = R, x = c(1, 2), y = c(0, 4))
   lines(lens)
   #
-  lens = lens(R = R, x = c(5, 3), y = c(0, 5))
+  lens = lens(R = R, x = c(5, 3), y = c(0, 5), lty = 2)
   lines(lens, col="Red")
   # negative R: semi-concave Lens
-  lens = lens(R = c(4,-7), x = c(5, 0), y = c(1, 0) + 6)
-  lines(lens, col="#329624")
+  lens = lens(R = c(4,-7), x = c(5, 0), y = c(1, 0) + 6,
+		col="#88B644", fill="#32B024");
+  lines(lens)
 
-  ### Example 2: Group of Lenses
+  ### Example 3: Group of Lenses
   # pos = c(0, poz, 1)
   h = c(2, 3, 4)
   scale.R = c(1, 1.5, 2)
   x = c(0, 6); y = c(3, 2);
-  # fill: does NOT work with concave lenses;
 
   lst = lens.group(x=x, y=y, h=h, pos=pos, l.scale = scale.R, fill=fill)
   plot.base()
