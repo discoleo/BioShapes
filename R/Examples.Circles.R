@@ -124,6 +124,28 @@ test.circle.uniform.text = function(n = 200, phi = 0, d = 0.5) {
 	}
 }
 
+#' @export
+example.polycircles = function(lwd = 4, col = "#F06666", fill = "#F0A040", N = 65) {
+	# Obj 1:
+	c1 = c(2,2); r = 2;
+	x1 = list(
+		structure(list(r=r, center = c1, phi = c(0, pi)), class="circle.arc"),
+		structure(list(r=r, center = c1, phi = c(pi, 2*pi), pow=2.5), class="circloid")
+	)
+	# Obj 2:
+	c2 = c(5,6); r = c(2,1.5); phi = c(0, pi);
+	dp = c(2*cos(pi/3), sin(pi/3));
+	x2 = list(
+		structure(list(r=r, center = c2 + dp*c(1,1), phi=phi, th = -pi/3), class="ellipse"),
+		structure(list(r=r, center = c2 + dp*c(-1,1), phi=phi, th = pi/3), class="ellipse"),
+		structure(list(r=r, center = c2 + dp*c(0,-1), phi = c(pi, 2*pi)), class="ellipse")
+	)
+
+	plot.base()
+	plot.polycircle(x1, col=col, fill=fill, N=N, lwd=lwd);
+	plot.polycircle(x2, col=col, fill=fill, N=N, lwd=lwd);
+}
+
 
 #####################
 

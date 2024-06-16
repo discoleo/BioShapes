@@ -61,7 +61,7 @@ example.curves = function(R = 5, nr = 20, axt = c(1, 2)) {
 }
 
 #' @export
-examples.circloids = function(n = c(3, 5), r = c(5,3,3,2), col = "red") {
+example.circloids = function(n = c(3, 5), r = c(5,3,3,2), col = "red") {
 	if(length(col) == 1) col = c(col, col);
 	if(length(n) == 2) n = c(n, n);
 	par.old = par(mfrow = c(1,2), mar = c(1,0.5,1.5, 0.5));

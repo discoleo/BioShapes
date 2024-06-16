@@ -141,6 +141,17 @@ plot.circle.bitrig = function(r, center = c(0,0), pow = 2, phi = c(0, 2*pi), dph
 	invisible(list(x=x, y=y));
 }
 
+#' @export
+plot.polycircle = function(x, col = 1, fill = NULL, ..., N = 129) {
+	xy = as.points.polycircle(x, N=N);
+	if(is.null(fill)) {
+		polygon(xy, col = NULL, border = col, ...);
+	} else {
+		polygon(xy, col = fill, border = col, ...);
+	}
+	invisible(xy);
+}
+
 
 ### Plot:
 
@@ -389,6 +400,59 @@ lines.circles = function(x, R, fill="#B0B032", col=NULL, col.line="green", line=
 lines.ellipse = function(x, lwd = NULL, col = NULL, ...) {
   lines.object.base(list(x), lwd=lwd, col=col, ...)
   invisible();
+}
+
+###############
+
+#' @export
+as.points.polycircle = function(x, N = 129) {
+	xy = lapply(x, function(x) {
+		if(inherits(x, "circle.arc")) {
+			n = x$N;
+			if(! is.null(n)) N = n;
+			r = x$r; center = x$center; phi = x$phi;
+			phi.seq = seq(phi[1], phi[2], length.out = N);
+			x = r * cos(phi.seq) + center[1];
+			y = r * sin(phi.seq) + center[2];
+			return(data.frame(x=x, y=y));
+		}
+		if(inherits(x, "ellipse")) {
+			n = x$N;
+			if(! is.null(n)) N = n;
+			r = x$r; center = x$center; phi = x$phi; th = x$th;
+			phi.seq = seq(phi[1], phi[2], length.out = N);
+			x = r[1] * cos(phi.seq);
+			y = r[2] * sin(phi.seq);
+			if( ! is.null(th) && th != 0) {
+				xr = x*cos(th) - y*sin(th);
+				yr = x*sin(th) + y*cos(th);
+				x = xr; y = yr;
+			}
+			x = x + center[1];
+			y = y + center[2];
+			return(data.frame(x=x, y=y));
+		}
+		if(inherits(x, "circloid")) {
+			n = x$N;
+			if(! is.null(n)) N = n;
+			r = x$r; center = x$center; phi = x$phi; pow = x$pow;
+			phi.seq = seq(phi[1], phi[2], length.out = N);
+			dphi = x$dphi;
+			if(is.null(dphi)) dphi = 0;
+			cs = cos(phi.seq); sn = sin(phi.seq + dphi);
+			x = r * abs(cs)^pow * sign(cs) + center[1];
+			y = r * abs(sn)^pow * sign(sn) + center[2];
+			return(data.frame(x=x, y=y));
+		}
+		if(inherits(x, "matrix")) {
+			return(data.frame(x = x[,1], y = x[,2]));
+		}
+		if(inherits(x, "polygon")) {
+			return(data.frame(x = x[,1], y = x[,2]));
+		}
+	});
+	xy = do.call(rbind, xy);
+	invisible(xy);
 }
 
 
