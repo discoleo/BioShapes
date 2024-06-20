@@ -14,8 +14,52 @@
 
 ### Arrows: Other Types
 
+# - Circular Arrows;
 # - Pins/Tags;
 # - Boxes & Labels;
+
+
+###################
+
+### Circular Arrows
+# r = radius of circle;
+# w = width of Annulus;
+#' @export
+arrow.circular = function(phi, r = 2, center = c(0,0), w = 0.5,
+		type = c("Equal", "Ring", "Ugly"), N = NULL) {
+	type = match.arg(type);
+	w2 = w/2;
+	rr = c(r - w2, r + w2);
+	#
+	c1 = list(r=rr[1], center=center, phi=phi, N=N);
+	c1 = as.circle.arc(c1);
+	c2 = list(r=rr[2], center=center, phi = rev(phi), N=N);
+	c2 = as.circle.arc(c2);
+	# Simple Ring segment
+	if(type == "Ring") {
+		lst = list(Ci = c1, C2 = c2);
+		class(lst) = c("polycircle", "list");
+		lst = as.bioshape(list(A = lst));
+		return(lst);
+	}
+	if(type == "Ugly)") {
+		dphi = 2 * asin(w / (2*r));
+	} else {
+		r0 = r;
+		r  = sqrt(r^2 + w2^2);
+		dphi = atan(w2/r);
+	}
+	xe = r*cos(phi[1] + dphi) + center[1];
+	ye = r*sin(phi[1] + dphi) + center[2];
+	rr = rev(rr);
+	xs = r*cos(phi[2] + dphi) + center[1];
+	ys = r*sin(phi[2] + dphi) + center[2];
+	#
+	lst = list(Ci = c1, cbind(xs, ys), C2 = c2, cbind(xe, ye));
+	class(lst) = c("polycircle", "list");
+	lst = as.bioshape(list(A = lst));
+	return(lst);
+}
 
 
 #######################

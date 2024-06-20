@@ -203,6 +203,7 @@ center.p3 = function(x, y) {
 ### Ring/Annulus
 # w   = width of annulus;
 # lwd = width of border;
+# Note: simulated using circle with very wide border;
 #' @export
 circle.ring = function(xy, r = 1, w = 0.25, col = c("#D0D048", "#969612"), lwd = 4, w.scale = 68) {
 	d = w.scale * w;

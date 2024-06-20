@@ -369,6 +369,9 @@ virus2 = function(R = 2, center = c(0,0), n.spike = 10, off.spike = c(0, 1, 1.5)
 }
 
 ### Convex Lens
+# x, y = outer margins of lens;
+# R = 2 radiuses of lens;
+#     by default: R = dist(xy) * scale;
 #' @export
 lens = function(x, y, R = NULL, scale = c(1,1),
                 lwd = 1, lty = NULL, col = NULL, fill = NULL) {
@@ -426,10 +429,13 @@ lens = function(x, y, R = NULL, scale = c(1,1),
   return(as.bioshape(lst));
 }
 
+### System of Lenses
 # x, y = endpoints of Axis (group of lens);
+# h   = vector with height of lenses;
+# pos = position of lenses on the xy-Axis;
 #' @export
 lens.group = function(x, y, h, pos=NULL, R=NULL, l.scale=1,
-                      lwd=1, col=NULL, fill=NULL, lty=NULL) {
+		lwd=1, col=NULL, fill=NULL, lty=NULL) {
   len = length(h);
   if(is.null(pos)) {
     if(len > 2) stop("Specify the position of all the lenses!");
