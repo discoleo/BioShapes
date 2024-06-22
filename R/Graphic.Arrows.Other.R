@@ -24,9 +24,13 @@
 ### Circular Arrows
 # r = radius of circle;
 # w = width of Annulus;
+# type = Types of circular arrow;
+# - Equal: Head = Symmetric/Isosceles triangle;
+# - OutEqual: as Equal, but tip extends beyond phi[2];
 #' @export
 arrow.circular = function(phi, r = 2, center = c(0,0), w = 0.5,
-		type = c("Equal", "Ring", "Ugly"), N = NULL) {
+		type = c("Equal", "Gene", "OutEqual", "Ring", "Ugly"),
+		tip.scale = 1, N = NULL) {
 	type = match.arg(type);
 	w2 = w/2;
 	rr = c(r - w2, r + w2);
@@ -42,20 +46,38 @@ arrow.circular = function(phi, r = 2, center = c(0,0), w = 0.5,
 		lst = as.bioshape(list(A = lst));
 		return(lst);
 	}
+	# Complex Types:
+	isGene = type == "Gene";
+	w2 = w2 * tip.scale;
 	if(type == "Ugly)") {
-		dphi = 2 * asin(w / (2*r));
+		dphi = 2 * asin(w2 / r);
 	} else {
 		r0 = r;
 		r  = sqrt(r^2 + w2^2);
 		dphi = atan(w2/r);
+		if(type == "Equal") {
+			# shifted phi
+			phi = phi - dphi;
+			c1$phi = phi;
+			c2$phi = rev(phi);
+		} else if(isGene) {
+			phi[2] = phi[2] - dphi;
+			c1$phi[2] = phi[2];
+			c2$phi[1] = phi[2];
+		}
 	}
-	xe = r*cos(phi[1] + dphi) + center[1];
-	ye = r*sin(phi[1] + dphi) + center[2];
+	if(isGene) {
+		xyE = NULL;
+	} else {
+		xE = r*cos(phi[1] + dphi) + center[1];
+		yE = r*sin(phi[1] + dphi) + center[2];
+		xyE = cbind(xE, yE);
+	}
 	rr = rev(rr);
-	xs = r*cos(phi[2] + dphi) + center[1];
-	ys = r*sin(phi[2] + dphi) + center[2];
+	xT = r*cos(phi[2] + dphi) + center[1];
+	yT = r*sin(phi[2] + dphi) + center[2];
 	#
-	lst = list(Ci = c1, cbind(xs, ys), C2 = c2, cbind(xe, ye));
+	lst = list(Cin = c1, cbind(xT, yT), Cout = c2, xyE);
 	class(lst) = c("polycircle", "list");
 	lst = as.bioshape(list(A = lst));
 	return(lst);
