@@ -27,10 +27,12 @@
 # type = Types of circular arrow;
 # - Equal: Head = Symmetric/Isosceles triangle;
 # - OutEqual: as Equal, but tip extends beyond phi[2];
+# - Gene: End has no arrow;
+# - ShGene: simpler, but tip is shifted above midline circle;
 #' @export
 arrow.circular = function(phi, r = 2, center = c(0,0), w = 0.5,
-		type = c("Equal", "Gene", "OutEqual", "Ring", "Ugly"),
-		tip.scale = 1, N = NULL) {
+		type = c("Equal", "Gene", "ShGene", "OutEqual", "Ring", "Ugly"),
+		tip.scale = 1, N = NULL, ...) {
 	type = match.arg(type);
 	w2 = w/2;
 	rr = c(r - w2, r + w2);
@@ -48,10 +50,23 @@ arrow.circular = function(phi, r = 2, center = c(0,0), w = 0.5,
 	}
 	# Complex Types:
 	isGene = type == "Gene";
+	if(isGene) {
+		# Experimental: midline tip;
+		d = w2 * tip.scale;
+		alpha = solve.circular.tip.phi(w2, d=d, r=r, ...);
+		id  = 1; # TODO
+		az1 = alpha$dphi1[id];
+		az2 = alpha$dphi2[id];
+		c1$phi[2] = phi[2] - az1;
+		c2$phi[1] = phi[2] - az2;
+		dphi = 0;
+	}
+	#
 	w2 = w2 * tip.scale;
+	isShGene = type == "ShGene";
 	if(type == "Ugly)") {
 		dphi = 2 * asin(w2 / r);
-	} else {
+	} else if( ! isGene) {
 		r0 = r;
 		r  = sqrt(r^2 + w2^2);
 		dphi = atan(w2/r);
@@ -60,20 +75,20 @@ arrow.circular = function(phi, r = 2, center = c(0,0), w = 0.5,
 			phi = phi - dphi;
 			c1$phi = phi;
 			c2$phi = rev(phi);
-		} else if(isGene) {
+		} else if(isShGene) {
 			phi[2] = phi[2] - dphi;
 			c1$phi[2] = phi[2];
 			c2$phi[1] = phi[2];
 		}
 	}
-	if(isGene) {
+	if(isShGene || isGene) {
 		xyE = NULL;
 	} else {
 		xE = r*cos(phi[1] + dphi) + center[1];
 		yE = r*sin(phi[1] + dphi) + center[2];
 		xyE = cbind(xE, yE);
 	}
-	rr = rev(rr);
+	# rr = rev(rr);
 	xT = r*cos(phi[2] + dphi) + center[1];
 	yT = r*sin(phi[2] + dphi) + center[2];
 	#
@@ -81,6 +96,51 @@ arrow.circular = function(phi, r = 2, center = c(0,0), w = 0.5,
 	class(lst) = c("polycircle", "list");
 	lst = as.bioshape(list(A = lst));
 	return(lst);
+}
+
+# Experimental
+solve.circular.tip = function(w, d, r, rm.complex = TRUE,
+		as.square = FALSE, debug = TRUE, tol = 1E-8) {
+	r2 = r*r;
+	w2 = w*w; w4 = w2*w2;
+	d2 = d*d; d4 = d2*d2; d6 = d2*d4;
+	coeff = c(4*w2*r2*d4, w4*d2 + 4*w2*r2*d2 - 2*w2*d4 - 4*r2*d4 + d6,
+		(w4 - 4*w2*d2 - 4*r2*d2 + 3*d4), 3*d2 - 2*w2, 1);
+	h2 = polyroot(coeff);
+	if(debug) print(h2);
+	isCZero = abs(Im(h2)) < tol;
+	if(rm.complex) {
+		h2 = Re(h2[isCZero]);
+		H2 = d2 + h2;
+		isReal = H2 >= 0;
+		H2 = H2[isReal];
+	} else {
+		h2[isCZero] = Re(h2[isCZero]);
+		H2 = d2 + h2;
+	}
+	if(as.square) {
+		return(H2);
+	} else {
+		H = sqrt(H2);
+		return(H);
+	}
+}
+solve.circular.tip.phi = function(w, d, r, rm.complex = TRUE, debug = TRUE, tol = 1E-8) {
+	h2 = solve.circular.tip(w, d, r, as.square = TRUE,
+		rm.complex=rm.complex, debug=debug, tol=tol);
+	r2 = r*r; rn = r-w; rp = r+w;
+	cs1 = (r2 + rn^2 - h2) / (2*r*rn);
+	cs2 = (r2 + rp^2 - h2) / (2*r*rp);
+	if(rm.complex) {
+		isReal = cs1 >= -1 & cs1 <= 1 & cs2 >= -1 & cs2 <= 1;
+		if(debug) cat("Is Real: ", isReal, "\n");
+		cs1 = cs1[isReal];
+		cs2 = cs2[isReal];
+	}
+	az1 = acos(cs1);
+	az2 = acos(cs2);
+	if(debug) print(rbind(az1, az2));
+	return(list(dphi1 = az1, dphi2 = az2));
 }
 
 
