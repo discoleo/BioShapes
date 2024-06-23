@@ -25,10 +25,11 @@
 # r = radius of circle;
 # w = width of Annulus;
 # type = Types of circular arrow;
-# - Equal: Head = Symmetric/Isosceles triangle;
+# - Equal: Head = Symmetric/Isosceles triangle with height = w/2 * tip.scale;
 # - OutEqual: as Equal, but tip extends beyond phi[2];
 # - Gene: End has no arrow;
 # - ShGene: simpler, but tip is shifted above midline circle;
+# TODO: simpler version where H = specified;
 #' @export
 arrow.circular = function(phi, r = 2, center = c(0,0), w = 0.5,
 		type = c("Equal", "Gene", "ShGene", "OutEqual", "Ring", "Ugly"),
@@ -99,6 +100,11 @@ arrow.circular = function(phi, r = 2, center = c(0,0), w = 0.5,
 }
 
 # Experimental
+# - Solution is complicated by the fact that
+#   H is not trivially depending on d;
+#   (H = sqrt(d^2 + h^2));
+# - Problem is simplified substantially
+#   if H is specified instead of d;
 solve.circular.tip = function(w, d, r, rm.complex = TRUE,
 		as.square = FALSE, debug = TRUE, tol = 1E-8) {
 	r2 = r*r;
