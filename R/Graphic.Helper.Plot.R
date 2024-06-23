@@ -482,6 +482,15 @@ lines.slope = function(xy, slope, L = 4, ...) {
 	lines(x2, y2, ...);
 }
 
+# phi = Angle of line;
+#' @export
+lines.radial = function(phi, center = c(0,0), ...) {
+	tn = tan(phi);
+	b0 = center[2] - center[1]*tn;
+	abline(b0, tn, ...);
+	invisible(cbind(tn, b0));
+}
+
 ######################
 
 ######################
