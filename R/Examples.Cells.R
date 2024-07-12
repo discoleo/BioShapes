@@ -63,7 +63,7 @@ example.cell.phyllopodia = function(n = 12, scale.base = c(1,1.4,1,1),
 	
 	# Length + Base
 	tmp = cell.podia(r = r[2], n = n[2], center = c(4,4), phi = phi[2],
-		scale.base = scale.base[2], l.scale = seq(0.4,1, length=12),
+		scale.base = scale.base[2], l.scale = seq(0.4,1, length=n[2]),
 		lwd = lwd[2], col = "#90C020")
 	plot.base(axt = NULL)
 	lines(tmp)
@@ -76,7 +76,7 @@ example.cell.phyllopodia = function(n = 12, scale.base = c(1,1.4,1,1),
 	
 	# Fill
 	tmp = cell.podia(r = r[4], n = n[4], center = c(4,4), phi = phi[4],
-		scale.base = scale.base[4], l.scale = seq(0.4,1, length=12),
+		scale.base = scale.base[4], l.scale = seq(0.4,1, length=n[4]),
 		lwd = lwd[4], col = "#90C020", fill = "#F0A0B0")
 	plot.base(axt = NULL)
 	lines(tmp)
