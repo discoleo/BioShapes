@@ -255,8 +255,10 @@ draw_blood_cell = function(center = c(0, 0),
 # l = Length of phyllopodia;
 # l.scale = relative length based on r;
 #' @export
-cell.podia = function(r = 3, center = c(0,0), l.scale = 1, l = NULL,
-		n = 12, w = 0.5, scale.base = 1, phi = 0, as.line = FALSE) {
+cell.podia = function(r = 3, center = c(0,0),
+		lwd = NULL, col = NULL, fill = NULL,
+		l.scale = 1, l = NULL, n = 12, w = 0.5, scale.base = 1, phi = 0,
+		as.line = FALSE, N = c(9, 17)) {
 	if(is.null(l)) {
 		l = r * l.scale;
 	}
@@ -282,6 +284,7 @@ cell.podia = function(r = 3, center = c(0,0), l.scale = 1, l = NULL,
 			R * sin(phi[id]) + center[2]);
 		phiC = phiT[id] + c(0, pi);
 		lstP = list(r = w2, center = cc, phi = phiC);
+		if(! is.null(N)) lstP$N = N[2];
 		class(lstP) = c("circle.arc", "list");
 		# Inner Circle:
 		phiC = c(phiE[id], phiS[id]);
@@ -293,6 +296,7 @@ cell.podia = function(r = 3, center = c(0,0), l.scale = 1, l = NULL,
 			class(L) = c("polygon", "matrix");
 		} else {
 			L = list(r=r, center=center, phi = phiC);
+			if(! is.null(N)) L$N = N[1];
 			class(L) = c("circle.arc", "matrix");
 		}
 		lst = list(P = lstP, C = L);
@@ -301,6 +305,9 @@ cell.podia = function(r = 3, center = c(0,0), l.scale = 1, l = NULL,
 	});
 	lst = unlist(lst, recursive = FALSE);
 	class(lst) = c("polycircle", "list");
+	if(! is.null(lwd)) lst$lwd = lwd;
+	if(! is.null(col)) lst$col = col;
+	if(! is.null(fill)) lst$fill = fill;
 	lst = as.bioshape(list(lst));
 	return(lst);
 }

@@ -47,6 +47,44 @@ example.bloodCells = function(radius = 2, lwd = 10){
   lines(tmp)
 }
 
+#' @export
+example.cell.phyllopodia = function(n = 12, scale.base = c(1,1.4,1,1),
+		lwd = c(1,2,1,1), phi = c(0, 0, 0, pi*7/12), r = 3) {
+	if(length(n) == 1) n = rep(n, 4);
+	if(length(r) == 1) r = rep(r, 4);
+	if(length(phi) == 1) phi = rep(phi, 4);
+	if(length(lwd) == 1) lwd = rep(lwd, 4);
+	par.old = par(mfrow = c(2,2));
+	
+	tmp = cell.podia(r = r[1], n = n[1], center = c(4,4), phi = phi[1],
+		scale.base = scale.base[1], lwd = lwd[1])
+	plot.base(axt = NULL)
+	lines(tmp)
+	
+	# Length + Base
+	tmp = cell.podia(r = r[2], n = n[2], center = c(4,4), phi = phi[2],
+		scale.base = scale.base[2], l.scale = seq(0.4,1, length=12),
+		lwd = lwd[2], col = "#90C020")
+	plot.base(axt = NULL)
+	lines(tmp)
+	
+	# Inward: Strange
+	tmp = cell.podia(r = r[3], n = n[3], center = c(4,4), phi = phi[3], l.scale = -0.4,
+		scale.base = scale.base[3], lwd = lwd[3])
+	plot.base(axt = NULL)
+	lines(tmp)
+	
+	# Fill
+	tmp = cell.podia(r = r[4], n = n[4], center = c(4,4), phi = phi[4],
+		scale.base = scale.base[4], l.scale = seq(0.4,1, length=12),
+		lwd = lwd[4], col = "#90C020", fill = "#F0A0B0")
+	plot.base(axt = NULL)
+	lines(tmp)
+	
+	par(par.old);
+	invisible();
+}
+
 
 ##############
 ### Neuron ###
