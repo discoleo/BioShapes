@@ -249,6 +249,62 @@ draw_blood_cell = function(center = c(0, 0),
 
 }
 
+##################
+### Immunology ###
+
+# l = Length of phyllopodia;
+# l.scale = relative length based on r;
+#' @export
+cell.podia = function(r = 3, center = c(0,0), l.scale = 1, l = NULL,
+		n = 12, w = 0.5, scale.base = 1, phi = 0, as.line = FALSE) {
+	if(is.null(l)) {
+		l = r * l.scale;
+	}
+	R  = r + l; # Outer "circle"
+	if(length(R) == 1) R = rep(R, n);
+	w2 = w / 2;
+	phi  = 2*pi*seq(0, n-1) / n + phi;
+	# dphi = w * scale.base / (2*r); # approx.
+	dphi = asin(w * scale.base / (2*r));
+	phiS = phi - dphi;
+	phiS = c(phiS[-1], phiS[1]); # shift;
+	#
+	phiE = phi + dphi;
+	phiT = phi - pi/2;
+	# Correction for shift:
+	isInv = phiS < phiE;
+	phiS[isInv] = phiS[isInv] + 2*pi;
+	lst = lapply(seq(n), function(id) {
+		# Podia:
+		R  = R[id];
+		cc = c(
+			R * cos(phi[id]) + center[1],
+			R * sin(phi[id]) + center[2]);
+		phiC = phiT[id] + c(0, pi);
+		lstP = list(r = w2, center = cc, phi = phiC);
+		class(lstP) = c("circle.arc", "list");
+		# Inner Circle:
+		phiC = c(phiE[id], phiS[id]);
+		if(as.line) {
+			# Line
+			x = r * cos(phiC) + center[1];
+			y = r * sin(phiC) + center[2];
+			L = cbind(x=x, y=y);
+			class(L) = c("polygon", "matrix");
+		} else {
+			L = list(r=r, center=center, phi = phiC);
+			class(L) = c("circle.arc", "matrix");
+		}
+		lst = list(P = lstP, C = L);
+		names(lst) = paste0(c("Podia", "Cell"), id);
+		return(lst);
+	});
+	lst = unlist(lst, recursive = FALSE);
+	class(lst) = c("polycircle", "list");
+	lst = as.bioshape(list(lst));
+	return(lst);
+}
+
 
 ########################
 ########################
