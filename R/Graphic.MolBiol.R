@@ -191,6 +191,73 @@ mol.Ig = function(xy, height = 6, t.Hinge = 2/5, d.HH = 1/2, d.LH = d.HH, d.rel 
 	return(as.bioshape(lst));
 }
 
+###########
+
+###########
+### TLR ###
+
+### Toll-Like Receptors
+
+#' @export
+mol.tlr = function(x, y, r = 2, n = 28, phi = - pi/6,
+		lwd = c(1,4), col = "#328012", fill = "#64C232",
+		type = c("Dimer", "Monomer"),
+		d.rel = - 0.25, r.ll.rel = c(0.375, 0.5)) {
+	type = match.arg(type);
+	dphi = atan2(y[2] - y[1], x[2] - x[1]) - pi/2;
+	molBase = function(phi) {
+		# Leucine-Rich Domain:
+		phi.cc = phi[1];
+		cc = c(
+			x[2] - r*cos(phi.cc),
+			y[2] - r*sin(phi.cc));
+		ll = mol.tlr.lld(cc, r=r, n=n, phi=phi, r.ll.rel=r.ll.rel,
+			lwd = lwd[[1]], col = col[[1]], fill = fill[[1]]);
+		# Trans-Membrane:
+		# TODO: better concept;
+		mb = list(x = x, y = y, lwd = lwd[[2]], col = col[[1]]);
+		# Full:
+		lst = list(LL = ll, Mbr = mb);
+	}
+	lst = as.bioshape(molBase(phi + dphi));
+	if(type == "Dimer") {
+		if(dphi >= - pi/2) d.rel = - d.rel;
+		d  = dist.xy(x, y) * d.rel;
+		xy = shift.ortho(x, y, d=d);
+		x  = xy[,1]; y = xy[,2];
+		lst = list(TLR1 = lst);
+		phi = dphi - phi;
+		phi = c(pi + phi, phi);
+		if(length(col)  > 1) col  = col[[2]];
+		if(length(fill) > 1) fill = fill[[2]];
+		lst$TLR2 = as.bioshape(molBase(phi));
+	}
+	return(as.bioshape(lst));
+}
+
+# Leucin-rich Domain
+#' @export
+mol.tlr.lld = function(xy, r = 2, n = 28, phi = pi/3, r.ll.rel = c(0.375, 0.5),
+		lwd = 1, col = "#328012", fill = "#64C232") {
+	if(length(phi) == 1) phi = c(phi, phi + pi);
+	dp = diff(phi);
+	rL = r * r.ll.rel[1]; # Long axis
+	rS = r * r.ll.rel[2] * 2 * sin(dp / (2*n)); # Short axis
+	rE = c(rS, rL);
+	th = seq(0, n, length.out = n) * dp / n;
+	th = th + phi[1];
+	lst = lapply(seq(n), function(id) {
+		th = th[id];
+		x  = r * cos(th) + xy[1];
+		y  = r * sin(th) + xy[2];
+		lst = list(r = rE, center = c(x, y), phi = c(0, 2*pi), th = th + pi/2,
+			lwd=lwd, col=col, fill=fill);
+		return(as.ellipse(lst));
+	});
+	return(as.bioshape(lst));
+}
+
+
 ####################
 ####################
 
