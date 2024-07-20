@@ -252,8 +252,11 @@ draw_blood_cell = function(center = c(0, 0),
 ##################
 ### Immunology ###
 
-# l = Length of phyllopodia;
+### Pseudopodia/Filopodia
+# l = Length of Filopodia;
 # l.scale = relative length based on r;
+# w = width;
+# scale.base = scale width of base;
 #' @export
 cell.podia = function(r = 3, center = c(0,0),
 		lwd = NULL, col = NULL, fill = NULL,
@@ -264,8 +267,8 @@ cell.podia = function(r = 3, center = c(0,0),
 	}
 	R  = r + l; # Outer "circle"
 	if(length(R) == 1) R = rep(R, n);
-	w2 = w / 2;
-	phi  = 2*pi*seq(0, n-1) / n + phi;
+	w2  = w / 2;
+	phi = 2*pi*seq(0, n-1) / n + phi;
 	# dphi = w * scale.base / (2*r); # approx.
 	dphi = asin(w * scale.base / (2*r));
 	phiS = phi - dphi;
@@ -283,6 +286,72 @@ cell.podia = function(r = 3, center = c(0,0),
 			R * cos(phi[id]) + center[1],
 			R * sin(phi[id]) + center[2]);
 		phiC = phiT[id] + c(0, pi);
+		lstP = list(r = w2, center = cc, phi = phiC);
+		if(! is.null(N)) lstP$N = N[2];
+		class(lstP) = c("circle.arc", "list");
+		# Inner Circle:
+		phiC = c(phiE[id], phiS[id]);
+		if(as.line) {
+			# Line
+			x = r * cos(phiC) + center[1];
+			y = r * sin(phiC) + center[2];
+			L = cbind(x=x, y=y);
+			class(L) = c("polygon", "matrix");
+		} else {
+			L = list(r=r, center=center, phi = phiC);
+			if(! is.null(N)) L$N = N[1];
+			class(L) = c("circle.arc", "matrix");
+		}
+		lst = list(P = lstP, C = L);
+		names(lst) = paste0(c("Podia", "Cell"), id);
+		return(lst);
+	});
+	lst = unlist(lst, recursive = FALSE);
+	class(lst) = c("polycircle", "list");
+	if(! is.null(lwd)) lst$lwd = lwd;
+	if(! is.null(col)) lst$col = col;
+	if(! is.null(fill)) lst$fill = fill;
+	lst = as.bioshape(list(lst));
+	return(lst);
+}
+
+### Variable Pseudopodia/Filopodia
+# phi.top  = Angle (position) of top of Filopodia;
+# phi.base = Angle of base;
+#' @export
+cell.podia.phi = function(phi.top, phi.base, r = 3, center = c(0,0),
+		lwd = NULL, col = NULL, fill = NULL,
+		l.scale = 1, l = NULL, w = 0.5, scale.base = 1, phi = 0,
+		as.line = FALSE, N = c(9, 17)) {
+	if(is.null(l)) {
+		l = r * l.scale;
+	}
+	if(phi != 0) {
+		# TODO
+	}
+	n = length(phi.top);
+	R = r + l; # Outer "circle"
+	if(length(R) == 1) R = rep(R, n);
+	w2 = w / 2;
+	sn = w * scale.base / (2*r);
+	sn[sn > 1] = 1;
+	dphi = asin(sn);
+	phiS = phi.base - dphi;
+	phiS = c(phiS[-1], phiS[1]); # shift;
+	#
+	phiE = phi.base + dphi;
+	phiT = phi.top - pi/2;
+	phiT = cbind(phiT, phiT + pi)
+	# Correction for shift:
+	isInv = phiS < phiE;
+	phiS[isInv] = phiS[isInv] + 2*pi;
+	lst = lapply(seq(n), function(id) {
+		# Podia:
+		R  = R[id];
+		cc = c(
+			R * cos(phi.top[id]) + center[1],
+			R * sin(phi.top[id]) + center[2]);
+		phiC = phiT[id,];
 		lstP = list(r = w2, center = cc, phi = phiC);
 		if(! is.null(N)) lstP$N = N[2];
 		class(lstP) = c("circle.arc", "list");
