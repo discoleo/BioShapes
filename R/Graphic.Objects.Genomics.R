@@ -11,7 +11,8 @@
 
 #' @export
 genes.mutations = function(x, y, nrow = c(3,2), lbl = NULL,
-		d.row = 3*d, cex.text = 1, d = 1, dna.join = c(0.25, 0.75)) {
+		cex.text = 1, d = 1, d.row = 3*d, d.col = 0.5,
+		dna.join = c(0.25, 0.75)) {
 	if(is.null(lbl)) {
 		lbl = c("Wild-type", "Heterozygous", "Homozygous",
 			"Compound\nHeterozygous\n(in trans)",
@@ -40,6 +41,7 @@ genes.mutations = function(x, y, nrow = c(3,2), lbl = NULL,
 	nc = length(nrow);
 	nr = max(nrow);
 	hasRows = (nr > 1);
+	hasCols = (nc > 1);
 	# TODO:
 	# - Split into columns;
 	# - Labels & mutations;
@@ -48,15 +50,27 @@ genes.mutations = function(x, y, nrow = c(3,2), lbl = NULL,
 	} else {
 		if(nr %% 2 == 0) {
 			d.row = seq(d.row/2, by = d.row, length.out = nr / 2);
-			d.row = c(-d.row, d.row);
+			d.row = c(rev(d.row), -d.row);
 		} else {
 			d.row = seq(d.row, by = d.row, length.out = (nr - 1) / 2);
-			d.row = c(-d.row, 0, d.row);
+			d.row = c(rev(d.row), 0, -d.row);
 		}
 		xy  = shift.ortho(x, y, d = d.row, simplify = FALSE);
 		lst = lapply(xy, function(xy) {
 			as.gene(xy$x, xy$y);
 		});
+		# Labels:
+		hasLbl = any(! is.na(lbl));
+		if(hasLbl) {
+			cc = sapply(lst, function(obj) {
+				center.xy(obj$Gene$x, obj$Gene$y);
+			});
+			len = length(lst);
+			txt = list(x = cc[1,], y = cc[2,], labels = lbl[seq(len)],
+				cex = cex.text);
+			class(txt) = c("text", "list");
+			lst$Labels = txt;
+		}
 		return(as.bioshape(lst));
 	}
 }
