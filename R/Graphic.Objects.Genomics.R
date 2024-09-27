@@ -80,6 +80,7 @@ genes.mutations = function(x, y, nrow = c(3,2), lbl = NULL,
 				as.gene(xy$x, xy$y);
 			});
 		}
+		names(lst) = paste0("Gene", seq_along(lst));
 		# Labels:
 		hasLbl = any(! is.na(lbl));
 		if(hasLbl) {

@@ -326,19 +326,21 @@ shift.ortho = function(x, y, d=1, slope=NULL,
     }
     return(r)
   }
-  ### Horizontal Line
-  if(slope == 0) {
-    d = d * scale;
-    if(length(d) == 1 && simplify) {
-      r = data.frame(x = x, y = y + d);
-    } else {
-      r = lapply(seq(along = d), function(id) {
-        data.frame(x = x, y = y + d[id], id = id + id.offset);
-      })
-      r = do.call(rbind, r);
-    }
-    return(r)
-  }
+	### Horizontal Line
+	if(slope == 0) {
+		d = d * scale;
+		if(length(d) == 1 && simplify) {
+			r = data.frame(x = x, y = y + d);
+		} else {
+			r = lapply(seq(along = d), function(id) {
+				data.frame(x = x, y = y + d[id], id = id + id.offset);
+			});
+			if(simplify) {
+				r = do.call(rbind, r);
+			}
+		}
+		return(r);
+	}
   ### Oblique Line
   sl.orto = - 1 / slope;
   sl2 = sqrt(sl.orto^2 + 1/scale^2);
