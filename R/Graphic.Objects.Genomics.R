@@ -43,8 +43,8 @@ genes.mutations = function(x, y, nrow = c(3,2), lbl = NULL,
 	hasRows = (nr > 1);
 	hasCols = (nc > 1);
 	# TODO:
-	# - Split into columns;
-	# - Labels & mutations;
+	# - [basic version] Split into columns & Labels;
+	# - Mutations;
 	if(! hasRows) {
 		return(as.gene(x, y));
 	} else {
@@ -55,10 +55,31 @@ genes.mutations = function(x, y, nrow = c(3,2), lbl = NULL,
 			d.row = seq(d.row, by = d.row, length.out = (nr - 1) / 2);
 			d.row = c(rev(d.row), 0, -d.row);
 		}
-		xy  = shift.ortho(x, y, d = d.row, simplify = FALSE);
-		lst = lapply(xy, function(xy) {
-			as.gene(xy$x, xy$y);
-		});
+		if(hasCols) {
+			dTot = dist.xy(x, y);
+			dCol = (dTot - (nc-1)*d.col) / nc;
+			tSep = d.col / dTot; tUnit = (dCol + d.col) / dTot;
+			ti = tUnit * seq(nc - 1);
+			ti = as.vector(rbind(ti - tSep, ti));
+			xi = x[1] * (1 - ti) + x[2] * ti;
+			yi = y[1] * (1 - ti) + y[2] * ti;
+			xi = c(x[1], xi, x[2]);
+			yi = c(y[1], yi, y[2]);
+			lst = list();
+			for(idU in seq(0, nc-1)) {
+				id  = 2*idU; id = c(id + 1, id + 2);
+				xy  = shift.ortho(xi[id], yi[id], d = d.row, simplify = FALSE);
+				tmp = lapply(xy, function(xy) {
+					as.gene(xy$x, xy$y);
+				});
+				lst = c(lst, tmp);
+			}
+		} else {
+			xy  = shift.ortho(x, y, d = d.row, simplify = FALSE);
+			lst = lapply(xy, function(xy) {
+				as.gene(xy$x, xy$y);
+			});
+		}
 		# Labels:
 		hasLbl = any(! is.na(lbl));
 		if(hasLbl) {
