@@ -240,13 +240,12 @@ reflect = function(x, y, p, slope=NULL) {
     # Horizontal Line
     return(c(p[1], 2*y[1]-p[2]))
   } else if(x[[1]] == x[[2]]) {
-    # Vertical Line
-    return(c(2*x[1]-p[1], p[2])) # De ce?
-    # TODO: distanta de la punct la dreapta + punctul initial ?
+    # Vertical Line: xp = p[1]; yp = p[2];
+    return(c(2*x[1] - p[1], p[2]));
   }
 
   sl.orto = - 1 / slope;
-  # intersection point:
+  # Intersection point:
   div = slope - sl.orto; # div always > 0!
   x.int = (x[1]*slope - p[1]*sl.orto - y[1] + p[2]) / div;
   y.int = (x.int - p[1])*sl.orto + p[2];
@@ -353,7 +352,10 @@ shift.ortho = function(x, y, d=1, slope=NULL,
   }
   # Note: inconsistency when d = 1 between slope = Inf vs generic val;
   rez = lapply(seq(along = d), function(id) shift.f(x, y, id))
-  rez = data.frame(do.call(rbind, rez));
+  if(simplify) {
+	# TODO: check consequences;
+	rez = data.frame(do.call(rbind, rez));
+  }
   return(rez);
 }
 
