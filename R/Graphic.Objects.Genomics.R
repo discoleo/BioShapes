@@ -10,14 +10,63 @@
 
 
 #' @export
-genes.mutations = function(x, y, nrow = c(3,2), lbl = NULL,
-		cex.text = 1, d = 1, d.row = 3*d, d.col = 0.5,
+genes.mutations = function(x, y, lbl = NULL, which = 1,
+		nrow = c(3,3), fill = "#FFA096", cex.text = 1,
+		d = 0.575, d.row = 5.5*d, d.col = 0.5,
 		dna.join = c(0.25, 0.75)) {
 	if(is.null(lbl)) {
-		lbl = c("Wild-type", "Heterozygous", "Homozygous",
+		lbl = c("Wild-type", "Heterozygous", "Homozygous", "",
 			"Compound\nHeterozygous\n(in trans)",
 			"Compound\nHeterozygous\n(in cis)");
+		if(which == 1) lbl = lbl[c(1,NA,3,NA,5)];
+		if(which == 2) lbl = lbl[c(NA,2,NA,NA,NA,6)];
 	}
+	lst = genes.boxes(x=x, y=y, nrow=nrow, lbl=lbl,
+		cex.text = cex.text, d = d, d.row = d.row, d.col = d.col,
+		dna.join = dna.join);
+	lbl = lst$Labels;
+	lst$Labels = NULL;
+	lst$Gene4  = NULL; # remove Top/Col 2;
+	# Mutations:
+	tM = list(
+		list(ID = "Gene2", G1 = 0.75, G2 = NA),
+		list(ID = "Gene3", G1 = 0.75, G2 = 0.75),
+		list(ID = "Gene5", G1 = 0.75, G2 = 0.25),
+		list(ID = "Gene6", G1 = c(0.25, 0.75), G2 = NA) );
+	nmG = if(which == 1) "G1" else "G2";
+	lsP = list();
+	for(id in seq_along(tM)) {
+		mM = tM[[id]];
+		tt = mM[[nmG]]; tt = tt[! is.na(tt)];
+		if(length(tt) > 0) {
+			xy = lst[[mM$ID]]$Gene;
+			pM = lapply(tt, function(ti) {
+				tt = c(ti - 0.05, ti + 0.05); # Hard-coded
+				x1 = xy$x[1] * (1-tt) + xy$x[2] * tt;
+				x2 = xy$x[4] * (1-tt) + xy$x[3] * tt;
+				y1 = xy$y[1] * (1-tt) + xy$y[2] * tt;
+				y2 = xy$y[4] * (1-tt) + xy$y[3] * tt;
+				r  = list(x = c(x1, x2[2:1]), y = c(y1, y2[2:1]), fill=fill);
+				class(r) = c("polygon", "list");
+				return(r);
+			});
+			lsP = c(lsP, pM);
+		}
+	}
+	if(length(lsP) > 0) {
+		lsP = as.bioshape(lsP);
+		lst$M = lsP;
+	}
+	# Labels: add back;
+	lst$Labels = lbl;
+	return(lst);
+}
+
+
+#' @export
+genes.boxes = function(x, y, nrow = c(3,2), lbl = NULL,
+		cex.text = 1, d = 1, d.row = 3*d, d.col = 0.5,
+		dna.join = c(0.25, 0.75)) {
 	slope = slope(x, y);
 	# Gene: Base Unit
 	as.gene = function(x, y) {
@@ -49,11 +98,11 @@ genes.mutations = function(x, y, nrow = c(3,2), lbl = NULL,
 		return(as.gene(x, y));
 	} else {
 		if(nr %% 2 == 0) {
-			d.row = seq(d.row/2, by = d.row, length.out = nr / 2);
-			d.row = c(rev(d.row), -d.row);
+			d.rows = seq(d.row/2, by = d.row, length.out = nr / 2);
+			d.rows = c(rev(d.rows), -d.rows);
 		} else {
-			d.row = seq(d.row, by = d.row, length.out = (nr - 1) / 2);
-			d.row = c(rev(d.row), 0, -d.row);
+			d.rows = seq(d.row, by = d.row, length.out = (nr - 1) / 2);
+			d.rows = c(rev(d.rows), 0, -d.rows);
 		}
 		if(hasCols) {
 			dTot = dist.xy(x, y);
@@ -68,14 +117,15 @@ genes.mutations = function(x, y, nrow = c(3,2), lbl = NULL,
 			lst = list();
 			for(idU in seq(0, nc-1)) {
 				id  = 2*idU; id = c(id + 1, id + 2);
-				xy  = shift.ortho(xi[id], yi[id], d = d.row, simplify = FALSE);
+				xy  = shift.ortho(xi[id], yi[id], slope=slope,
+					d = d.rows, simplify = FALSE);
 				tmp = lapply(xy, function(xy) {
 					as.gene(xy$x, xy$y);
 				});
 				lst = c(lst, tmp);
 			}
 		} else {
-			xy  = shift.ortho(x, y, d = d.row, simplify = FALSE);
+			xy  = shift.ortho(x, y, slope=slope, d = d.rows, simplify = FALSE);
 			lst = lapply(xy, function(xy) {
 				as.gene(xy$x, xy$y);
 			});
