@@ -33,6 +33,12 @@ as.bioshape = function(x) {
   class(x) = c("bioshape", class(x));
   invisible(x);
 }
+# Empty Bioshape
+#' @export
+as.bioshape.empty = function() {
+	lst = list(x = numeric(0), y = numeric(0));
+	as.bioshape(list(lst));
+}
 
 #' @export
 adjust.range = function(x, adj) {
