@@ -30,14 +30,17 @@ grid.hexa = function(n, r = 1, center = c(1,1), col = NULL, phi = 0) {
 	G = c(G, L2 = as.bioshape(L));
 	if(n == 2) return(as.bioshape(rev(G)));
 	# L 2:n
-	L = lapply(seq(2, n), function(id) {
-		R = r * sqrt(3) * (id-1); nOuter = 6*id;
-		id.filter = seq(1, nOuter, by = id);
-		grid.hexa.ring(n = nOuter, p = id-1,
-			id.filter=id.filter, R=R, r=r, center=center,
-			col=col[id], phi=phi, phi.h = phi + pi/6);
+	L = lapply(seq(3, n), function(nL) {
+		# Simpler version: only 6 outer hexagons;
+		R = r * sqrt(3) * (nL-1);
+		cc = grid.centers.hexaSimple(n = nL-1, r = R, center=center, phi=phi);
+		Ln = lapply(seq(nrow(cc)), function(id) {
+			ngon(6, center = unlist(cc[id,]), r=r,
+				col=col[nL], phi = phi + pi/6);
+		});
+		return(as.bioshape(Ln));
 	});
-	names(L) = paste0("L", seq(2, n));
+	names(L) = paste0("L", seq(3, n));
 	G = rev(c(G, L));
 	return(invisible(as.bioshape(G)));
 }
@@ -61,6 +64,24 @@ grid.hexa.ring = function(n, p, R, r = 1, center = c(1,1),
 	invisible(lst);
 }
 # Centers of the Hexagon-Ring
+#' @export
+grid.centers.hexaSimple = function(n, r, center = c(1,1), phi = 0) {
+	cc = ngon(6, r=r, center=center, phi=phi);
+	cc$x = c(cc$x, cc$x[1]);
+	cc$y = c(cc$y, cc$y[1]);
+	# Partition Lines between the 6 Points/Centers:
+	tt = seq(0, n-1) / n;
+	partf = function(id) {
+		x1 = cc$x[id]; x2 = cc$x[id+1];
+		y1 = cc$y[id]; y2 = cc$y[id+1];
+		x  = (1-tt)*x1 + tt*x2;
+		y  = (1-tt)*y1 + tt*y2;
+		return(data.frame(x=x, y=y));
+	}
+	cc = lapply(seq(6), partf);
+	cc = do.call(rbind, cc);
+	return(cc);
+}
 #' @export
 grid.hexa.centers = function(n, p, r, center = c(1,1),
 		id.filter = NULL, phi = 0) {
