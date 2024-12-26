@@ -337,18 +337,26 @@ example.SpiroGons = function(which = 0, R = 4, ngon = c(5,7,0,5)) {
   if(which == 0 || which == 4) {
     plot0();
     n = 31; ng = ngon[4];
+	### Outer Chain:
+	# - clockwise "arrow";
     gg = circle.spiro(n=n, R=R, ngon=ng, type = "real-clock")
     lines(gg)
-    # through Contact points:
+    # - through Contact points:
     plot.circle(R, col="green", lty=2)
+	### Intermediate Chain:
+	# - gons {11, 20} are excluded;
+	# - types of chains: differ slightly;
+	# - type = "clock" is less "smooth";
     gg = circle.spiro(n = n - 8, R = R - 1.2, ngon=ng, type = "clock", r.adj = -0.02)
     gg = as.bioshape(lapply(c(seq(10), 21:23), function(id) gg[[id]]));
     lines(gg)
     gg = circle.spiro(n = n - 8, R = R - 1.2, ngon=ng, type = "in")
     gg = as.bioshape(lapply(12:19, function(id) gg[[id]]));
     lines(gg)
-    # Centers of polygons:
-    plot.circle(R - 1.2, col="red", lty=3)
+    # - through Centers of polygons:
+    plot.circle(R - 1.2, col="red", lty=3);
+	text(0, 0, "rm", col="red", cex=1.75);
+	### Inner Chain:
     gg = circle.spiro(n = n - 10, R = R - 2.5, ngon=ng, type = "in")
     lines(gg)
     plot.circle(R - 2.5, col="red", lty=3)

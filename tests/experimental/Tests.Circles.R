@@ -4,9 +4,6 @@
 ###############
 ### Circles ###
 
-test.r = function(x) {
-	test.isNaN(x$r);
-}
 test.isNaN = function(x) {
 	if(is.nan(x) || is.na(x)) {
 		return(FALSE);
@@ -20,9 +17,12 @@ test.isNaN = function(x) {
 
 test.circle.p3 = function(x, y, msg="") {
 	cc = circle.p3(x, y)
+	test.r = function(x) {
+		test.isNaN(x$r);
+	}
 	if( ! test.r(cc)) {
 		cat(paste0("Failed in ", msg, ": x = ",
-			x[1], x[2], "; y = ", y[1], y[2], ";\n"));
+			x[1], ", ", x[2], "; y = ", y[1], ", ", y[2], ";\n"));
 		stop();
 	}
 	#
