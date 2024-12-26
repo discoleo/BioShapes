@@ -21,7 +21,7 @@
 
 # TODO: create complex examples in R/Examples.R
 # TODO: Centers for muscles
-# TODO: Genome for examples.virus
+# TODO: Genome for example.virus
 # TODO: description for Virus
 
 

@@ -295,11 +295,11 @@ enzymeReaction = function(x = c(2,5), y = c(1,1),
 ### Chemistry ###
 
 #' @export
-examples.SpiroGons = function(which = 0, R = 4, ngon = c(5,7,0,5)) {
+example.SpiroGons = function(which = 0, R = 4, ngon = c(5,7,0,5)) {
   if(is.na(match(which, 0:4))) stop("Wrong id!");
   if(which == 0) {
     cat(c("Note:\n",
-          "Use examples.SpiroGons(which) to run the individual plots.\n"));
+          "Use example.SpiroGons(which) to run the individual plots.\n"));
     par.old = par(mfrow = c(2,2));
   }
   lim = R + 1; lim = c(-lim, lim); ngon[ngon == 0] = 6;
@@ -361,7 +361,7 @@ examples.SpiroGons = function(which = 0, R = 4, ngon = c(5,7,0,5)) {
 ### Ensemble of Shapes
 
 #' @export
-examples.GonsOnCircle = function(R = 3, ngons = c(3,4,5,6)) {
+example.GonsOnCircle = function(R = 3, ngons = c(3,4,5,6)) {
   par.old = par(mfrow = c(2,2))
   lim = R + 1; lim = c(-lim, lim);
   # Plot 1:
