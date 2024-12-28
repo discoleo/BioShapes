@@ -294,8 +294,12 @@ enzymeReaction = function(x = c(2,5), y = c(1,1),
 
 ### Chemistry ###
 
+# type = types in the 4th example;
+# Alternative:
+# type = c("real-clock", "real-aclock", "real-clock", "in");
 #' @export
-example.SpiroGons = function(which = 0, R = 4, ngon = c(5,7,0,5)) {
+example.SpiroGons = function(which = 0, R = 4, ngon = c(5,7,0,5),
+		type = c("real-clock", "clock", "in", "in")) {
   if(is.na(match(which, 0:4))) stop("Wrong id!");
   if(which == 0) {
     cat(c("Note:\n",
@@ -339,7 +343,7 @@ example.SpiroGons = function(which = 0, R = 4, ngon = c(5,7,0,5)) {
     n = 31; ng = ngon[4];
 	### Outer Chain:
 	# - clockwise "arrow";
-    gg = circle.spiro(n=n, R=R, ngon=ng, type = "real-clock")
+    gg = circle.spiro(n=n, R=R, ngon=ng, type = type[1])
     lines(gg)
     # - through Contact points:
     plot.circle(R, col="green", lty=2)
@@ -347,17 +351,20 @@ example.SpiroGons = function(which = 0, R = 4, ngon = c(5,7,0,5)) {
 	# - gons {11, 20} are excluded;
 	# - types of chains: differ slightly;
 	# - type = "clock" is less "smooth";
-    gg = circle.spiro(n = n - 8, R = R - 1.2, ngon=ng, type = "clock", r.adj = -0.02)
-    gg = as.bioshape(lapply(c(seq(10), 21:23), function(id) gg[[id]]));
+    gg = circle.spiro(n = n - 8, R = R - 1.2, ngon=ng, type = type[2], r.adj = -0.02)
+	nn = length(gg);
+	nn = if(nn > 20) c(seq(10), 21:nn) else seq(10);
+    gg = as.bioshape(lapply(nn, function(id) gg[[id]]));
     lines(gg)
-    gg = circle.spiro(n = n - 8, R = R - 1.2, ngon=ng, type = "in")
-    gg = as.bioshape(lapply(12:19, function(id) gg[[id]]));
+    gg = circle.spiro(n = n - 8, R = R - 1.2, ngon=ng, type = type[3])
+	nn = min(19, length(gg) - 1);
+    gg = as.bioshape(lapply(12:nn, function(id) gg[[id]]));
     lines(gg)
     # - through Centers of polygons:
     plot.circle(R - 1.2, col="red", lty=3);
 	text(0, 0, "rm", col="red", cex=1.75);
 	### Inner Chain:
-    gg = circle.spiro(n = n - 10, R = R - 2.5, ngon=ng, type = "in")
+    gg = circle.spiro(n = n - 10, R = R - 2.5, ngon=ng, type = type[4])
     lines(gg)
     plot.circle(R - 2.5, col="red", lty=3)
   }

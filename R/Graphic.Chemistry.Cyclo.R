@@ -1,24 +1,29 @@
 ###################
 #
-# Bachelor Thesis
-#
 # Title: BioShapes
+# Maintainer: L. Mada
 #
-# Candidate: Adrian Cotoc
+# https://github.com/discoleo/BioShapes
+#
+# Continuation of:
+# 1. Bachelor Thesis: Adrian Cotoc (2022-2023)
 # Faculty of Mathematics and Informatics, UVT
 #
 # Coordinator:
 #   Prof. Daniela Zaharie
 #   Dr. med. Leonard Mada (Syonic SRL)
+#   in collaboration with Syonic SRL
+#   [old] GitHub: https://github.com/Adi131313/BioShapes
 #
-# in collaboration with Syonic SRL
-# continous the work of Darian Voda
-#
-# GitHub: https://github.com/Adi131313/BioShapes
+# 2. Bachelor Thesis: Darian Voda (2021-2022)
 
+
+### Circular chain of ngons;
+# n = number of sides of ngon;
+# R = radius of chain;
 #' @export
-circle.ngon = function(R=3, center=c(0,0), r=1/4, n=3, phi=0, clockwise=TRUE,
-                       r.adj = -0.01, phi.adj=0) {
+circle.ngon = function(R=3, center=c(0,0), r=1/4, n=3, phi=0,
+		clockwise = TRUE, r.adj = -0.01, phi.adj = 0) {
   if(n %% 2 == 0) { d = 2; }
   else d = (1 + cos(pi/n));
   # ng = number of ngons;
@@ -40,14 +45,20 @@ circle.ngon = function(R=3, center=c(0,0), r=1/4, n=3, phi=0, clockwise=TRUE,
     ngon(n, r=r, center=c(cx[id], cy[id]), phi = th[id]);
   })
   attr(pg, "r") = r;
-  class(pg) = "bioshape";
+  pg = as.bioshape(pg);
   return(pg);
 }
 
+# n = number of ngons;
+# R = radius of the chain;
+# Note:
+# - the radius of the ngons is computed automatically
+#   and may vary based on the specific type of the chain;
 #' @export
 circle.spiro = function(n, R=3, center = c(0,0), ngon=6, phi=0,
-                        type = c("auto", "in", "out", "clockwise", "anti-clockwise", "real-clock"),
-                        r.adj=0, phi.adj=0) {
+		type = c("auto", "in", "out", "clockwise", "anti-clockwise",
+			"real-clock", "real-aclock"),
+		r.adj = 0, phi.adj = 0) {
   # Note:
   # - Center of ngon is on circle,
   #   unlike "real-clock" where contact points are on circle;
@@ -63,7 +74,8 @@ circle.spiro = function(n, R=3, center = c(0,0), ngon=6, phi=0,
     # Default:
     #  Odd => In; Even => Clockwise;
     type = if(isEven) "clockwise" else "in";
-  } else if(isEven && (type == "anti-clockwise" || type == "real-clock")) {
+  } else if(isEven && (type == "anti-clockwise" ||
+		type == "real-clock" || type == "real-aclock")) {
     type = "clockwise"; # the same;
   }
   if(isEven) {
@@ -79,7 +91,10 @@ circle.spiro = function(n, R=3, center = c(0,0), ngon=6, phi=0,
     r  = 2*R*sin(pi/n) / sqrt(1 + cs^2 - 2*cs*cos(pi*(1 - 2/n)));
     if(type == "real-clock") {
       return(circle.ngon(R=R, r=r, center=center, n = ngon,
-                         phi=phi, r.adj=r.adj, phi.adj=phi.adj));
+			phi=phi, r.adj=r.adj, phi.adj=phi.adj));
+    } else if(type == "real-aclock") {
+      return(circle.ngon(R=R, r=r, center=center, n = ngon, clockwise = FALSE,
+			phi=phi, r.adj=r.adj, phi.adj=phi.adj));
     }
     cs = r * (1 - cs) / (2*R); # shift
     sh = if(type == "clockwise") - acos(cs) else (pi - acos(cs));
@@ -96,6 +111,6 @@ circle.spiro = function(n, R=3, center = c(0,0), ngon=6, phi=0,
     ngon(ngon, r=r, center=c(cx[id], cy[id]), phi = th[id]);
   })
   attr(pg, "r") = r;
-  class(pg) = "bioshape";
+  pg = as.bioshape(pg);
   return(pg);
 }
