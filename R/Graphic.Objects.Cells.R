@@ -387,6 +387,9 @@ cell.podia.phi = function(phi.top, phi.base, r = 3, center = c(0,0),
 
 ### Tumors
 
+# see also Ref. Mathologer: for function uniform.circle
+# in file Graphic.Helper.Circles.R;
+
 # n = number of cells;
 # r = radius of each cell;
 # R = radius of tumor mass;
