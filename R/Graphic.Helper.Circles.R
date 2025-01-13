@@ -319,12 +319,12 @@ circle.ArcByDist = function(x, y, d, col=NULL, fill=NULL, lwd=1, tol=1E-8) {
 
 ### Fill Circle
 
-# 1. Mathologer: Helicone math and the phyllotactic microscope:
-#    a secret key to nature and numbers
-#    https://www.youtube.com/watch?v=YqPxCMsu684
+# 1. Mathologer: The Helicone Numberscope:
+#    Mathematical Superpowers Hidden in a Simple Toy
+#    https://www.youtube.com/watch?v=_YjNEfZ0VqU
 # TODO:
 # - explore the various concepts, like:
-#   n_spirals = Fibonacci number, or angle = phi/2;
+#   n_spirals = Fibonacci number, or angle = phiGolden/2;
 
 
 ### Uniform inside Circle
