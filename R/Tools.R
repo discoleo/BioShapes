@@ -21,6 +21,15 @@
 
 ### Helper Functions
 
+### Extended Check: NaN & NA
+#' @export
+is.NaN1 = function(x) {
+	if(is.nan(x) || is.na(x)) {
+		return(TRUE);
+	}
+	return(FALSE);
+}
+
 ### Rep List
 #' @export
 rep.all.list = function(x, len) {
