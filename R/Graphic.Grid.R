@@ -12,9 +12,12 @@
 ### Hexagonal Grid: Circular
 # n = Number of levels;
 # r = Radius of each hexagon;
+# r.hexa = actual radius of each hexagon (as drawn);
 # phi = Rotation of the grid/hexagons;
 #' @export
-grid.hexa = function(n, r = 1, center = c(1,1), col = NULL, phi = 0) {
+grid.hexa = function(n, r = 1, center = c(1,1), col = NULL,
+		phi = 0, r.hexa = r) {
+	r0 = r; r = r.hexa;
 	if(n < 0) stop("The number of levels n must be positive!");
 	if(n == 0) return(as.bioshape.empty());
 	if(is.null(col)) {
@@ -26,13 +29,13 @@ grid.hexa = function(n, r = 1, center = c(1,1), col = NULL, phi = 0) {
 	if(n == 1) return(as.bioshape(G));
 	# L2:
 	L = ring.hexa(6, center=center, r=r, phi=phi,
-		R = sqrt(3) * r, col = col[2]);
+		R = sqrt(3) * r0, col = col[2]);
 	G = c(G, L2 = as.bioshape(L));
 	if(n == 2) return(as.bioshape(rev(G)));
 	# L 2:n
 	L = lapply(seq(3, n), function(nL) {
 		# Simpler version: only 6 outer hexagons;
-		R = r * sqrt(3) * (nL-1);
+		R = r0 * sqrt(3) * (nL-1);
 		cc = grid.centers.hexaSimple(n = nL-1, r = R, center=center, phi=phi);
 		Ln = lapply(seq(nrow(cc)), function(id) {
 			ngon(6, center = unlist(cc[id,]), r=r,
