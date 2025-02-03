@@ -22,6 +22,9 @@
 
 
 ### Arrows: Summary
+# dx = shift on OX-axis (e.g. for slanted arrows);
+# d.lines = plot multiple base-lines, e.g. d.lines = c(-1,1)/7;
+# join    = type of join between arrow and arrow-head (0 = default);
 #' @export
 example.arrows = function(dx = c(0, 0), lwd = 2, lty = 1, d.lines = 0, join = 0,
 		fill = c("red", "#FFA090", "#3296F2", "#E648D0"),

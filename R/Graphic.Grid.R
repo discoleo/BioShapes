@@ -22,7 +22,10 @@ grid.hexa = function(n, r = 1, center = c(1,1), col = NULL,
 	if(n == 0) return(as.bioshape.empty());
 	if(is.null(col)) {
 		# col = # TODO
-	} else if(length(col) == 1) col = rep(col, n);
+	} else if(length(col) == 1) { col = rep(col, n); }
+	else if(length(col) < n) {
+		warning("Vector of colours is shorter!");
+	}
 	### Grid:
 	L = ngon(6, center=center, r=r, col = col[1], phi = phi + pi/6);
 	G = list(L1 = L);
