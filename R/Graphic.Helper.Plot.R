@@ -304,6 +304,7 @@ lines.arrow = function(x, lwd = NULL, col = NULL, lty = NULL, ...) {
 	}
 	### ArrowTail
 	arrow = x$Arrow;
+	if(is.null(arrow)) arrow = x$Tail; # TODO: check/fix;
 	lines.object.base(arrow, lwd=lwd, col=col, lty=lty, ...)
 	### ArrowHead
 	ahead = x$Head;

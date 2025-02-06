@@ -305,11 +305,12 @@ measure = function(x, y, type = c("in", "out"), lwd = 1, lty = 1, col = 1, plot 
   }
   t1 = arrowHeadT(x[1], y[1], slope=slope, dV = d, scale=scale);
   t2 = arrowHeadT(x[2], y[2], slope=slope, dV = d, scale=scale);
-  hh = list(h1, h2, t1, t2, lwd=lwd.head);
+  hh = list(H1=h1, H2=h2, T1=t1, T2=t2, lwd=lwd.head);
   # Tail
   arrTail = arrowTail(x, y, slope=slope, d.lines=d.lines, lwd=lwd);
   # arrTail$lty = lty; # TODO
   # Full Arrow
+  # Note: lines.arrow expected Arrow = ... (not Tail);
   lst = list(Tail = arrTail, Head = hh, col=col, lty=lty);
   class(lst) = c("arrow", "list");
   if(plot) lines(lst);
