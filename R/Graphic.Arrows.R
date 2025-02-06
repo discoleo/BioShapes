@@ -729,8 +729,9 @@ lineBanded = function(x, y, w=0.1, delta=0.25, lwd=1.5, lty=1, n=NULL, col="blac
 
 ### Braces ###
 #' @export
-braces.curly = function(center = c(0,0), scale = c(6, 1), left.open = TRUE, th = 90,
-                        pow=2.5, mid = 0.625, y0.scale = 1.75, npx = 32) {
+braces.curly = function(center = c(0,0), scale = c(6, 1), th = 90,
+		lwd = NULL, col = NULL, left.open = TRUE,
+		pow=2.5, mid = 0.625, y0.scale = 1.75, npx = 32) {
   x0 = seq(-1, 0, length.out = npx);
   dx = x0 + mid;
   sg = sign(dx);
@@ -747,9 +748,13 @@ braces.curly = function(center = c(0,0), scale = c(6, 1), left.open = TRUE, th =
   } else {
     r = cbind(x, y);
   }
-  r[,1] = r[,1] + center[1];
-  r[,2] = r[,2] + center[2];
-  return(r);
+  x = r[,1] + center[1];
+  y = r[,2] + center[2];
+  r = list(x=x, y=y);
+  if(! is.null(lwd)) r$lwd = lwd;
+  if(! is.null(col)) r$col = col;
+  r = as.bioshape(list(Brace = r));
+  return(invisible(r));
 }
 
 ### Braces 2 ###

@@ -208,11 +208,14 @@ example.bioshapes = function(n.lipo = c(30, 17), d.lsc = 0, d.lipo = 0.1,
 
 
 #### Diagram of a Liposome ####
+# n = Number of lipid-units in the lipid bilayer;
 # d = Dimensions of ArrowHead;
 #' @export
-diagramLiposome = function(lbl = c("Outer lipid layer",
+example.liposome.diagram = function(lbl = c("Outer lipid layer",
 		"Inner lipid layer", "Lipid bilayer"),
-		title = "Liposome", lwd=2, d=-0.4, n = c(30, 17), col="#48B000",
+		title = "Liposome", lwd=2,
+		col="#48B000", col.arrow = "red",
+		n = c(30, 17), phi = NULL, d = 0.4,
 		cex.title = 1.5, xy.title = c(0, -6.5), new = TRUE) {
 
   if(new){
@@ -220,29 +223,36 @@ diagramLiposome = function(lbl = c("Outer lipid layer",
   }
   if(length(lbl) == 1) lbl = rep(lbl, 3);
   # Liposome
-  lst = liposomes(n, r=0.5, phi=c(0, pi/(2*n[[2]])), d=0.2)
+  if(is.null(phi)) phi = c(0, pi/(2*n[[2]]));
+  lst = liposomes(n, r=0.5, phi=phi, d=0.2)
   lines(lst)
 
   # Title
   if( ! is.null(title)) text(xy.title[1], xy.title[2], title, cex=cex.title);
 
+  d = - d; # Arrow pointing to;
   # Left arrow
-  a1 = arrowSimple(x=c(-2.7,-5), y=c(-4.6,-8), d=d, lwd=lwd);
+  a1 = arrowSimple(x=c(-2.7,-5), y=c(-4.6,-8), d=d, lwd=lwd, col = col.arrow);
   text(-5.5, -9, lbl[[1]])
 
   # Right arrow
-  a2 = arrowSimple(x=c(1.4, 5), y=c(-2.4,-7), d=d, lwd=lwd);
+  # a2 = arrowSimple(x=c(1.4, 5), y=c(-2.4,-7), d=d, lwd=lwd);
+  a2 = arrowSimple(x=c(2.2, 4.1), y=c(-1.7,-7), d=d, lwd=lwd, col = col.arrow);
   text(5, -8, lbl[[2]])
 
+  # Brace:
+  lines(braces.curly(c(0.65,3.7), scale = c(2.8,1), th = 75, lwd=2, col = col.arrow));
   # Upper arrow
-  a3 = arrowSimple(x=c(0.08, 1), y=c(3.5,8), d=d, lwd=lwd);
+  # a3 = arrowSimple(x=c(0.08, 1), y=c(3.5,8), d=d, lwd=lwd);
+  a3 = arrowSimple(x=c(0.2, 1), y=c(3.9,8), d=d, lwd=lwd, col = col.arrow);
   text(1, 9, lbl[[3]])
 }
 
 
 #### Liposome Measurements ####
 #' @export
-measureLiposome = function(lbl = c("D = 60 nm", "d=50"), center=c(0,0), add=FALSE,
+example.liposome.measure = function(lbl = c("D = 60 nm", "d=50"),
+		center=c(0,0), add=FALSE,
 		lwd.arrow=2, lwd=1.5, title="Liposome", xy.title = c(0,-6.5), cex.title=1.5, ...) {
   if( ! add) plot.base(xlim=c(-10,10), ylim=c(-10,10));
 

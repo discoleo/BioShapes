@@ -106,7 +106,7 @@ vitamin.A = function(x = 0, y = 0, r = 1, phi0 = 0, adj = NULL, rev.OH = FALSE) 
 }
 
 #' @export
-test.vitamin.A = function() {
+example.vitamin.A = function() {
 	layout(matrix(c(1,2,1,3), 2));
 	par.old = par(mar = c(5, 4, 1, 2) + 0.1);
 	#
