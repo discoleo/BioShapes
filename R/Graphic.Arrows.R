@@ -546,6 +546,36 @@ arrowTriangle = function(x, y, lwd = 1, lty = 1, col = "red", fill = NULL, plot 
   invisible(lst);
 }
 
+######################
+######################
+
+### Solid Tail
+# (Rectangle)
+
+### Simple
+#' @export
+arrow.BSimple = function(x, y, w = 0.25, lwd = 1, lty = 1,
+		col = "red", fill = NULL, plot = TRUE,
+		scale = 1, join = 0, ...) {
+	w = w/2; w = c(-w, w);
+	lst = arrowSimple(x=x, y=y, lwd=lwd, lty=lty, col=col,
+		plot = FALSE, d.lines = w, ...);
+	xy = lst$Arrow$xy;
+	xy = split(xy, xy$id);
+	hh = lst$Head$H;
+	hx = rev(hh$x); hy = rev(hh$y); # TODO: correct upstream;
+	x  = c(xy[[1]]$x, hx, xy[[2]]$x[2:1]);
+	y  = c(xy[[1]]$y, hy, xy[[2]]$y[2:1]);
+	lst = list(x=x, y=y, lwd=lwd, lty=lty, col=col);
+	if(! is.null(fill)) lst$fill = fill;
+	class(lst) = c("polygon", "list");
+	lst = as.bioshape(list(Arrow = lst));
+	if(plot) lines(lst);
+	invisible(lst);
+}
+
+
+#################
 #################
 
 ### Arrow: Tail = Square Wave
