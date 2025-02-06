@@ -96,7 +96,7 @@ arrowSimple = function(x, y, lwd = 1, lty = 1, col = "red", plot = TRUE,
 ### Double Lined Head: --->>
 #' @export
 arrowDouble = function(x, y, lwd = 1, lty = 1, col = "red", plot = TRUE,
-			d = -0.5, d.head = -1, dV = c(-d.head, d.head), d.lines = 0,
+			d = -0.25, d.head = -0.5, dV = c(-d.head, d.head), d.lines = 0,
 			h.lwd = lwd, scale = 1, join = 0) {
   if(join > 2) stop("Unsupported value for join!");
   slope = slope(x, y);
@@ -554,7 +554,7 @@ arrowTriangle = function(x, y, lwd = 1, lty = 1, col = "red", fill = NULL, plot 
 
 ### Simple
 #' @export
-arrow.BSimple = function(x, y, w = 0.25, lwd = 1, lty = 1,
+arrow.Sd0Simple = function(x, y, w = 0.25, lwd = 1, lty = 1,
 		col = "red", fill = NULL, plot = TRUE,
 		scale = 1, join = 0, ...) {
 	w = w/2; w = c(-w, w);
@@ -566,6 +566,45 @@ arrow.BSimple = function(x, y, w = 0.25, lwd = 1, lty = 1,
 	hx = rev(hh$x); hy = rev(hh$y); # TODO: correct upstream;
 	x  = c(xy[[1]]$x, hx, xy[[2]]$x[2:1]);
 	y  = c(xy[[1]]$y, hy, xy[[2]]$y[2:1]);
+	lst = list(x=x, y=y, lwd=lwd, lty=lty, col=col);
+	if(! is.null(fill)) lst$fill = fill;
+	class(lst) = c("polygon", "list");
+	lst = as.bioshape(list(Arrow = lst));
+	if(plot) lines(lst);
+	invisible(lst);
+}
+
+### Simple
+# type: T1 = -> (only tip solid), T2 = ->> (solid head);
+#' @export
+arrow.SdSimple = function(x, y, w = 0.25, lwd = 1, lty = 1,
+		col = "red", fill = NULL, plot = TRUE,
+		type = c("T1", "T2", "Simple"),
+		scale = 1, join = 0, ...) {
+	type = match.arg(type);
+	if(type == "Simple") {
+		return(arrow.Sd0Simple(x, y, w=w, lwd=lwd, lty=lty,
+			col=col, fill=fill, plot=plot, scale=scale, join = 1, ...));
+	}
+	w = w/2; w = c(-w, w);
+	lst = arrowDouble(x=x, y=y, lwd=lwd, lty=lty, col=col,
+		plot = FALSE, d.lines = w, ...);
+	xy = lst$Arrow$xy;
+	xy = split(xy, xy$id);
+	h1 = lst$Head$H1;
+	h2 = lst$Head$H2;
+	x1 = rev(h1$x); y1 = rev(h1$y); # TODO: correct upstream;
+	x2 = rev(h2$x); y2 = rev(h2$y); # TODO: correct upstream;
+	if(type == "T1") {
+		x2[2] = x1[2]; y2[2] = y1[2];
+		x = c(xy[[1]]$x, x2, xy[[2]]$x[2:1]);
+		y = c(xy[[1]]$y, y2, xy[[2]]$y[2:1]);
+	} else {
+		x1 = c(x2[1], x1, x2[3]);
+		y1 = c(y2[1], y1, y2[3]);
+		x = c(xy[[1]]$x, x1, xy[[2]]$x[2:1]);
+		y = c(xy[[1]]$y, y1, xy[[2]]$y[2:1]);
+	}
 	lst = list(x=x, y=y, lwd=lwd, lty=lty, col=col);
 	if(! is.null(fill)) lst$fill = fill;
 	class(lst) = c("polygon", "list");
