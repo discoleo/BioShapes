@@ -236,8 +236,9 @@ arrowHeadTriangle = function(x, y, slope, d=-1, dV=c(-d, d), scale=1) {
   else shiftPoint(c(x, y), slope=slope, d = d, scale=scale);
   pV = shiftLine(p, slope=slope, d = dV, scale=scale);
   arrHead = list(
-    x = c(pV[1,1], x, pV[2,1], pV[1,1]),
-    y = c(pV[1,2], y, pV[2,2], pV[1,2]));
+    x = c(pV[1,1], x, pV[2,1]),  # pV[1,1]),
+    y = c(pV[1,2], y, pV[2,2])); # pV[1,2]));
   attr(arrHead, "Mid") = p;
+  class(arrHead) = c("polygon", "list");
   return(arrHead);
 }
