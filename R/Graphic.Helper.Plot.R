@@ -217,9 +217,12 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 	} else if(inherits(lst, "ellipse")) {
 		fill = lst$fill;
 		if(inherits(lst$center, "matrix")) {
-			print("TODO")
+			r = lst$r;
+			phi = lst$phi;
+			phi = if(is.null(phi)) 0 else phi * 180 / pi;
 			lapply(seq(nrow(lst$center)), function(nr) {
-				# TODO
+				shape::plotellipse(rx = r[1], ry = r[2], mid = lst$center[nr, ],
+						lcol=col, col=fill, lwd=lwd, angle = phi, ...);
 			})
 		} else {
 			lst$col = col; lst$fill = fill;

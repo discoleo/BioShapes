@@ -9,6 +9,42 @@
 ### Grids
 
 
+### Square Grid
+
+### Circles: Distributed Evenly
+grid.squareEC = function(x, y, r = 1/2, col = NULL, fill = NULL, d = r/4) {
+	cc = grid.squareE.centers(x, y, r=r, d=d);
+	lst = list(centers = as.matrix(cc), r=r);
+	if(! is.null(col))  lst$col  = col;
+	if(! is.null(fill)) lst$fill = fill;
+	clShape = if(length(r) == 1) "circle" else "ellipse";
+	class(lst) = c(clShape, "list");
+	lst = list(G = lst);
+	return(as.bioshape(lst));
+}
+
+### Distributed Evenly
+# r = radius of shapes;
+# d = distance between individual shapes;
+# (x, y) = pair of coordinates of rectangle;
+grid.squareE.centers = function(x, y, r = 1/2, d = r/4) {
+	if(length(r) == 1) r = c(r, r);
+	if(length(d) == 1) d = c(d, d);
+	div = 2*r + d;
+	nx = floor((abs(x[1] - x[2]) + d[1]) / div[1]);
+	ny = floor((abs(y[1] - y[2]) + d[2]) / div[2]);
+	sx = if(x[2] < x[1]) -1 else 1;
+	sy = if(y[2] < y[1]) -1 else 1;
+	cx = seq(x[1] + sx*r[1], x[2] - sx*r[1], length.out = nx);
+	cy = seq(y[1] + sy*r[2], y[2] - sy*r[2], length.out = ny);
+	cc = expand.grid(cx, cy);
+	names(cc) = c("x", "y")
+	return(cc);
+}
+
+
+### Hexagonal Grid
+
 ### Hexagonal Grid: Circular
 # n = Number of levels;
 # r = Radius of each hexagon;
