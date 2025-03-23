@@ -24,7 +24,7 @@ grid.squareEC = function(x, y, r = 1/2, col = NULL, fill = NULL,
 	} else {
 		cc = grid.laced.centers(x, y, r=r, d=d);
 	}
-	lst = list(centers = as.matrix(cc), r=r);
+	lst = list(center = as.matrix(cc), r=r);
 	if(! is.null(col))  lst$col  = col;
 	if(! is.null(fill)) lst$fill = fill;
 	clShape = if(length(r) == 1) "circle" else "ellipse";
