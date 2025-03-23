@@ -20,6 +20,23 @@
 
 ### Functions to Generate Objects
 
+### Simple Rectangle
+#' @export
+rect0 = function(x, y, lwd = NULL, col = NULL, fill = NULL) {
+	if(length(x) != 2 || length(y) != 2) {
+		stop("Invalid coordinates!");
+	}
+	x = c(x, x[2], x[1]);
+	y = rep(y, each = 2);
+	lst = list(x=x, y=y);
+	if(! is.null(lwd)) lst$lwd = lwd;
+	if(! is.null(col)) lst$col = col;
+	if(! is.null(fill)) lst$fill = fill;
+	class(lst) = c("polygon", "list");
+	lst = list(R = lst);
+	return(as.bioshape(lst));
+}
+
 ### Regular n-gon
 #' @export
 ngon = function(n, r = 1, center = c(0, 0), phi = 0,
@@ -32,6 +49,9 @@ ngon = function(n, r = 1, center = c(0, 0), phi = 0,
   return(p);
 }
 
+### Set of n-Gons
+# - Distributed on a Circle;
+# N = number of n-gons;
 #' @export
 ngon.circle = function(n, N, R = 2, r = 1/2, center = c(0, 0), phi = 0,
 		lwd = NULL, col = NULL, fill = NULL){

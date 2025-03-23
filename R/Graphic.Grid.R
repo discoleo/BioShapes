@@ -12,8 +12,18 @@
 ### Square Grid
 
 ### Circles: Distributed Evenly
-grid.squareEC = function(x, y, r = 1/2, col = NULL, fill = NULL, d = r/4) {
-	cc = grid.squareE.centers(x, y, r=r, d=d);
+#' @export
+grid.squareEC = function(x, y, r = 1/2, col = NULL, fill = NULL,
+		type = c("square", "interlaced"), d = r/4) {
+	type = match.arg(type);
+	if(inherits(d, "formula")) {
+		d = eval(d[[2]]);
+	}
+	if(type == "square") {
+		cc = grid.squareE.centers(x, y, r=r, d=d);
+	} else {
+		cc = grid.laced.centers(x, y, r=r, d=d);
+	}
 	lst = list(centers = as.matrix(cc), r=r);
 	if(! is.null(col))  lst$col  = col;
 	if(! is.null(fill)) lst$fill = fill;
@@ -27,6 +37,7 @@ grid.squareEC = function(x, y, r = 1/2, col = NULL, fill = NULL, d = r/4) {
 # r = radius of shapes;
 # d = distance between individual shapes;
 # (x, y) = pair of coordinates of rectangle;
+#' @export
 grid.squareE.centers = function(x, y, r = 1/2, d = r/4) {
 	if(length(r) == 1) r = c(r, r);
 	if(length(d) == 1) d = c(d, d);
@@ -39,6 +50,30 @@ grid.squareE.centers = function(x, y, r = 1/2, d = r/4) {
 	cy = seq(y[1] + sy*r[2], y[2] - sy*r[2], length.out = ny);
 	cc = expand.grid(cx, cy);
 	names(cc) = c("x", "y")
+	return(cc);
+}
+
+# Interlaced Rows:
+#' @export
+grid.laced.centers = function(x, y, r = 1/2, d = r/2) {
+	if(length(r) == 1) r = c(r, r);
+	if(length(d) == 1) d = c(d, d);
+	div = 2*r + d;
+	nx = floor((abs(x[1] - x[2]) + d[1]) / div[1]);
+	ny = floor((abs(y[1] - y[2]) + d[2]) / div[2]);
+	sx = if(x[2] < x[1]) -1 else 1;
+	sy = if(y[2] < y[1]) -1 else 1;
+	cx = seq(x[1] + sx*r[1], x[2] - sx*r[1], length.out = nx);
+	cy = seq(y[1] + sy*r[2], y[2] - sy*r[2], length.out = ny);
+	cc = expand.grid(cx, cy);
+	names(cc) = c("x", "y");
+	if(ny <= 1) return(cc);
+	# Interlaced rows:
+	cx = (cx[ - nx] + cx[-1]) / 2;
+	cy = (cy[ - ny] + cy[-1]) / 2;
+	ci = expand.grid(cx, cy);
+	names(ci) = c("x", "y");
+	cc = rbind(cc, ci);
 	return(cc);
 }
 
