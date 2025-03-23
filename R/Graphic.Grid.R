@@ -33,6 +33,40 @@ grid.squareEC = function(x, y, r = 1/2, col = NULL, fill = NULL,
 	return(as.bioshape(lst));
 }
 
+### Circles: Distributed Evenly + Random Effects
+#' @export
+grid.squareREC = function(x, y, r = 1/2, phi = 0,
+		col = NULL, fill = NULL, type = c("interlaced", "square"),
+		d = 3/2*r, scale.center = 1/4, scale.r = 1/6, scale.phi = 1) {
+	type = match.arg(type);
+	if(inherits(d, "formula")) {
+		d = eval(d[[2]]);
+	}
+	if(length(r) == 1) r = c(r,r);
+	if(type == "square") {
+		cc = grid.squareE.centers(x, y, r=r, d=d);
+	} else {
+		cc = grid.laced.centers(x, y, r=r, d=d);
+	}
+	# Random effects:
+	n = nrow(cc); cc.sc = r * scale.center;
+	cc$x  = cc$x + runif(n, - cc.sc[1], cc.sc[1]);
+	cc$y  = cc$y + runif(n, - cc.sc[2], cc.sc[2]);
+	r.sc  = r * scale.r;
+	cc$rx  = runif(n, r[1] - r.sc[1], r[1] + r.sc[1]);
+	cc$ry  = runif(n, r[2] - r.sc[2], r[2] + r.sc[2]);
+	phi.sc = pi/2 * scale.phi;
+	cc$phi = phi + runif(n, - phi.sc, phi.sc);
+	# Object:
+	lst = list(center = cc);
+	if(! is.null(col))  lst$col  = col;
+	if(! is.null(fill)) lst$fill = fill;
+	clShape = if(length(r) == 1) "circle" else "ellipse";
+	class(lst) = c(clShape, "list");
+	lst = list(G = lst);
+	return(as.bioshape(lst));
+}
+
 ### Distributed Evenly
 # r = radius of shapes;
 # d = distance between individual shapes;

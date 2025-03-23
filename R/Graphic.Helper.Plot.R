@@ -224,6 +224,14 @@ lines.object.base = function(x, lwd, col, fill=NULL, ...) {
 				shape::plotellipse(rx = r[1], ry = r[2], mid = lst$center[nr, ],
 						lcol=col, col=fill, lwd=lwd, angle = phi, ...);
 			})
+		} else if(inherits(lst$center, "data.frame")) {
+			lst$center$phi = lst$center$phi * 180 / pi;
+			lapply(seq(nrow(lst$center)), function(nr) {
+				lst = lst$center[nr, , drop = FALSE];
+				cc  = c(lst$x, lst$y);
+				shape::plotellipse(rx = lst$rx, ry = lst$ry, mid = cc,
+						lcol=col, col=fill, lwd=lwd, angle = lst$phi, ...);
+			})
 		} else {
 			lst$col = col; lst$fill = fill;
 			lst$lwd = lwd; # TODO: check effects;
