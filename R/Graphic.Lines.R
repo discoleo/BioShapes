@@ -42,6 +42,43 @@ split.AltLines.matrix = function(xy) {
 	return(xy);
 }
 
+### With Separator
+# n = Number of segments;
+# d = Separator distance
+# both = Separator on both sides;
+#' @export
+split.withSep = function(x, y, n, d, both = TRUE) {
+	n = n + 1; # Number of points;
+	# Shift End of Line by Separator:
+	dd = dist.xy(x, y);
+	if(! both) {
+		x2 = x[2]; y2 = y[2];
+	} else {
+		td = d / dd; tdi = 1 - td;
+		x2 = td * x[1] + tdi * x[2];
+		y2 = td * y[1] + tdi * y[2];
+	}
+	# Split:
+	n1 = n + 1;
+	xy = split.line(c(x[1], x2), c(y[1], y2), n = n1);
+	# t2:
+	n2 = n1 + 1;
+	d2 = (dd - d) / n;
+	td = d / d2; tdi = 1 - td;
+	px = tdi * xy$x[- n2] + td * xy$x[-1];
+	py = tdi * xy$y[- n2] + td * xy$y[-1];
+	# Merge:
+	xx = as.vector(rbind(xy$x[- n2], px));
+	yy = as.vector(rbind(xy$y[- n2], py));
+	if(both) {
+		xx = c(xx, x2, x[2]); yy = c(yy, y2, y[2]);
+	} else {
+		xx = c(xx, x[2]); yy = c(yy, y[2]);
+	}
+	xy = data.frame(x = xx, y = yy);
+	return(xy);
+}
+
 ###################
 
 ### Line with Stair

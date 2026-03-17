@@ -435,6 +435,15 @@ rotate = function(x, y, slope, p1=c(0,0)) {
   return(lst);
 }
 
+###############
+
+# h = Height of Rectangle/Parallelogram
+as.rect.fromLine = function(x, y, h) {
+	xy = shift.ortho(x, y, d = h);
+	xy = data.frame(x = c(x, xy$x[c(2,1)]), y = c(y, xy$y[c(2,1)]));
+	return(xy);
+}
+
 
 ######################
 
